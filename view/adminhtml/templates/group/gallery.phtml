@@ -287,6 +287,7 @@ $get_base_url = $block->getBaseUrl();
             content += '<input class="url bynder_selected_images" type="text"'+
                         'data-bynderid="'+bynder_media_id+'"'+
                         'data-isimport="'+check_is_imported+'"'+
+                        'data-isorder="'+is_order+'"'+
                         'data-index="'+i+'" id="textboxId_'+i+'" data-imgType="'+select_item_type+'"'+
                         'data-thumUrl="'+item_thum_url+'" value="'+original_item_url+'" />'
             content += '</td>'
@@ -770,6 +771,7 @@ $get_base_url = $block->getBaseUrl();
                     var item_img_type = jQuery(this).attr("data-imgType");
                     var item_thum_url = jQuery(this).attr("data-thumUrl");
                     var is_imported = jQuery(this).attr("data-isimport");
+                    var is_order = jQuery(this).attr("data-isorder");
                     var item_media_id = jQuery(this).attr("data-bynderid");
 
                     var n_image_role = jQuery('.image_role_'+item_index).val();
@@ -793,7 +795,8 @@ $get_base_url = $block->getBaseUrl();
                         "item_type" : item_img_type,
                         "thum_url" : item_thum_url,
                         "bynder_md_id": item_media_id,
-                        "is_import" : is_imported
+                        "is_import" : is_imported,
+                        "is_order" : [is_order]
                     };
                     all_selected_images.push(images_details);
                 });
@@ -1004,6 +1007,7 @@ $get_base_url = $block->getBaseUrl();
                 var item_img_type = jQuery(this).attr("data-imgType");
                 var item_thum_url = jQuery(this).attr("data-thumUrl");
                 var is_imported = jQuery(this).attr("data-isimport");
+                var is_order = jQuery(this).attr("data-isorder");
                 var item_media_id = jQuery(this).attr("data-bynderid");
 
                 var n_image_role = jQuery('.image_role_'+item_index).val();
@@ -1027,7 +1031,8 @@ $get_base_url = $block->getBaseUrl();
                     "item_type" : item_img_type,
                     "thum_url" : item_thum_url,
                     "bynder_md_id": item_media_id,
-                    "is_import" : is_imported
+                    "is_import" : is_imported,
+                    "is_order" : [is_order]
                 };
                 all_selected_images.push(images_details);
             });

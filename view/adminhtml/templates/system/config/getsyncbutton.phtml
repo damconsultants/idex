@@ -50,7 +50,7 @@
                     if (response.status == 1) {
                         resultText = response.message
                         console.log(response.message);
-                        $('#byndersyncdata_bynder_sync_data_sku').text(resultText);
+                        $('#byndersyncdata_bynder_sync_data_sku').val(resultText);
                         $(".success-msg-sync").show();
                         $(".error-msg-sync").hide();
                         $(".success-msg-sync").html("Sku Get Successfully...!");
@@ -59,7 +59,7 @@
                         }, 5000);
                     } else {
                         resultText = transport.statusText;
-                        $('#byndersyncdata_bynder_sync_data_sku').text('');
+                        $('#byndersyncdata_bynder_sync_data_sku').val('');
                         $(".success-msg-sync").hide();
                         $(".error-msg-sync").show();
                         $(".error-msg-sync").html("There is not any empty Bynder Data in product.");

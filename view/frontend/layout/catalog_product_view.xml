@@ -6,7 +6,13 @@
                 <argument name="template" xsi:type="string">DamConsultants_Idex::product/view/gallery.phtml</argument>
             </action>
         </referenceBlock>
-
+        <referenceBlock name="product.media">
+			<action method="setTemplate">
+				<argument name="template" xsi:type="string">
+					DamConsultants_Idex::product/view/galleryhyva.phtml
+				</argument>
+			</action>
+		</referenceBlock>
        <referenceBlock name="product.info.details">
            <block class="Magento\Catalog\Block\Product\View" name="custom.tab" template="DamConsultants_Idex::product/view/bynderdoc_tab.phtml" group="detailed_info" >
                <arguments>

@@ -155,23 +155,28 @@ class Gallery extends \Magento\Catalog\Block\Product\View\Gallery
 
     public function getGalleryImagesJson()
     {
+
         $product = $this->_registry->registry('product');
         $imagesItems = [];
         $use_bynder_cdn = $product->getData('use_bynder_cdn');
+
         $use_bynder_both_image = $product->getData('use_bynder_both_image');
+
         if ($use_bynder_both_image == 1) { /*Both Image*/
 
             if (!empty($product->getData('bynder_multi_img'))) {
                 $bynder_image = $product->getData('bynder_multi_img');
                 $json_value = json_decode($bynder_image, true);
 
-                $role_image = 0;
+                $flag = '';
                 foreach ($json_value as $key => $values) {
-                    $image_values =  trim($values['thum_url']);
+                    $image_values = trim($values['thum_url']);
+                    $isMain = '';
                     if ($values['item_type'] == 'IMAGE') {
                         foreach ($values['image_role'] as $image_role) {
-                            if ($image_role ==  'Base') {
-                                $role_image = 1;
+                            if ($image_role == 'Base') {
+                                $flag = true;
+                                $isMain = true;
                             }
                         }
                     }
@@ -181,11 +186,11 @@ class Gallery extends \Magento\Catalog\Block\Product\View\Gallery
                         'full' => $image_values,
                         'caption' => $this->getProduct()->getName(),
                         'position' => $key + 1,
-                        'isMain' =>$role_image,
-                        'type' => ($values['item_type'] == 'IMAGE') ? 'image' : 'video',
+                        'isMain' => $isMain,
+                        'type' => ($values['item_type'] == 'IMAGE') ? 'image' : 'iframe',
                         'videoUrl' => ($values['item_type'] == 'VIDEO') ? $values['item_url'] : null,
                         "src" => ($values['item_type'] == 'VIDEO') ? $values['item_url'] : null,
-                        "type" => ($values['item_type'] == 'VIDEO') ? 'iframe' : null
+                        //"type" => ($values['item_type'] == 'VIDEO') ? 'iframe' : null
                     ]);
                     $imagesItems[] = $imageItem->toArray();
                 }
@@ -195,7 +200,7 @@ class Gallery extends \Magento\Catalog\Block\Product\View\Gallery
                     'thumb' => $image->getData('small_image_url'),
                     'img' => $image->getData('medium_image_url'),
                     'full' => $image->getData('large_image_url'),
-                    'caption' => ($role_image == 1) ? 0 :($image->getLabel() ?: $this->getProduct()->getName()),
+                    'caption' =>  ($image->getLabel() ?: $this->getProduct()->getName()),
                     'position' => $image->getData('position'),
                     'isMain' => $this->isMainImage($image),
                     'type' => str_replace('external-', '', $image->getMediaType()),
@@ -210,15 +215,21 @@ class Gallery extends \Magento\Catalog\Block\Product\View\Gallery
                 $imagesItems[] = $imageItem->toArray();
             }
         } elseif ($use_bynder_cdn == 1) { /*CDN Image*/
+
             if (!empty($product->getData('bynder_multi_img'))) {
                 $bynder_image = $product->getData('bynder_multi_img');
                 $json_value = json_decode($bynder_image, true);
-                $role_image = 0;
+
+                $flag = '';
                 foreach ($json_value as $key => $values) {
-                    $image_values =  trim($values['thum_url']);
-                    foreach ($values['image_role'] as $image_role) {
-                        if ($image_role ==  'Base') {
-                            $role_image = 1;
+                    $image_values = trim($values['thum_url']);
+                    $isMain = '';
+                    if ($values['item_type'] == 'IMAGE') {
+                        foreach ($values['image_role'] as $image_role) {
+                            if ($image_role == 'Base') {
+                                $isMain = true;
+                                $flag = true;
+                            }
                         }
                     }
                     $imageItem = new DataObject([
@@ -227,14 +238,15 @@ class Gallery extends \Magento\Catalog\Block\Product\View\Gallery
                         'full' => $image_values,
                         'caption' => $this->getProduct()->getName(),
                         'position' => $key + 1,
-                        'isMain' =>$role_image,
-                        'type' => ($values['item_type'] == 'IMAGE') ? 'image' : 'video',
+                        'isMain' => $isMain,
+                        'type' => ($values['item_type'] == 'IMAGE') ? 'image' : 'iframe',
                         'videoUrl' => ($values['item_type'] == 'VIDEO') ? $values['item_url'] : null,
                         "src" => ($values['item_type'] == 'VIDEO') ? $values['item_url'] : null,
-                        "type" => ($values['item_type'] == 'VIDEO') ? 'iframe' : null
+                        //"type" => ($values['item_type'] == 'VIDEO') ? 'iframe' : null
                     ]);
                     $imagesItems[] = $imageItem->toArray();
                 }
+
             } else {
                 /* CDN link empty */
                 foreach ($this->getGalleryImages() as $image) {
@@ -278,7 +290,9 @@ class Gallery extends \Magento\Catalog\Block\Product\View\Gallery
                 $imagesItems[] = $imageItem->toArray();
             }
         }
+        
         return json_encode($imagesItems);
+
     }
 
     /**
