@@ -129,15 +129,18 @@ class ImageFactory extends \Magento\Catalog\Block\Product\ImageFactory
         $label = "";
         $use_bynder_both_image = $product_details->getUseBynderBothImage();
         if ($use_bynder_cdn == 1 || $use_bynder_both_image == 1) {
-            if ($bynderImage != "") {
+            if ($bynderImage != "" && strlen($bynderImage) > 10) {
                 $json_value = json_decode($bynderImage, true);
+				$json_value = $json_value["asset_list"];
                 $small_image = 'Small';
                 if (!empty($json_value)) {
                     foreach ($json_value as $values) {
-                        if (!empty($values['alt_text'])) {
-                            $altText = trim($values['alt_text']);
-                            $label = $altText;
-                        }
+						if($values['item_type'] == 'IMAGE'){
+							if (!empty($values['alt_text'])) {
+								$altText = trim($values['alt_text']);
+								$label = $altText;
+							}
+						}
 
                     }
                 } else {
@@ -194,21 +197,24 @@ class ImageFactory extends \Magento\Catalog\Block\Product\ImageFactory
         $use_bynder_cdn = $product_details->getUseBynderCdn();
         $use_bynder_both_image = $product_details->getUseBynderBothImage();
         if ($use_bynder_cdn == 1 || $use_bynder_both_image == 1) {
-            if ($bynderImage != "") {
+            if ($bynderImage != "" && strlen($bynderImage) > 10) {
                 $json_value = json_decode($bynderImage, true);
+				$json_value = $json_value["asset_list"];
                 $small_image = 'Small';
                 if (!empty($json_value)) {
                    
                     foreach ($json_value as $values) {
-                        
-                        if (isset($values['image_role'])) {
-                            foreach ($values['image_role'] as $image_role) {
-                                if ($image_role == $small_image) {
-                                    $image_values = trim($values['thum_url']);
-                                    $image_url = $image_values;
-                                }
-                            }
-                        }
+                        if($values['item_type'] == 'IMAGE'){
+							 if (isset($values['image_role'])) {
+								foreach ($values['image_role'] as $image_role) {
+									if ($image_role == $small_image) {
+										$image_values = trim($values['thum_url']);
+										$image_url = $image_values;
+									}
+								}
+							}
+						}
+                       
                     }
                 } else {
                     $image_url = $imageAsset->getUrl();

@@ -71,6 +71,7 @@ class Thumbnail extends \Magento\Ui\Component\Listing\Columns\Column
                 $image_value = $_product->getBynderMultiImg();
                 if (!empty($image_value)) {
                     $item_old_value = json_decode($image_value, true);
+					$item_old_value = $item_old_value["asset_list"];
                     if (null == $item_old_value) {
                         continue;
                     }

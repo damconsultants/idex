@@ -72,7 +72,7 @@ class Data extends AbstractHelper
     public const PRODUCT_SKU_LIMIT = 'cronimageconfig/set_limit_product_sku/product_sku_limt';
     public const FETCH_CRON = 'cronimageconfig/configurable_cron/fetch_enable';
     public const AUTO_CRON = 'cronimageconfig/auto_add_bynder/auto_enable';
-    public const API_CALLED = 'https://developer.thedamconsultants.biz/';
+    public const API_CALLED = 'https://developer.thedamconsultants.com/';
     public const DELETE_CRON = 'cronimageconfig/delete_cron_bynder/delete_enable';
 
     /**
@@ -307,7 +307,7 @@ class Data extends AbstractHelper
     public function getCheckBynder()
     {
         $fields = [
-            'base_url' => $this->_storeManager->getStore()->getBaseUrl(),
+            'base_url' => $this->getbaseurl(),
             'licence_token' => $this->getLicenceToken()
         ];
         $jsonData = '{}';
@@ -344,7 +344,7 @@ class Data extends AbstractHelper
             'permanent_token' => $bynder_auth['token'],
             'databaseId' => $bynder_auth['og_media_ids'],
             'daatasetType' => $bynder_auth['dataset_types'],
-            'base_url' => $this->_storeManager->getStore()->getBaseUrl(),
+            'base_url' => $this->getbaseurl(),
             'licence_token' => $this->getLicenceToken(),
             'bynder_metaproperty_collection' => $bynder_auth['collection_data_value']
         ];
@@ -376,7 +376,7 @@ class Data extends AbstractHelper
     public function getLicenceKey()
     {
         $fields = [
-            'domain_name' => $this->_storeManager->getStore()->getBaseUrl()
+            'domain_name' => $this->getbaseurl()
         ];
         $jsonData = '{}';
         $fields = json_encode($fields);
@@ -408,7 +408,7 @@ class Data extends AbstractHelper
     {
 
         $fields = [
-            'domain_name' => $this->_storeManager->getStore()->getBaseUrl(),
+            'domain_name' => $this->getbaseurl(),
             'bynder_domain' => $this->getBynderDom(),
             'permanent_token' => $this->getPermanenToken(),
             'licence_token' => $this->getLicenceToken(),
@@ -445,7 +445,7 @@ class Data extends AbstractHelper
     {
 
         $fields = [
-            'domain_name' => $this->_storeManager->getStore()->getBaseUrl(),
+            'domain_name' => $this->getbaseurl(),
             'bynder_domain' => $this->getBynderDom(),
             'permanent_token' => $this->getPermanenToken(),
             'licence_token' => $this->getLicenceToken(),
@@ -482,7 +482,7 @@ class Data extends AbstractHelper
     {
 
         $fields = [
-            'domain_name' => $this->_storeManager->getStore()->getBaseUrl(),
+            'domain_name' => $this->getbaseurl(),
             'bynder_domain' => $this->getBynderDom(),
             'permanent_token' => $this->getPermanenToken(),
             'licence_token' => $this->getLicenceToken(),
@@ -519,7 +519,7 @@ class Data extends AbstractHelper
     {
 
         $fields = [
-            'domain_name' => $this->_storeManager->getStore()->getBaseUrl(),
+            'domain_name' => $this->getbaseurl(),
             'bynder_domain' => $this->getBynderDom(),
             'permanent_token' => $this->getPermanenToken(),
             'licence_token' => $this->getLicenceToken(),
@@ -553,7 +553,7 @@ class Data extends AbstractHelper
     public function getBynderMetaProperites()
     {
         $fields = [
-            'domain_name' => $this->_storeManager->getStore()->getBaseUrl(),
+            'domain_name' => $this->getbaseurl(),
             'bynder_domain' => $this->getBynderDom(),
             'permanent_token' => $this->getPermanenToken(),
             'licence_token' => $this->getLicenceToken()
@@ -587,7 +587,7 @@ class Data extends AbstractHelper
     public function getImageSyncWithProperties($sku_id, $property_id, $collection_data_value)
     {
         $fields = [
-            'domain_name' => $this->_storeManager->getStore()->getBaseUrl(),
+            'domain_name' => $this->getbaseurl(),
             'bynder_domain' => $this->getBynderDom(),
             'permanent_token' => $this->getPermanenToken(),
             'licence_token' => $this->getLicenceToken(),
@@ -625,7 +625,7 @@ class Data extends AbstractHelper
     public function getDataRemoveForMagento($sku_id, $media_Id, $metaProperty_id)
     {
         $fields = [
-            'domain_name' => $this->_storeManager->getStore()->getBaseUrl(),
+            'domain_name' => $this->getbaseurl(),
             'bynder_domain' => $this->getBynderDom(),
             'permanent_token' => $this->getPermanenToken(),
             'licence_token' => $this->getLicenceToken(),
@@ -663,7 +663,7 @@ class Data extends AbstractHelper
     public function getAddedCompactviewSkuFromBynder($sku_id, $media_Id, $metaProperty_id)
     {
         $fields = [
-            'domain_name' => $this->_storeManager->getStore()->getBaseUrl(),
+            'domain_name' => $this->getbaseurl(),
             'bynder_domain' => $this->getBynderDom(),
             'permanent_token' => $this->getPermanenToken(),
             'licence_token' => $this->getLicenceToken(),
@@ -702,7 +702,7 @@ class Data extends AbstractHelper
     public function getUpdateBynderImageRoleAndAltText($product_sku_key, $metaProperty_Collections, $image)
     {
         $fields = [
-            'domain_name' => $this->_storeManager->getStore()->getBaseUrl(),
+            'domain_name' => $this->getbaseurl(),
             'bynder_domain' => $this->getBynderDom(),
             'permanent_token' => $this->getPermanenToken(),
             'licence_token' => $this->getLicenceToken(),
@@ -738,11 +738,11 @@ class Data extends AbstractHelper
     public function changeBynderAssetsDetails($bynder_auth)
     {
         $fields = [
-            'domain_name' => $this->_storeManager->getStore()->getBaseUrl(),
+            'domain_name' => $this->getbaseurl(),
             'bynder_domain' => $bynder_auth['bynderDomain'],
             'permanent_token' => $bynder_auth['token'],
             'new_value_obj' => $bynder_auth['new_value_obj'],
-            'base_url' => $this->_storeManager->getStore()->getBaseUrl(),
+            'base_url' => $this->getbaseurl(),
             'licence_token' => $this->getLicenceToken(),
             'bynder_metaproperty_collection' => $bynder_auth['collection_data_value']
         ];
@@ -772,7 +772,7 @@ class Data extends AbstractHelper
      */
     public function changePopupBynderAssetsDetails($bynder_auth)
     {
-        $getBaseUrl = $this->_storeManager->getStore()->getBaseUrl();
+        $getBaseUrl = $this->getbaseurl();
         $fields = [
             'domain_name' => $getBaseUrl,
             'bynder_domain' => $bynder_auth['bynderDomain'],
@@ -809,7 +809,7 @@ class Data extends AbstractHelper
      */
     public function removeSkuOrRoleDAM($bynder_auth)
     {
-        $getBaseUrl = $this->_storeManager->getStore()->getBaseUrl();
+        $getBaseUrl = $this->getbaseurl();
         $fields = [
             'domain_name' => $getBaseUrl,
             'bynder_domain' => $bynder_auth['bynderDomain'],
@@ -844,9 +844,9 @@ class Data extends AbstractHelper
      */
     public function getCheckBynderSideDeleteData($bynder_auth)
     {
-        $getBaseUrl = $this->_storeManager->getStore()->getBaseUrl();
+        $getBaseUrl = $this->getbaseurl();
         $fields = [
-            'domain_name' => $this->_storeManager->getStore()->getBaseUrl(),
+            'domain_name' => $this->getbaseurl(),
             'bynder_domain' => $this->getBynderDom(),
             'permanent_token' => $this->getPermanenToken(),
             'licence_token' => $this->getLicenceToken(),

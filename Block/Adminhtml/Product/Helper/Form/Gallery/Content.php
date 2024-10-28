@@ -89,7 +89,7 @@ class Content extends \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Galle
         array $data = []
     ) {
         parent::__construct($context, $jsonEncoder, $mediaConfig, $data);
-        $this-> request = $httpRequest;
+        $this->request = $httpRequest;
         $this->b_datahelper = $bynderData;
     }
     /**

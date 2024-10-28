@@ -205,7 +205,7 @@ $get_base_url = $block->getBaseUrl();
         if(old_bynder_image.trim() != ""){
             past_bynder_image_videos = jQuery('textarea[name="product[bynder_multi_img]"]').val();
             const old_img_obj = JSON.parse(past_bynder_image_videos);
-            jQuery.each(old_img_obj,function(kk,val){
+			jQuery.each(old_img_obj['asset_list'],function(kk,val){
                 
                 var item_url_new = "";
                 var imag_url_val = val.item_url;
@@ -257,18 +257,17 @@ $get_base_url = $block->getBaseUrl();
     });
     function set_selected_images(old_selected_images,){
         var selected_images = JSON.parse(old_selected_images);
-        var item_length = selected_images.length;
+		var item_length = selected_images['asset_list'].length;
         var content = '';
-        selected_images.sort(function(a, b) {
+        selected_images['asset_list'].sort(function(a, b) {
 			return a.is_order - b.is_order;
 		});
-        jQuery.each(selected_images, function( i, img_data ){
+        jQuery.each(selected_images['asset_list'], function( i, img_data ){
 
             var selected_role = img_data.image_role;
             var select_item_type = img_data.item_type;
 			var is_order = img_data.is_order
-			console.log("is_order", is_order);
-            var bynder_media_id = "";
+			var bynder_media_id = "";
             if(typeof img_data.bynder_md_id != "undefined"){
                 bynder_media_id = img_data.bynder_md_id;
             }
@@ -398,8 +397,7 @@ $get_base_url = $block->getBaseUrl();
                             });
 
                             var bdomain = localStorage.getItem("cvad");
-							console.log(video_url);
-                            if (typeof bdomain == "undefined" || bdomain == null) {
+							if (typeof bdomain == "undefined" || bdomain == null) {
                                 localStorage.setItem("cvad", configuration_domain); 
                                 bdomain = configuration_domain;                               
                             }
@@ -571,11 +569,9 @@ $get_base_url = $block->getBaseUrl();
                                                     var database_array = [];
                                                     var img_alttext_details = [];
                                                     var bynder_new_data_array = [];
-                                                    console.log("data", data);
                                                     $.each(data.data, function(index, r) {
                                                         var image_links_test = assets[index].url;
                                                         $.each(r, function(i, res) {
-                                                            console.log(res);
                                                             var bynder_md_id = res.bynderid;
                                                             image_links_test += "&&thumb_link=" + res.image_link + "&&"
                                                             var type_val = res.type + index;
@@ -609,8 +605,7 @@ $get_base_url = $block->getBaseUrl();
 																	if (video_url[res.bynderid] != undefined) {
 																		var v_url = video_url[bynder_md_id];
 																	}
-																	console.log("v_url", v_url);
-                                                                    //var original_img_url = download_link.split("?");
+																	//var original_img_url = download_link.split("?");
 																	var all_mg_role_options = r.thumbnails.all_magento_role_options;
 
                                                                     //video_url +=res.image_link+"@@"+res.main_link+" \n";
@@ -697,8 +692,7 @@ $get_base_url = $block->getBaseUrl();
                     var item_image_role = input_field_val.b_image_role;
                     var select_item_type = input_field_val.b_img_type;
                     var item_thum_url = input_field_val.b_thum_url;
-					console.log("i", i);
-                    var bynder_media_id = "";
+					var bynder_media_id = "";
                     if(typeof input_field_val.media_id != "undefined"){
                         bynder_media_id = input_field_val.media_id;
                     }

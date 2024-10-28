@@ -12,6 +12,18 @@ use \DamConsultants\Idex\Model\DefaultMetaPropertyFactory;
 
 class SynMetaProperty extends \Magento\Framework\App\Action\Action
 {
+	protected $_logger;
+	protected $_productCollectionFactory;
+	protected $productRepository;
+	protected $storeManager;
+	protected $productAction;
+	protected $resultJsonFactory;
+	protected $_resultRedirect;
+	protected $collection;
+	protected $_helperdata;
+	protected $defaultMetaPropertyFactory;
+	protected $_productRepositoryModel;
+	protected $messageManager;
     /**
      * Get
      *

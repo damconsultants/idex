@@ -270,7 +270,8 @@ class ProductDataSaveAfter implements ObserverInterface
 						"changes_details" => json_encode($all_deleted_new_items),
 						"collection_data_value" => $collection_data_slug_val
 					];
-					$this->datahelper->removeSkuOrRoleDAM($bynder_auth);
+                    /** stop the sync code from magento to bynder changes edited by kuldip ladola */
+					/* $this->datahelper->removeSkuOrRoleDAM($bynder_auth); */
 				}
 
 				/******************************         Above section for delete and update role     ******************************************* */

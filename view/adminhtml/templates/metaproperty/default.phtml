@@ -4,19 +4,37 @@ $get_metaData = $block_get_data['metadata'];
 $default_sku_value = $block_get_data['sku_selected'];
 $default_image_role_value = $block_get_data['image_role_selected'];
 $default_image_alt_text = $block_get_data['image_alt_text'];
+$default_customer_visibility = $block_get_data['customer_visibility'];
+$default_brands = $block_get_data['image_brand'];
+$default_style = $block_get_data['image_style'];
+$default_image_file = $block_get_data['image_file'];
+$default_image_search = $block_get_data['image_search'];
+$default_image_asset = $block_get_data['image_asset'];
 $default_image_media_order = $block_get_data['image_order'];
 $url = $block->getMainUrl();
-$syncMetaUrl = $url."bynder/index/synmetaproperty";
+$syncMetaUrl = $url . "bynder/index/synmetaproperty";
 
 $sku_properites = "";
 $image_role = "";
 $alt_properites = "";
+$brands_properites = "";
+$style_properites = "";
+$file_catagory_properites = "";
+$search_visibility_properites = "";
+$asset_properites = "";
 $is_order = "";
+$customer_visibility = "";
 if (count($get_metaData) > 0) {
     foreach ($get_metaData as $newKey => $newValue) {
         $sku_checked = "";
         $image_role_checked = "";
         $alt_checked = "";
+        $brands = "";
+        $style = "";
+        $file_catagory = "";
+        $search_visibility = "";
+        $asset = "";
+        $customer_visibility_checked = "";
         $media_order_checked = "";
         if ($default_sku_value == $newKey) {
             $sku_checked = "selected";
@@ -24,195 +42,187 @@ if (count($get_metaData) > 0) {
             $image_role_checked = "selected";
         } elseif ($default_image_alt_text == $newKey) {
             $alt_checked = "selected";
+        } elseif ($default_customer_visibility == $newKey) {
+            $customer_visibility_checked = "selected";
+        } elseif ($default_brands == $newKey) {
+            $brands = "selected";
+        } elseif ($default_style == $newKey) {
+            $style = "selected";
+        } elseif ($default_image_file == $newKey) {
+            $file_catagory = "selected";
+        } elseif ($default_image_search == $newKey) {
+            $search_visibility = "selected";
+        } elseif ($default_image_asset == $newKey) {
+            $asset = "selected";
         } elseif ($default_image_media_order == $newKey) {
             $media_order_checked = "selected";
         }
         $sku_properites .= '<option value="' . $newKey . '" ' . $sku_checked . ' >' .
-                        $block->escapeHtml($newValue) .
-                        '</option>';
+            $block->escapeHtml($newValue) .
+            '</option>';
         $image_role .= '<option value="' . $newKey . '" ' . $image_role_checked . ' >' .
-                        $block->escapeHtml($newValue) .
-                        '</option>';
+            $block->escapeHtml($newValue) .
+            '</option>';
         $alt_properites .= '<option value="' . $newKey . '" ' . $alt_checked . ' >' .
-                            $newValue .
-                            '</option>';
-		$is_order .= '<option value="' . $newKey . '" ' . $media_order_checked . ' >' .
-                            $newValue .
-                            '</option>';
+            $newValue .
+            '</option>';
+        $customer_visibility .= '<option value="' . $newKey . '" ' . $customer_visibility_checked . ' >' .
+            $newValue .
+            '</option>';
+        $brands_properites .= '<option value="' . $newKey . '" ' . $brands . ' >' .
+            $newValue .
+            '</option>';
+        $style_properites .= '<option value="' . $newKey . '" ' . $style . ' >' .
+            $newValue .
+            '</option>';
+        $file_catagory_properites .= '<option value="' . $newKey . '" ' . $file_catagory . ' >' .
+            $newValue .
+            '</option>';
+        $search_visibility_properites .= '<option value="' . $newKey . '" ' . $search_visibility . ' >' .
+            $newValue .
+            '</option>';
+        $asset_properites .= '<option value="' . $newKey . '" ' . $asset . ' >' .
+            $newValue .
+            '</option>';
+        $is_order .= '<option value="' . $newKey . '" ' . $media_order_checked . ' >' .
+            $newValue .
+            '</option>';
     }
 }
 ?>
-<button type="submit" class="action- scalable primary syncMetaProperties" 
-        name="submit" id="btn_submit sync-metaproperties" 
-        style="margin-top: 30px; border-radius: 4px; width: 247px;  margin-left: auto; display: block;">
+<button type="submit" class="action- scalable primary syncMetaProperties" name="submit"
+    id="btn_submit sync-metaproperties"
+    style="margin-top: 30px; border-radius: 4px; width: 247px;  margin-left: auto; display: block;">
     <span>
-        <?= $block->escapeHtml('Sync Metaproperties');?>
+        <?= $block->escapeHtml('Sync Metaproperties'); ?>
     </span>
 </button>
 <form name="metaproperty" action="<?= $block->escapeUrl($block->getSubmitUrl()); ?>" method="post"
     enctype="multipart/form-data">
-    <?= $block->getBlockHtml('formkey');
-    ?>
+    <?= $block->getBlockHtml('formkey'); ?>
     <div class="main_container dear-stock-sec">
         <div class="main_header_master admin__data-grid-wrap">
-            <div class="main_container_masterdata admin__data-grid-wrap product-imp-sec" style="padding-bottom: 11rem; !important">
-                <label> <strong>The Meta Property Configration For the SKU:-</strong> </label> <br><br>
-                <div class="form-check form-check-inline" style="float: left;width: 100%;">
+            <div class="main_container_masterdata admin__data-grid-wrap product-imp-sec"
+                style="padding-bottom: 1.5rem; !important">
 
-                    <label class="form-check-label">
+                <!-- Dropdown Container -->
+                <div class="dropdown-container">
+
+                    <div class="dropdown-item">
+                        <label><strong>Meta Property for SKU:</strong></label><br><br>
                         <input type="hidden" name="system_slug[]" value="sku" />
-                        <label> <strong>Property List:-</strong> </label> <br><br>
                         <select class="selectbox_item" id="bynder_property" name="select_meta_tag[]">
-                            <option value="0">Select The option</option>
+                            <option value="0">Select an option</option>
                             <?= $sku_properites; ?>
                         </select>
-                    </label>
+                    </div>
 
-                </div>
-                <hr>
-                <label> <strong> The Meta Property Configration For the Image Role :-</strong> </label> <br><br>
-                <div class="form-check form-check-inline" style="float: left;width: 100%;">
-
-                    <label class="form-check-label">
-                        <label> <strong>Property List:-</strong> </label> <br><br>
+                    <div class="dropdown-item">
+                        <label><strong>Meta Property for Image Role:</strong></label><br><br>
                         <input type="hidden" name="system_slug[]" value="image_role" />
                         <select class="selectbox_item" id="bynder_property_image_role" name="select_meta_tag[]">
-                            <option value="0">Select The option</option>
+                            <option value="0">Select an option</option>
                             <?= $image_role; ?>
                         </select>
-                    </label>
-                </div>
-                <hr>
-                <label> <strong> The Meta Property Configration For the Alt Text :-</strong> </label> <br><br>
-                <div class="form-check form-check-inline" style="float: left;width: 100%;">
-                    <label class="form-check-label">
-                        <label> <strong>Property List:-</strong> </label> <br><br>
+                    </div>
+
+                    <div class="dropdown-item">
+                        <label><strong>Meta Property for Alt Text:</strong></label><br><br>
                         <input type="hidden" name="system_slug[]" value="alt_text" />
                         <select class="selectbox_item" id="bynder_property_alt_tax" name="select_meta_tag[]">
-                            <option value="0">Select The option</option>
-
+                            <option value="0">Select an option</option>
                             <?= $alt_properites; ?>
                         </select>
-                    </label>
-                </div>
-				<hr>
-                <label> <strong> The Meta Property Configration For the Media Order :-</strong> </label> <br><br>
-                <div class="form-check form-check-inline" style="float: left;width: 100%;">
+                    </div>
 
-                    <label class="form-check-label">
-                        <label> <strong>Property List:-</strong> </label> <br><br>
+                    <div class="dropdown-item">
+                        <label><strong>Meta Property for Customer Visibility:</strong></label><br><br>
+                        <input type="hidden" name="system_slug[]" value="customer_visibility" />
+                        <select class="selectbox_item" id="bynder_property_customer_visibility"
+                            name="select_meta_tag[]">
+                            <option value="0">Select an option</option>
+                            <?= $customer_visibility; ?>
+                        </select>
+                    </div>
+
+                    <div class="dropdown-item">
+                        <label><strong>Meta Property for Brands:</strong></label><br><br>
+                        <input type="hidden" name="system_slug[]" value="brands" />
+                        <select class="selectbox_item" id="bynder_property_brands" name="select_meta_tag[]">
+                            <option value="0">Select an option</option>
+                            <?= $brands_properites; ?>
+                        </select>
+                    </div>
+
+                    <div class="dropdown-item">
+                        <label><strong>Meta Property for Style:</strong></label><br><br>
+                        <input type="hidden" name="system_slug[]" value="style" />
+                        <select class="selectbox_item" id="bynder_property_style" name="select_meta_tag[]">
+                            <option value="0">Select an option</option>
+                            <?= $style_properites; ?>
+                        </select>
+                    </div>
+
+                    <div class="dropdown-item">
+                        <label><strong>Meta Property for File Category:</strong></label><br><br>
+                        <input type="hidden" name="system_slug[]" value="file_category" />
+                        <select class="selectbox_item" id="bynder_property_file_category" name="select_meta_tag[]">
+                            <option value="0">Select an option</option>
+                            <?= $file_catagory_properites; ?>
+                        </select>
+                    </div>
+
+                    <div class="dropdown-item">
+                        <label><strong>Meta Property for Search Visibility:</strong></label><br><br>
+                        <input type="hidden" name="system_slug[]" value="search_visibility" />
+                        <select class="selectbox_item" id="bynder_property_search_visibility" name="select_meta_tag[]">
+                            <option value="0">Select an option</option>
+                            <?= $search_visibility_properites; ?>
+                        </select>
+                    </div>
+
+                    <div class="dropdown-item">
+                        <label><strong>Meta Property for Asset:</strong></label><br><br>
+                        <input type="hidden" name="system_slug[]" value="asset" />
+                        <select class="selectbox_item" id="bynder_property_asset" name="select_meta_tag[]">
+                            <option value="0">Select an option</option>
+                            <?= $asset_properites; ?>
+                        </select>
+                    </div>
+
+                    <div class="dropdown-item">
+                        <label><strong>Meta Property for Media Order:</strong></label><br><br>
                         <input type="hidden" name="system_slug[]" value="image_order" />
                         <select class="selectbox_item" id="bynder_property_media_order" name="select_meta_tag[]">
-                            <option value="0">Select The option</option>
-							<?= $is_order ?>
+                            <option value="0">Select an option</option>
+                            <?= $is_order ?>
                         </select>
-                    </label>
-					<button type="submit" class="action- scalable primary" name="submit" id="btn_submit" style="margin-top: 30px; border-radius: 4px; width: 247px;  margin-left: auto; display: block;">
-                        <span>
-                            <?= $block->escapeHtml('Save Metaproperties'); ?>
-                        </span>
-                    </button>
+                    </div>
                 </div>
-				<!--<hr>
-                <label> <strong> The Meta Property Configration For the Image Role :-</strong> </label> <br><br>
-                <div class="form-check form-check-inline" style="float: left;width: 100%;">
+                <!-- End of Dropdown Container -->
 
-                    <label class="form-check-label">
-                        <label> <strong>Property List:-</strong> </label> <br><br>
-                        <input type="hidden" name="system_slug[]" value="image_role" />
-                        <select class="selectbox_item" id="bynder_property_5" name="select_meta_tag[]">
-                            <option value="0">Select The option</option>
-
-                            <?php /*foreach ($get_metaData as $v) {
-                                $checked = "";
-                                if ($default_image_role_value == $v["name"]) {
-                                    $checked = "selected";
-                                }*/
-                                ?>
-                                <option value="<?php //$block->escapeHtml($v['name']); ?>"
-                                    <?php //$block->escapeHtml($checked); ?>>
-                                    <?php //$block->escapeHtml($v['label']); ?>
-                                </option>
-                                <?php
-                            //} ?>
-                        </select>
-                    </label>
-                </div>
-				<hr>
-                <label> <strong> The Meta Property Configration For the Image Role :-</strong> </label> <br><br>
-                <div class="form-check form-check-inline" style="float: left;width: 100%;">
-
-                    <label class="form-check-label">
-                        <label> <strong>Property List:-</strong> </label> <br><br>
-                        <input type="hidden" name="system_slug[]" value="image_role" />
-                        <select class="selectbox_item" id="bynder_property_6" name="select_meta_tag[]">
-                            <option value="0">Select The option</option>
-
-                            <?php /*foreach ($get_metaData as $v) {
-                                $checked = "";
-                                if ($default_image_role_value == $v["name"]) {
-                                    $checked = "selected";
-                                }*/
-                                ?>
-                                <option value="<?php //$block->escapeHtml($v['name']); ?>"
-                                    <?php //$block->escapeHtml($checked); ?>>
-                                    <?php //$block->escapeHtml($v['label']); ?>
-                                </option>
-                                <?php
-                           // } ?>
-                        </select>
-                    </label>
-                </div>
-				<hr>
-                <label> <strong> The Meta Property Configration For the Image Role :-</strong> </label> <br><br>
-                <div class="form-check form-check-inline" style="float: left;width: 100%;">
-
-                    <label class="form-check-label">
-                        <label> <strong>Property List:-</strong> </label> <br><br>
-                        <input type="hidden" name="system_slug[]" value="image_role" />
-                        <select class="selectbox_item" id="bynder_property_7" name="select_meta_tag[]">
-                            <option value="0">Select The option</option>
-
-                            <?php /*foreach ($get_metaData as $v) {
-                                $checked = "";
-                                if ($default_image_role_value == $v["name"]) {
-                                    $checked = "selected";
-                                }*/
-                                ?>
-                                <option value="<?php // $block->escapeHtml($v['name']); ?>"
-                                    <?php // $block->escapeHtml($checked); ?>>
-                                    <?php // $block->escapeHtml($v['label']); ?>
-                                </option>
-                                <?php
-                            //} ?>
-                        </select>
-                    </label>
-					<button type="submit" class="action- scalable primary" name="submit" id="btn_submit">
-                        <span>
-                            <?php // $block->escapeHtml('Save SKU Property'); ?>
-                        </span>
-                    </button>
-                </div>-->
-
+                <button type="submit" class="action-scalable primary" name="submit" id="btn_submit"
+                    style="margin-top: 30px; border-radius: 4px; width: 247px; margin-left: auto; display: block;">
+                    <span><?= $block->escapeHtml('Save Metaproperties'); ?></span>
+                </button>
             </div>
         </div>
     </div>
-
 </form>
 <script>
-    require(["jquery"],function($) {
-        $(document).ready(function() {
+    require(["jquery"], function ($) {
+        $(document).ready(function () {
             $('.syncMetaProperties').click(function () {
                 var customurl = '<?= $block->escapeHtml($syncMetaUrl); ?>';
-                    $.ajax({
-                        url: customurl,
-                        type: 'POST',
-                        showLoader: true,
-                        async: true,
-                        //dataType: 'json',
-                        loaderArea: true,
-                        timeout: 300000,
-                    complete: function(response) { 
+                $.ajax({
+                    url: customurl,
+                    type: 'POST',
+                    showLoader: true,
+                    async: true,
+                    //dataType: 'json',
+                    loaderArea: true,
+                    timeout: 300000,
+                    complete: function (response) {
                         location.reload(true);
                     }
                     // error: function (xhr, status, errorThrown) {
@@ -220,6 +230,49 @@ if (count($get_metaData) > 0) {
                     // }
                 });
             });
-       });
+        });
     });
 </script>
+<style>
+    .dropdown-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 10px;
+    }
+
+    .dropdown-item {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: #d7c3c363;
+    }
+
+    .dropdown-item label {
+        font-weight: bold;
+        margin-bottom: 10px;
+        display: block;
+    }
+
+    .selectbox_item {
+        width: 100%;
+        padding: 8px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    button.primary {
+        background-color: #ff6f00;
+        border: none;
+        padding: 10px 20px;
+        color: #fff;
+        font-size: 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        width: 100%;
+    }
+
+    button.primary:hover {
+        background-color: #e65c00;
+    }
+</style>

@@ -10,17 +10,19 @@ class Index extends \Magento\Backend\Block\Template
     /**
      * @var \DamConsultants\Idex\Helper\Data
      */
-    protected $helperdata;
+    protected $_helperdata;
 
     /**
      * @var \DamConsultants\Idex\Model\MetaPropertyFactory
      */
-    protected $metaProperty;
+    protected $_metaProperty;
 
     /**
      * @var \DamConsultants\Idex\Model\ResourceModel\Collection\MetaPropertyCollectionFactory
      */
-    protected $metaPropertyCollectionFactory;
+    protected $_metaPropertyCollectionFactory;
+	protected $_default_metaProperty_collection;
+	protected $_storeManager;
 
     /**
      * Metaproperty
@@ -107,14 +109,25 @@ class Index extends \Magento\Backend\Block\Template
             $response_data['sku_selected'] = $properties_details["sku"]["bynder_property_slug"];
             $response_data['image_role_selected']= $properties_details["image_role"]["bynder_property_slug"];
             $response_data['image_alt_text']= $properties_details["alt_text"]["bynder_property_slug"];
+			$response_data['customer_visibility']= $properties_details["customer_visibility"]["bynder_property_slug"];
+			$response_data['image_brand']= $properties_details["brands"]["bynder_property_slug"];
+			$response_data['image_style']= $properties_details["style"]["bynder_property_slug"];
+			$response_data['image_file']= $properties_details["file_category"]["bynder_property_slug"];
+			$response_data['image_search']= $properties_details["search_visibility"]["bynder_property_slug"];
+			$response_data['image_asset']= $properties_details["asset"]["bynder_property_slug"];
 			$response_data['image_order']= $properties_details["image_order"]["bynder_property_slug"];
         } else {
             $response_data['sku_selected'] = '0';
             $response_data['image_role_selected'] = '0';
             $response_data['image_alt_text'] = '0';
+			$response_data['customer_visibility'] = '0';
+			$response_data['image_brand'] = '0';
+			$response_data['image_style'] = '0';
+			$response_data['image_file'] = '0';
+			$response_data['image_search'] = '0';
+			$response_data['image_asset'] = '0';
 			$response_data['image_order'] =  '0';
         }
-        //echo "<pre>"; print_r($response_data); exit;
         return $response_data;
     }
     /**

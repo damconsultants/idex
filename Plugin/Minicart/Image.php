@@ -43,22 +43,30 @@ class Image
         $productId = $item->getProduct()->getId();
         $product = $this->product->load($productId);
         $bynderImage = $product->getData('bynder_multi_img');
-        $json_value = json_decode($bynderImage, true);
         $thumbnail = 'Thumbnail';
-        if (!empty($json_value)) {
-            foreach ($json_value as $values) {
-                if (isset($values['image_role'])) {
-                    foreach ($values['image_role'] as $image_role) {
-                        if ($image_role ==  $thumbnail) {
-                            $image_values = trim($values['thum_url']);
-                            $data['product_image']['src'] =  $image_values;
+        if(!empty($bynderImage) && strlen($bynderImage) > 10){
+            $json_value = json_decode($bynderImage, true);
+        }else{
+            $json_value = "";
+        }
+
+        if(is_null($json_value) || $json_value == "[]"){
+            $data['product_image']['src'];
+        }else{
+            if (!empty($json_value) && count($json_value) > 0) {
+                foreach ($json_value["asset_list"] as $values) {
+                    if (isset($values['image_role'])) {
+                        foreach ($values['image_role'] as $image_role) {
+                            if ($image_role ==  $thumbnail) {
+                                $image_values = trim($values['thum_url']);
+                                $data['product_image']['src'] =  $image_values;
+                            }
                         }
                     }
                 }
+            } else {
+                $data['product_image']['src'];
             }
-        } else {
-          
-            $data['product_image']['src'];
         }
         return $data;
     }

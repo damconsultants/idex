@@ -131,10 +131,14 @@ $formNameEscaped = $blockj->escapeHtmlAttr($blockj->getFormName());
         var old_bynder_doc = jQuery('textarea[name="product[bynder_document]"]').val();
         if(old_bynder_doc.trim() != ""){
             var total_old_format_doc = old_bynder_doc.split(" \n");
-            if(total_old_format_doc.length > 0){
-                jQuery.each(total_old_format_doc,function(kk,val){
-                    if(val.trim() != ""){
+			const old_doc_obj = JSON.parse(old_bynder_doc);
+			console.log(old_doc_obj['asset_list']);
+            if(old_doc_obj.length > 0){
+                jQuery.each(old_doc_obj['asset_list'],function(kk,val){
+					
+                    //if(val.trim() != ""){
                         var old_item_extract = val.split("?");
+						console.log(val);
                         var item_url = old_item_extract[0];
 
                         var doc_details = {
@@ -142,7 +146,7 @@ $formNameEscaped = $blockj->escapeHtmlAttr($blockj->getFormName());
                             "item_type" : 'DOCUMENT',
                         };
                         old_selected_bynder_doc.push(doc_details);
-                    }
+                    //}
                 });
             }    
         }
