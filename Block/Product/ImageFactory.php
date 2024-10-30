@@ -129,7 +129,7 @@ class ImageFactory extends \Magento\Catalog\Block\Product\ImageFactory
         $label = "";
         $use_bynder_both_image = $product_details->getUseBynderBothImage();
         if ($use_bynder_cdn == 1 || $use_bynder_both_image == 1) {
-            if ($bynderImage != "" && strlen($bynderImage) > 10) {
+            if ($bynderImage != "") {
                 $json_value = json_decode($bynderImage, true);
 				$json_value = $json_value["asset_list"];
                 $small_image = 'Small';
@@ -197,7 +197,7 @@ class ImageFactory extends \Magento\Catalog\Block\Product\ImageFactory
         $use_bynder_cdn = $product_details->getUseBynderCdn();
         $use_bynder_both_image = $product_details->getUseBynderBothImage();
         if ($use_bynder_cdn == 1 || $use_bynder_both_image == 1) {
-            if ($bynderImage != "" && strlen($bynderImage) > 10) {
+            if ($bynderImage != "") {
                 $json_value = json_decode($bynderImage, true);
 				$json_value = $json_value["asset_list"];
                 $small_image = 'Small';

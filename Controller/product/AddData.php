@@ -131,14 +131,58 @@ class AddData extends \Magento\Framework\App\Action\Action
         $product_id = $this->getRequest()->getParam('product_id');
         $coockie_id = $this->getRequest()->getParam('image_coockie_id');
         $bynder_image = $this->getRequest()->getParam('image');
-        if ($coockie_id == 0) {
+        $storeId = $this->storeManagerInterface->getStore()->getId();
+        $product = $this->_product->load($product_id);
+        $bynder_value = $product->getData('bynder_multi_img');
+        $item_old_value = json_decode($bynder_value, true);
+        $item_old_value = $item_old_value["asset_list"];
+        $item_old_asset_value = json_decode($bynder_value, true);
+        $old_asset_detail_array = $item_old_asset_value['assets_extra_details'];
+        $ajax_value = json_decode($bynder_image, true);
+        $ajax_hash_id = [];
+        $bynder_data = [];
+        $bynder_extra_data = [];
+        foreach($ajax_value as $a_value){
+            $ajax_hash_id[] = $a_value['hash_id'];
+        }
+        foreach($item_old_value as $value) {
+            if(in_array($value['hash_id'], $ajax_hash_id)){
+                $bynder_data[] = $value;
+            }
+        }
+        foreach($old_asset_detail_array as $hash_id_key => $value_data) {
+            //echo "<pre> extara "; print_r($hash_id_key);
+            if(in_array($hash_id_key, $ajax_hash_id)){
+                $bynder_extra_data[$hash_id_key] = $value_data;
+            }
+        }
+        $update_latest_code = [
+            "asset_list" => $bynder_data,
+            "assets_extra_details" => $bynder_extra_data
+        ];
+        $new_value_array = json_encode($update_latest_code, true);
+        $updated_values = [
+            'bynder_multi_img' => $new_value_array
+        ];
+        $this->productActionObject->updateAttributes(
+            [$product_id],
+            $updated_values,
+            $storeId
+        );
+        $new_bynder_value = $product->getResource()->getAttributeRawValue(
+            $product_id,
+            'bynder_multi_img',
+            $storeId
+        );
+        //echo "<pre>"; print_r($new_bynder_value); exit;
+        /*if ($coockie_id == 0) {
             $data = [
-                "value" => $bynder_image,
+                "value" => $new_value_array,
                 "product_id" => $product_id
             ];
             $bynderTempData = $this->bynderTempData->create();
             $bynderTempData->setData($data);
-            $bynderTempData->save();
+            //$bynderTempData->save();
             $collectionData = $this->bynderTempDataCollectionFactory->create()->load();
             if (!empty($collectionData)) {
                 $lastAddedId = "";
@@ -151,12 +195,12 @@ class AddData extends \Magento\Framework\App\Action\Action
             $records->addFieldToFilter('product_id', ['eq' => [$product_id]])->load();
             if (empty($records)) {
                 $data = [
-                    "value" => $bynder_image,
+                    "value" => $new_value_array,
                     "product_id" => $product_id
                 ];
                 $bynderTempData = $this->bynderTempData->create();
                 $bynderTempData->setData($data);
-                $bynderTempData->save();
+                //$bynderTempData->save();
                 $collectionData = $this->bynderTempDataCollectionFactory->create()->load();
                 if (!empty($collectionData)) {
                     $lastAddedId = "";
@@ -166,13 +210,13 @@ class AddData extends \Magento\Framework\App\Action\Action
                 }
             } else {
                 $new_data = [
-                    "value" => $bynder_image,
+                    "value" => $new_value_array,
                     "product_id" => $product_id
                 ];
                 $bynderTempData = $this->bynderTempData->create();
                 $bynderTempData->load($coockie_id);
                 $bynderTempData->setData($new_data);
-                $bynderTempData->save();
+                //$bynderTempData->save();
                 $lastAddedId = $coockie_id;
             }
         }
@@ -184,6 +228,11 @@ class AddData extends \Magento\Framework\App\Action\Action
             'image_coockie_id',
             $lastAddedId,
             $publicCookieMetadata
-        );
+        );*/
+        $resultJson = $this->resultJsonFactory->create();
+        return $resultJson->setData([
+            'new_bynder_value' => $new_bynder_value,
+            'success' => true
+        ]);
     }
 }

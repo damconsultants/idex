@@ -205,7 +205,7 @@ $get_base_url = $block->getBaseUrl();
         if(old_bynder_image.trim() != ""){
             past_bynder_image_videos = jQuery('textarea[name="product[bynder_multi_img]"]').val();
             const old_img_obj = JSON.parse(past_bynder_image_videos);
-			jQuery.each(old_img_obj['asset_list'],function(kk,val){
+            jQuery.each(old_img_obj['asset_list'],function(kk,val){
                 
                 var item_url_new = "";
                 var imag_url_val = val.item_url;
@@ -257,21 +257,25 @@ $get_base_url = $block->getBaseUrl();
     });
     function set_selected_images(old_selected_images,){
         var selected_images = JSON.parse(old_selected_images);
-		var item_length = selected_images['asset_list'].length;
+        var item_length = selected_images['asset_list'].length;
         var content = '';
-        selected_images['asset_list'].sort(function(a, b) {
-			return a.is_order - b.is_order;
-		});
+        // selected_images['asset_list'].sort(function(a, b) {
+        //     return Number(a.is_order) - Number(b.is_order);
+        // });
         jQuery.each(selected_images['asset_list'], function( i, img_data ){
 
             var selected_role = img_data.image_role;
             var select_item_type = img_data.item_type;
-			var is_order = img_data.is_order
-			var bynder_media_id = "";
+			// var is_order = img_data.is_order
+			// console.log("is_order", is_order);
+            var bynder_media_id = "";
             if(typeof img_data.bynder_md_id != "undefined"){
                 bynder_media_id = img_data.bynder_md_id;
             }
-
+            var bynder_hash_id = "";
+            if(typeof img_data.hash_id != "undefined"){
+                bynder_hash_id = img_data.hash_id;
+            }
             var old_img_altText = img_data.alt_text;
             if(typeof old_img_altText == "undefined"){
                 old_img_altText = "";
@@ -285,8 +289,9 @@ $get_base_url = $block->getBaseUrl();
             content += '<img src ="'+drag_img+'"/></td><td>'
             content += '<input class="url bynder_selected_images" type="text"'+
                         'data-bynderid="'+bynder_media_id+'"'+
+                        'data-hashid="'+bynder_hash_id+'"'+
                         'data-isimport="'+check_is_imported+'"'+
-                        'data-isorder="'+is_order+'"'+
+                        //'data-isorder="'+is_order+'"'+
                         'data-index="'+i+'" id="textboxId_'+i+'" data-imgType="'+select_item_type+'"'+
                         'data-thumUrl="'+item_thum_url+'" value="'+original_item_url+'" />'
             content += '</td>'
@@ -397,7 +402,8 @@ $get_base_url = $block->getBaseUrl();
                             });
 
                             var bdomain = localStorage.getItem("cvad");
-							if (typeof bdomain == "undefined" || bdomain == null) {
+							console.log(video_url);
+                            if (typeof bdomain == "undefined" || bdomain == null) {
                                 localStorage.setItem("cvad", configuration_domain); 
                                 bdomain = configuration_domain;                               
                             }
@@ -573,6 +579,7 @@ $get_base_url = $block->getBaseUrl();
                                                         var image_links_test = assets[index].url;
                                                         $.each(r, function(i, res) {
                                                             var bynder_md_id = res.bynderid;
+                                                            var bynder_hash_id = res.idHash;
                                                             image_links_test += "&&thumb_link=" + res.image_link + "&&"
                                                             var type_val = res.type + index;
                                                             if ($.inArray(type_val, selected_types) != -1) {
@@ -596,7 +603,8 @@ $get_base_url = $block->getBaseUrl();
                                                                         "b_image_role":current_img_role,
                                                                         "b_img_type" : res.dataset_type,
                                                                         "b_thum_url" : pub_url,
-                                                                        "media_id"  :  bynder_md_id
+                                                                        "media_id"  :  bynder_md_id,
+                                                                        "hash_id"  :  bynder_hash_id
                                                                     };
                                                                     bynder_new_data_array.push(b_img_data);
                                                                 } else if (res.dataset_type == "VIDEO") {
@@ -605,7 +613,7 @@ $get_base_url = $block->getBaseUrl();
 																	if (video_url[res.bynderid] != undefined) {
 																		var v_url = video_url[bynder_md_id];
 																	}
-																	//var original_img_url = download_link.split("?");
+                                                                    //var original_img_url = download_link.split("?");
 																	var all_mg_role_options = r.thumbnails.all_magento_role_options;
 
                                                                     //video_url +=res.image_link+"@@"+res.main_link+" \n";
@@ -618,7 +626,8 @@ $get_base_url = $block->getBaseUrl();
                                                                         "b_image_role":all_mg_role_options,
                                                                         "b_img_type" : res.dataset_type,
                                                                         "b_thum_url" : res.main_link,
-                                                                        "media_id"  :  bynder_md_id
+                                                                        "media_id"  :  bynder_md_id,
+                                                                        "hash_id"  :  bynder_hash_id
                                                                     };
                                                                     bynder_new_data_array.push(b_img_data);
 
@@ -692,11 +701,14 @@ $get_base_url = $block->getBaseUrl();
                     var item_image_role = input_field_val.b_image_role;
                     var select_item_type = input_field_val.b_img_type;
                     var item_thum_url = input_field_val.b_thum_url;
-					var bynder_media_id = "";
+                    var bynder_media_id = "";
                     if(typeof input_field_val.media_id != "undefined"){
                         bynder_media_id = input_field_val.media_id;
                     }
-                    
+                    var bynder_hash_id = "";
+                    if(typeof input_field_val.hash_id != "undefined"){
+                        bynder_hash_id = input_field_val.hash_id;
+                    }
 
                     var selected_role = []
                     if(item_image_role.length > 0){
@@ -709,6 +721,7 @@ $get_base_url = $block->getBaseUrl();
                     content += '<input class="url bynder_selected_images"'+
                                 'type="text" data-index="'+i+'"'+
                                 'data-bynderid="'+bynder_media_id+'"'+
+                                'data-hashid="'+bynder_hash_id+'"'+
                                 'data-imgType="'+select_item_type+'"'+
                                 'data-thumUrl="'+item_thum_url+'"'+
                                 'id="textboxId_'+i+'"'+
@@ -765,7 +778,7 @@ $get_base_url = $block->getBaseUrl();
                     var item_img_type = jQuery(this).attr("data-imgType");
                     var item_thum_url = jQuery(this).attr("data-thumUrl");
                     var is_imported = jQuery(this).attr("data-isimport");
-                    var is_order = jQuery(this).attr("data-isorder");
+                    var item_hash_id = jQuery(this).attr("data-hashid");
                     var item_media_id = jQuery(this).attr("data-bynderid");
 
                     var n_image_role = jQuery('.image_role_'+item_index).val();
@@ -789,8 +802,9 @@ $get_base_url = $block->getBaseUrl();
                         "item_type" : item_img_type,
                         "thum_url" : item_thum_url,
                         "bynder_md_id": item_media_id,
+                        "hash_id" : item_hash_id,
                         "is_import" : is_imported,
-                        "is_order" : [is_order]
+                        //"is_order" : [is_order]
                     };
                     all_selected_images.push(images_details);
                 });
@@ -832,52 +846,56 @@ $get_base_url = $block->getBaseUrl();
 
                             let match_index = past_item_array.indexOf(origi_url);
                             var check_old_item_role = past_item_role_array[match_index];
-                            var count_old_array_role = check_old_item_role.length;
+                            if(check_old_item_role !== null) {
+                                console.log(check_old_item_role);
+                                var count_old_array_role = check_old_item_role.length;
 
-                            var count_new_array_role = new_item_roles.length;
+                                var count_new_array_role = new_item_roles.length;
 
-                            var old_item_role = "original";
-                            if(count_old_array_role > 0){
-                                old_item_role = check_old_item_role[0];
+                                var old_item_role = "original";
+                                if(count_old_array_role > 0){
+                                    old_item_role = check_old_item_role[0];
+                                }
+                                
+                                if(count_old_array_role == count_new_array_role){
+                                    if(check_old_item_role[0] == new_item_roles[0]){
+                                    /* do nothing */
+                                    }else{
+                                        var new_changes = {
+                                            "role" : new_item_roles[0],
+                                            "image_url" : imag_url_val,
+                                            "item_key" : img_media_id,
+                                            "old_role_name": old_item_role,
+                                            "type"  : 1
+                                        }
+                                        new_final_array[k] = new_changes;
+                                    }
+                                }else{
+                                    if(count_new_array_role > 0){
+                                        var new_changes = {
+                                            "role" : new_item_roles[0],
+                                            "image_url" : imag_url_val,
+                                            "item_key" : img_media_id,
+                                            "old_role_name": old_item_role,
+                                            "type"  : 2
+                                        }
+                                        new_final_array[k] = new_changes;
+                                    }else{
+                                        var new_changes = {
+                                            "role" : "original",
+                                            "image_url" : imag_url_val,
+                                            "item_key" : img_media_id,
+                                            "old_role_name": old_item_role,
+                                            "type"  : 3
+                                        }
+                                    new_final_array[k] = new_changes;
+                                    }
+                                }
                             }
                             
-                            if(count_old_array_role == count_new_array_role){
-                                if(check_old_item_role[0] == new_item_roles[0]){
-                                   /* do nothing */
-                                }else{
-                                    var new_changes = {
-                                        "role" : new_item_roles[0],
-                                        "image_url" : imag_url_val,
-                                        "item_key" : img_media_id,
-                                        "old_role_name": old_item_role,
-                                        "type"  : 1
-                                    }
-                                    new_final_array[k] = new_changes;
-                                }
-                            }else{
-                                if(count_new_array_role > 0){
-                                    var new_changes = {
-                                        "role" : new_item_roles[0],
-                                        "image_url" : imag_url_val,
-                                        "item_key" : img_media_id,
-                                        "old_role_name": old_item_role,
-                                        "type"  : 2
-                                    }
-                                    new_final_array[k] = new_changes;
-                                }else{
-                                    var new_changes = {
-                                        "role" : "original",
-                                        "image_url" : imag_url_val,
-                                        "item_key" : img_media_id,
-                                        "old_role_name": old_item_role,
-                                        "type"  : 3
-                                    }
-                                   new_final_array[k] = new_changes;
-                                }
-                            }
                         }
                     });
-                    if(new_final_array.length > 0){
+                    /*if(new_final_array.length > 0){
                         var new_value_obj = JSON.stringify(new_final_array);
                         
                         var bdomain = localStorage.getItem("cvad");
@@ -901,7 +919,7 @@ $get_base_url = $block->getBaseUrl();
                                     if(typeof data.data[k] != "undefined"){
                                         var updated_data_details = data.data[k];
                                         if(typeof updated_data_details.type != "undefined"){
-                                            /* change dowload link to public link by kuldip-theisens team*/
+                                            //change dowload link to public link by kuldip-theisens team
                                             all_selected_images[k].item_url = updated_data_details.public_url;
                                             all_selected_images[k].thum_url = updated_data_details.public_url;
                                         }
@@ -912,14 +930,14 @@ $get_base_url = $block->getBaseUrl();
                             var myJsonString = JSON.stringify(all_selected_images);
                             jQuery('textarea[name="product[bynder_multi_img]"]').val(myJsonString);
                             jQuery('textarea[name="product[bynder_videos]"]').val("");
-                            /*document.cookie = "bynder_image=" + myJsonString + "; path=/;";*/
+                            //document.cookie = "bynder_image=" + myJsonString + "; path=/;";
                             var image_coockie_id = 0;
                             try{
                                 image_coockie_id = Cookies.get('image_coockie_id');
                             }catch(err){
                                 document.cookie = "image_coockie_id=" + image_coockie_id + "; path=/;";
                             }
-                            var product_id = '<?= $block->escapeHtml($product_id); ?>';
+                            var product_id = '<?php //$block->escapeHtml($product_id); ?>';
                             $.ajax({
                                 url: add_temp_data,
                                 showLoader: true,
@@ -929,43 +947,45 @@ $get_base_url = $block->getBaseUrl();
                                     image_coockie_id:image_coockie_id
                                 },
                                 success: function (res) {
-                                    /* success data*/
+                                     //success data
                                 },
                             });
                         });
+                    } else {*/
+                    if (all_selected_images != '') {
+                        var myJsonString = JSON.stringify(all_selected_images);
+                        //jQuery('textarea[name="product[bynder_multi_img]"]').val(myJsonString);
                     } else {
-                        if (all_selected_images != '') {
-                            var myJsonString = JSON.stringify(all_selected_images);
-                            jQuery('textarea[name="product[bynder_multi_img]"]').val(myJsonString);
-                        } else {
-                            jQuery('textarea[name="product[bynder_multi_img]"]').val("");
-                        }
-                        jQuery('textarea[name="product[bynder_videos]"]').val("");
-                        /*document.cookie = "bynder_image=" + myJsonString + "; path=/;";*/
-                        var image_coockie_id = 0;
-                        try{
-                           image_coockie_id = Cookies.get('image_coockie_id');
-                        }catch(err){
-                           document.cookie = "image_coockie_id=" + image_coockie_id + "; path=/;";
-                        }
-                        var product_id = '<?= $block->escapeHtml($product_id); ?>';
-                        $.ajax({
-                            url: add_temp_data,
-                            showLoader: true,
-                            data: {
-                                product_id: product_id,
-                                image:myJsonString,
-                                image_coockie_id:image_coockie_id
-                            },
-                            success: function (res) {
-                                /* success data*/
-                            },
-                        });
+                        jQuery('textarea[name="product[bynder_multi_img]"]').val("");
                     }
+                    jQuery('textarea[name="product[bynder_videos]"]').val("");
+                    /*document.cookie = "bynder_image=" + myJsonString + "; path=/;";*/
+                    var image_coockie_id = 0;
+                    try{
+                        image_coockie_id = Cookies.get('image_coockie_id');
+                    }catch(err){
+                        document.cookie = "image_coockie_id=" + image_coockie_id + "; path=/;";
+                    }
+                    var product_id = '<?= $block->escapeHtml($product_id); ?>';
+                    $.ajax({
+                        url: add_temp_data,
+                        showLoader: true,
+                        data: {
+                            product_id: product_id,
+                            image:myJsonString,
+                            image_coockie_id:image_coockie_id
+                        },
+                        success: function (res) {
+                            jQuery('textarea[name="product[bynder_multi_img]"]').val(res.new_bynder_value).trigger('change');
+                            console.log("1 ",res);
+                            /* success data*/
+                        },
+                    });
+                    //}
                 }else{
                     if (all_selected_images != '') {
                             var myJsonString = JSON.stringify(all_selected_images);
-                            jQuery('textarea[name="product[bynder_multi_img]"]').val(myJsonString);
+                            //jQuery('textarea[name="product[bynder_multi_img]"]').val(myJsonString);
                         } else {
                             jQuery('textarea[name="product[bynder_multi_img]"]').val("");
                         }
@@ -987,6 +1007,8 @@ $get_base_url = $block->getBaseUrl();
                                 image_coockie_id:image_coockie_id
                             },
                             success: function (res) {
+                                jQuery('textarea[name="product[bynder_multi_img]"]').val(res.new_bynder_value).trigger('change');;
+                                console.log("2 ",res.new_bynder_value);
                                 /* success data*/
                             },
                         });
@@ -1001,7 +1023,7 @@ $get_base_url = $block->getBaseUrl();
                 var item_img_type = jQuery(this).attr("data-imgType");
                 var item_thum_url = jQuery(this).attr("data-thumUrl");
                 var is_imported = jQuery(this).attr("data-isimport");
-                var is_order = jQuery(this).attr("data-isorder");
+                var item_hash_id = jQuery(this).attr("data-hashid");
                 var item_media_id = jQuery(this).attr("data-bynderid");
 
                 var n_image_role = jQuery('.image_role_'+item_index).val();
@@ -1025,8 +1047,9 @@ $get_base_url = $block->getBaseUrl();
                     "item_type" : item_img_type,
                     "thum_url" : item_thum_url,
                     "bynder_md_id": item_media_id,
+                    "hash_id" : item_hash_id,
                     "is_import" : is_imported,
-                    "is_order" : [is_order]
+                    //"is_order" : [is_order]
                 };
                 all_selected_images.push(images_details);
             });

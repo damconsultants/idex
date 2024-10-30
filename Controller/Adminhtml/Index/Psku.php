@@ -135,7 +135,6 @@ class Psku extends \Magento\Backend\App\Action
                             $respon_array = json_decode($get_data, true);
                             if ($respon_array['status'] == 1) {
                                 $convert_array = json_decode($respon_array['data'], true);
-                                
                                 if ($convert_array['status'] == 1) {
                                     $current_sku = $sku;
                                     try {
@@ -161,7 +160,7 @@ class Psku extends \Magento\Backend\App\Action
 										'bynder_isMain' => null,
 										'bynder_auto_replace' => null
 									];
-									$this->action->updateAttributes(
+									$this->productAction->updateAttributes(
 										[$product_ids],
 										$updated_values,
 										$storeId
@@ -363,6 +362,7 @@ class Psku extends \Magento\Backend\App\Action
                     $new_magento_role_list = [];
                     $new_bynder_alt_text =[];
                     $new_bynder_mediaid_text = [];
+                    $hash_id = [];
                     if (count($bynder_image_role) > 0) {
                         foreach ($bynder_image_role as $m_bynder_role) {
                             $lower_m_bynder_role = strtolower($m_bynder_role);
@@ -583,7 +583,7 @@ class Psku extends \Magento\Backend\App\Action
 						if (count($item_old_value) > 0) {
 							foreach ($item_old_value as $img) {
                                 if ($img['item_type'] == 'IMAGE') {
-                                    $all_item_url[] = $img['thum_url'];
+                                    $all_item_url[] = $img['item_url'];
                                 } else {
                                     $all_video_url[] = $img['item_url'];
                                 }
@@ -615,42 +615,58 @@ class Psku extends \Magento\Backend\App\Action
 								"hash_id" => $hashId[$vv],
                                 "is_import" => 0
                             ];
-                            if (!in_array($item_url[0], $all_item_url)) {
-                                $diff_image_detail[] = [
-                                    "item_url" => $new_image_value,
-                                    "alt_text" => $img_altText_val,
-                                    "image_role" => $curt_img_role,
-                                    "item_type" => 'IMAGE',
-                                    "thum_url" => $item_url[0],
-                                    "bynder_md_id" => $bynder_media_id[$vv],
-									"hash_id" => $hashId[$vv],
-                                    "is_import" => 0
-                                ];
-								if (is_array($item_old_value)) {
-									if (count($item_old_value) > 0) {
-										foreach ($item_old_value as $kv => $img) {
-											if ($img['item_type'] == "IMAGE") {
-												/* here changes by me but not tested */
-												if ($new_magento_role_option_array[$vv] != "###") {
-													$new_mg_role_array = (array)$new_magento_role_option_array[$vv];
-													if (count($img["image_role"])>0 && count($new_mg_role_array)>0) {
-														$result_val=array_diff($img["image_role"], $new_mg_role_array);
-														$item_old_value[$kv]["image_role"] = $result_val;
-													}
-												}
-											}
-										}
-									}
-								}
-                                $total_new_value = count($diff_image_detail);
+                            if(empty($all_item_url)) {
+                                $total_new_value = count($image_detail);
                                 if ($total_new_value > 1) {
-                                    foreach ($diff_image_detail as $nn => $n_img) {
+                                    foreach ($image_detail as $nn => $n_img) {
                                         if ($n_img['item_type'] == "IMAGE" && $nn != ($total_new_value - 1)) {
-                                            if ($new_magento_role_option_array[$vv] != "###") {
-                                                $new_mg_role_array = (array)$new_magento_role_option_array[$vv];
-                                                if (count($n_img["image_role"]) > 0 && count($new_mg_role_array) > 0) {
-                                                    $result_val=array_diff($n_img["image_role"], $new_mg_role_array);
-                                                    $diff_image_detail[$nn]["image_role"] = $result_val;
+                                            $new_mg_role_array = (array)$new_magento_role_option_array[$vv];
+                                            if (count($n_img["image_role"]) > 0 && count($new_mg_role_array) > 0) {
+                                                $result_val = array_diff($n_img["image_role"], $new_mg_role_array);
+                                                $image_detail[$nn]["image_role"] = $result_val;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            if(!empty($all_item_url)) {
+                                if (!in_array($item_url[0], $all_item_url)) {
+                                    $diff_image_detail[] = [
+                                        "item_url" => $new_image_value,
+                                        "alt_text" => $img_altText_val,
+                                        "image_role" => $curt_img_role,
+                                        "item_type" => 'IMAGE',
+                                        "thum_url" => $item_url[0],
+                                        "bynder_md_id" => $bynder_media_id[$vv],
+                                        "hash_id" => $hashId[$vv],
+                                        "is_import" => 0
+                                    ];
+                                    if (is_array($item_old_value)) {
+                                        if (count($item_old_value) > 0) {
+                                            foreach ($item_old_value as $kv => $img) {
+                                                if ($img['item_type'] == "IMAGE") {
+                                                    /* here changes by me but not tested */
+                                                    if ($new_magento_role_option_array[$vv] != "###") {
+                                                        $new_mg_role_array = (array)$new_magento_role_option_array[$vv];
+                                                        if (count($img["image_role"])>0 && count($new_mg_role_array)>0) {
+                                                            $result_val=array_diff($img["image_role"], $new_mg_role_array);
+                                                            $item_old_value[$kv]["image_role"] = $result_val;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    $total_new_value = count($diff_image_detail);
+                                    if ($total_new_value > 1) {
+                                        foreach ($diff_image_detail as $nn => $n_img) {
+                                            if ($n_img['item_type'] == "IMAGE" && $nn != ($total_new_value - 1)) {
+                                                if ($new_magento_role_option_array[$vv] != "###") {
+                                                    $new_mg_role_array = (array)$new_magento_role_option_array[$vv];
+                                                    if (count($n_img["image_role"]) > 0 && count($new_mg_role_array) > 0) {
+                                                        $result_val=array_diff($n_img["image_role"], $new_mg_role_array);
+                                                        $diff_image_detail[$nn]["image_role"] = $result_val;
+                                                    }
                                                 }
                                             }
                                         }
@@ -676,6 +692,7 @@ class Psku extends \Magento\Backend\App\Action
                         foreach ($image_detail as $img) {
                             $image[] = $img['item_url'];
                         }
+                     
 						if (is_array($item_old_value)) {
                             if (is_array($all_video_url) && count($all_video_url) == 0 && count($all_item_url) > 0) {
                                 foreach ($item_old_value as $img) {
@@ -700,19 +717,21 @@ class Psku extends \Magento\Backend\App\Action
                                 $new_image_detail = array_merge($image_detail, $item_old_value);
                             } elseif (count($all_video_url) > 0 && count($all_item_url) > 0) {
                                 foreach ($item_old_value as $img) {
-                                    $item_img_url = $img['item_url'];
-                                    if (in_array($item_img_url, $image)) {
-                                        $item_key = array_search($img['item_url'], array_column($image_detail, "item_url"));
-                                        $new_image_detail_image[] = [
-                                            "item_url" => $item_img_url,
-                                            "alt_text" => $img['alt_text'],
-                                            "image_role" => $img['image_role'],
-                                            "item_type" => $img['item_type'],
-                                            "thum_url" => $img['thum_url'],
-                                            "bynder_md_id" => $img['bynder_md_id'],
-											"hash_id" => $img['hash_id'],
-                                            "is_import" => $img['is_import'],
-                                        ];
+                                    if ($img['item_type'] == 'IMAGE') {
+                                        $item_img_url = $img['item_url'];
+                                        if (in_array($item_img_url, $image)) {
+                                            $item_key = array_search($img['item_url'], array_column($image_detail, "item_url"));
+                                            $new_image_detail_image[] = [
+                                                "item_url" => $item_img_url,
+                                                "alt_text" => $img['alt_text'],
+                                                "image_role" => $img['image_role'],
+                                                "item_type" => $img['item_type'],
+                                                "thum_url" => $img['thum_url'],
+                                                "bynder_md_id" => $img['bynder_md_id'],
+                                                "hash_id" => $img['hash_id'],
+                                                "is_import" => $img['is_import'],
+                                            ];
+                                        }
                                     }
                                     if ($img['item_type'] == 'VIDEO') {
                                         $new_image_detail_video[] = [
@@ -901,12 +920,19 @@ class Psku extends \Magento\Backend\App\Action
                     if (!empty($old_value_array)) {
                         foreach ($old_value_array as $value) {
                             if ($value['item_type'] == 'IMAGE') {
-                                $old_item_url[] = $value['thum_url'];
+                                $old_item_url[] = $value['item_url'];
                             } else {
                                 $all_video_url[] = $value['item_url'];
                             }
                         }
                     }
+                    /*
+                    echo "<pre>";
+                    echo "\n**********all_video_url**********************\n";
+                    print_r($all_video_url);
+                    echo "\n**********new_video_array**********************\n";
+                    print_r($new_video_array);
+                    */
                     foreach ($new_video_array as $vv => $video_value) {
                         $item_url = explode("@@", $video_value);
                         $thum_url = explode("@@", $video_value);
@@ -932,27 +958,80 @@ class Psku extends \Magento\Backend\App\Action
                             }
                         }
                     }
-                    $new_video_array = array_merge($video_detail, $video_detail_diff);
-                    if (!empty($old_value_array)) {
-                        $array_merge = array_merge($old_value_array, $new_video_array);
-                        foreach ($array_merge as $img) {
-
-                            $type[] = $img['item_type'];
+                    /*
+                    echo "\n*************video_detail*******************\n";
+                    print_r($video_detail);
+                    echo "\n*************video_detail_diff*******************\n";
+                    print_r($video_detail_diff);
+                    exit;
+                    */
+                    if(count($video_detail_diff) > 0){
+                        $new_video_array_diff = $video_detail_diff;
+                    }else{
+                        $new_video_array_diff = array();
+                    }
+                    $new_image_detail = [];
+                    $new_image_detail_image = [];
+                    $new_image_detail_video = [];
+                    $video = [];
+                    if (count($video_detail) > 0) {
+                        foreach ($video_detail as $vid) {
+                            $video[] = $vid['item_url'];
                         }
-                        $flag = 0;
-                        if (in_array("IMAGE", $type) && in_array("VIDEO", $type)) {
-                            $flag = 1;
-                        } elseif (in_array("IMAGE", $type)) {
-                            $flag = 2;
-                        } elseif (in_array("VIDEO", $type)) {
-                            $flag = 3;
-                        }
+                     
+						if (is_array($old_value_array)) {
+                            if (is_array($all_video_url) && count($all_video_url) == 0 && count($old_item_url) > 0) {
+                                $new_image_detail = array_merge($old_value_array, $video_detail);
+                            } elseif (count($all_video_url) > 0 && count($old_item_url) == 0) {
+                                foreach ($old_value_array as $img) {
+                                    if ($img['item_type'] == 'VIDEO') {
+                                        $item_img_url = $img['item_url'];
+                                    }
+                                    if (in_array($item_img_url, $video)) {
+                                        $new_image_detail[] = $img;
+                                    }
+                                }
+                            } elseif (count($all_video_url) > 0 && count($old_item_url) > 0) {
+                                foreach ($old_value_array as $img) {
+                                    if ($img['item_type'] == 'IMAGE') {
+                                        $new_image_detail_image[] = $img;
+                                    }
+                                    if ($img['item_type'] == 'VIDEO') {
+                                        $item_img_url = $img['item_url'];
+                                        if (in_array($item_img_url, $video)) {
+                                            $new_image_detail_video[] = $img;
+                                        }
+                                    }
+                                    
+                                }
+                                $new_image_detail = array_merge($new_image_detail_image, $new_image_detail_video);
+                            }
+						}
+                    }
+                    $array_merge = array_merge($new_image_detail, $new_video_array_diff);
+                    $media_id = [];
+                    foreach ($array_merge as $img) {
+                        $type[] = $img['item_type'];
+                        $image[] = $img['item_url'];
+                        $media_id[] = $img['bynder_md_id'];
+                        $this->getDeleteMedaiDataTable($product_sku_key, $img['bynder_md_id']);
+                    }
+                    $this->getInsertMedaiDataTable($product_sku_key, $media_id, $product_ids, $storeId);
+                    //$new_video_array = array_merge($video_detail, $new_video_array_diff);
+                    $image_value_array = implode(',', $video);
+                    $flag = 0;
+                    if (in_array("IMAGE", $type) && in_array("VIDEO", $type)) {
+                        $flag = 1;
+                    } elseif (in_array("IMAGE", $type)) {
+                        $flag = 2;
+                    } elseif (in_array("VIDEO", $type)) {
+                        $flag = 3;
                     }
                     /** Need to change the code */
-                    $new_value_array = json_encode($array_merge, true);
+                    //$new_value_array = json_encode($array_merge, true);
                     $data_video_data = [
                         'sku' => $product_sku_key,
-                        'message' => $new_value_array,
+                        'message' => $image_value_array,
                         'data_type' => '3',
                         "lable" => "1"
                     ];

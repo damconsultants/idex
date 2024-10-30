@@ -48,6 +48,10 @@ define([
         dropHere: $t("Drop here"),
         maximumFileSize: $t("Maximum file size"),
         bynderImage: $t("Bynder Image"),
+        or: $t('or'),
+        uploadImage: $t('Upload Image'),
+        uploadNewImage: $t('Upload New Image'),
+        selectFromGallery: $t('Select from Gallery')
       },
       tracks: {
         visibleControls: true,

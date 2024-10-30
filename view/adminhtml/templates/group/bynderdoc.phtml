@@ -132,37 +132,29 @@ $formNameEscaped = $blockj->escapeHtmlAttr($blockj->getFormName());
         if(old_bynder_doc.trim() != ""){
             var total_old_format_doc = old_bynder_doc.split(" \n");
 			const old_doc_obj = JSON.parse(old_bynder_doc);
-			console.log(old_doc_obj['asset_list']);
-            if(old_doc_obj.length > 0){
+			console.log(old_doc_obj['asset_list'].length);
+            if(old_doc_obj['asset_list'].length > 0){
                 jQuery.each(old_doc_obj['asset_list'],function(kk,val){
-					
-                    //if(val.trim() != ""){
-                        var old_item_extract = val.split("?");
-						console.log(val);
-                        var item_url = old_item_extract[0];
-
-                        var doc_details = {
-                            "item_url": item_url,
-                            "item_type" : 'DOCUMENT',
-                        };
-                        old_selected_bynder_doc.push(doc_details);
-                    //}
+                    var item_url = val['item_url'];
+                    var item_media_id = val['bynder_md_id'];
+                    var item_hash_id = val['hash_id'];
+                    var doc_details = {
+                        "item_url": item_url,
+                        "item_type" : 'DOCUMENT',
+                        "bynder_md_id":item_media_id,
+                        "hash_id" : item_hash_id,   
+                    };
+                    old_selected_bynder_doc.push(doc_details);
                 });
             }    
         }
-        console.log(old_selected_bynder_doc);
-
         var old_selected_doc = jQuery('textarea[name="product[bynder_document]"]').val();
-        console.log(old_bynder_doc);
         if(old_selected_doc.trim() != ""){
-            if(((x)=>{try{JSON.parse(x);return true;}catch(e){return false}})(old_selected_doc))
+            if(((x)=>{try{JSON.parse(x);return true;}catch(e){return false}})(old_selected_doc['asset_list']))
             {
                 console.log("valide json");
             }else{
-
                 old_selected_doc = JSON.stringify(old_selected_bynder_doc);
-                console.log(old_selected_doc);
-                console.log("invalide json")
             }
             set_selected_images(old_selected_doc);
         }else{
@@ -177,23 +169,54 @@ $formNameEscaped = $blockj->escapeHtmlAttr($blockj->getFormName());
         jQuery.each(selected_images, function( i, img_data ){
             var select_item_type = img_data.item_type;
             var original_item_url = img_data.item_url;
-            
+            var bynder_media_id = "";
+            if(typeof img_data.bynder_md_id != "undefined"){
+                bynder_media_id = img_data.bynder_md_id;
+            }
+            var bynder_hash_id = "";
+            if(typeof img_data.hash_id != "undefined"){
+                bynder_hash_id = img_data.hash_id;
+            }
             content += '<tr style="background: #efefef;"><td>'
             content += '<img src ="'+drag_img+'"/></td><td>'
             content += '<input class="url bynder_selected_doc"'+
                         'type="text" data-index="'+i+'"'+
                         'id="textboxId_'+i+'"'+
                         'data-imgType="'+select_item_type+'"'+
+                        'data-bynderid="'+bynder_media_id+'"'+
+                        'data-hashid="'+bynder_hash_id+'"'+
                         'value="'+original_item_url+'" />'
             content += '</td>'
-            content += '<td><a href="#" class="btnDelete_'+i+'">'+
-                        '<img src ="'+ delete_icon +'" height="25" width="25"/>'+
-                        '</a></td></tr>';
-            jQuery("#sortable").on('click','.btnDelete_'+i,function(){
-                       jQuery(this).closest('tr').remove();
-             });
+            content += '<td><a href="javascript:void(0)" class="btnDelete" data-index="btnDelete_'+ i + '">'+
+                        '<img src ="'+ delete_icon +'" height="25" width="25" /></a>'+
+                        '</td></tr>'; 
+             
             
         });
+        require([
+			'jquery',
+			'Magento_Ui/js/modal/confirm'
+		],
+		function($, confirmation) {
+			jQuery(".btnDelete").on('click',function(e){
+			  var selete_var = $(this).attr('data-index');
+			  	e.preventDefault();
+				var $row = $(this).closest('tr');
+				confirmation({
+					title: 'Delete Document',
+					content: 'Do you want to delete this document?',
+					actions: {
+						confirm: function () {
+							$row.remove();
+						},
+
+						cancel: function () {
+							return false;
+						}
+					}
+				 });
+			});
+		});
         jQuery('.dynamic-rows-doc').find('.tbody_dynamic_doc').html(content);
          
     }
@@ -418,6 +441,7 @@ $formNameEscaped = $blockj->escapeHtmlAttr($blockj->getFormName());
                                                             if ($.inArray(type_val, selected_types) != -1) {
                                             
                                                                 if (res.dataset_type == "DOCUMENT") {
+                                                                    console.log("rs ", rs);
                                                                     var orignal_doc = res.main_link.split("?");
                                                                     console.log(orignal_doc);
                                                                     doc_url += res.main_link + "@@" + res.name + "\n";
@@ -427,6 +451,8 @@ $formNameEscaped = $blockj->escapeHtmlAttr($blockj->getFormName());
                                                                     var bynder_doc = {
                                                                         "b_item_url" : orignal_doc[0],
                                                                         "b_img_type" : res.dataset_type,
+                                                                        "media_id"  :  res.bynderid,
+                                                                        "hash_id"  :  res.idHash
                                                                     };
                                                                     bynder_new_data_array.push(bynder_doc);
                                                                     
@@ -492,13 +518,22 @@ $formNameEscaped = $blockj->escapeHtmlAttr($blockj->getFormName());
                     var input_field_val = data_item.shift();
                     var item_v_url = input_field_val.b_item_url;
                     var select_item_type = input_field_val.b_img_type;
-
+                    var bynder_media_id = "";
+                    if(typeof input_field_val.media_id != "undefined"){
+                        bynder_media_id = input_field_val.media_id;
+                    }
+                    var bynder_hash_id = "";
+                    if(typeof input_field_val.hash_id != "undefined"){
+                        bynder_hash_id = input_field_val.hash_id;
+                    }
                     console.log(input_field_val);
                     content = '<tr style="background: #efefef;" data-index="'+i+'"><td>'
                     content += '<img src ="'+drag_img+'"/></td><td>'
                     content += '<input class="url bynder_selected_doc"'+
                                 'type="text" data-index="'+i+'"'+
                                 'data-imgType="'+select_item_type+'"'+
+                                'data-bynderid="'+bynder_media_id+'"'+
+                                'data-hashid="'+bynder_hash_id+'"'+
                                 'id="textboxId_'+i+'"'+
                                 'value="'+item_v_url+'" /></td>'
                     content += '<td><a href="#" class="btnDelete_'+i+'">'+
@@ -519,9 +554,13 @@ $formNameEscaped = $blockj->escapeHtmlAttr($blockj->getFormName());
                     console.log(select_doc);
                     var item_index = jQuery(this).attr("data-index");
                     var item_doc_type = jQuery(this).attr("data-imgType");
+                    var item_hash_id = jQuery(this).attr("data-hashid");
+                    var item_media_id = jQuery(this).attr("data-bynderid");
                     var doc_details = {
                         "item_url":select_doc,
-                        "item_type" : item_doc_type,    
+                        "item_type" : item_doc_type,
+                        "bynder_md_id":item_media_id,
+                        "hash_id" : item_hash_id,   
                     };
                     console.log(doc_details);
                     all_selected_doc.push(doc_details);
@@ -531,7 +570,7 @@ $formNameEscaped = $blockj->escapeHtmlAttr($blockj->getFormName());
                 } else {
                     var myJsonString = "";
                 }
-                jQuery('textarea[name="product[bynder_document]"]').val(myJsonString);
+                //jQuery('textarea[name="product[bynder_document]"]').val(myJsonString);
                 //document.cookie = "bynder_doc=" + myJsonString + "; path=/;";
                 var doc_coockie_id = 0;
                 try{
@@ -549,6 +588,7 @@ $formNameEscaped = $blockj->escapeHtmlAttr($blockj->getFormName());
                         doc_coockie_id:doc_coockie_id
                     },
                     success: function (res) {
+                        jQuery('textarea[name="product[bynder_document]"]').val(res.new_bynder_value).trigger('change');
                     },
                 });
             })

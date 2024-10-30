@@ -111,11 +111,15 @@ class ImportImage extends \Magento\Framework\App\Action\Action
             
             if (!empty($bynder_image)) {
                 $img_array =  json_decode($bynder_image, true);
+				//$img_array =  $img_array['asset_list'];
             } elseif (!empty($image)) {
                 $img_array =  json_decode($image, true);
+				//$img_array =  $img_array['asset_list'];
             } elseif (!empty($bynder_multi_img)) {
                 $img_array =  json_decode($bynder_multi_img, true);
+				//$img_array =  $img_array['asset_list'];
             }
+			//echo "<pre>"; print_r($img_array); exit;
             if (count($img_array) > 0) {
                 foreach ($img_array as $k => $item) {
                     if ($item['item_type'] == 'IMAGE') {
@@ -147,6 +151,7 @@ class ImportImage extends \Magento\Framework\App\Action\Action
                                     in_array('Thumbnail', $item['image_role'])) {
                                 $roll = ['image', 'thumbnail'];
                             }
+							
                             $this->file->write(
                                 $img_url,
                                 $this->driverFile->fileGetContents($item_url)

@@ -1,0 +1,437 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Magento\Catalog\Model\Product;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+use Hyva\Theme\ViewModel\ProductPage;
+use Idex\CatalogExtended\ViewModel\Customer;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Magento\Catalog\Helper\Output as CatalogOutputHelper;
+
+/** @var Escaper $escaper */
+/** @var Template $block */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var ProductPage $productViewModel */
+$productViewModel = $viewModels->require(ProductPage::class);
+$customerViewModel = $viewModels->require(Customer::class);
+/** @var Product $product */
+$product = $productViewModel->getProduct();
+$catalogOutputHelper = $this->helper(CatalogOutputHelper::class);
+$document_text = $product->getBynderDocument();
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
+?>
+<div id="product.technical.details" class="technical-details container bg-zinc-50 py-24 max-xl:flex-col inline-flex gap-11">
+    <div class="xl:w-full xl:max-w-[504px]">
+        <div class="product-content-head">
+            <h2><?= $escaper->escapeHtml(__('Technical details &amp; documents')) ?></h2>
+        </div>
+        <p class="print:hidden text-zinc-800 text-base font-normal font-industry leading-normal tracking-wide">
+            <?= $escaper->escapeHtml(__("For the %1", $product->getName()))?>
+            <?php if(!$customerViewModel->isCustomerLoggedIn()):?>
+                <br class="max-md:hidden" /><?= $escaper->escapeHtml(__("To view all document"))?>
+                <a class="text-idex-orange" href="<?= $escaper->escapeUrl($customerViewModel->getLoginUrl()) ?>"><?= __('login to your account') ?></a>
+            <?php endif;?>
+        </p>
+    </div>
+    <div class="product-technical-tabs accordion w-full">
+        <div class="accordion-list">
+            <div class="tab">
+                <?= $escaper->escapeHtml(__("Specification")) ?>
+            </div>
+            <div class="card w-full">
+                <div class="table-wrapper overflow-x-auto print:pb-8" id="product-specification-details">
+                    <?php if ($attributes = $block->getAdditionalData()): ?>
+                        <div class="table-wrapper overflow-x-auto">
+                            <table class="additional-attributes">
+                                <?php foreach ($attributes as $attribute): ?>
+                                    <tr>
+                                        <th class="col label product-attribute-label"
+                                            scope="row"><?= $escaper->escapeHtml($attribute['label']) ?></th>
+                                        <td class="col data product-attribute-value"
+                                            data-th="<?= $escaper->escapeHtmlAttr($attribute['label']) ?>"
+                                        ><?= /* @noEscape */
+                                            $catalogOutputHelper->productAttribute($product, $attribute['value'], $attribute['code']) ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </table>
+                        </div>
+                    <?php endif;?>
+                </div>
+
+<!----------------------------------------------------------------------------------
+    Static Code need to make it dynamic start
+------------------------------------------------------------------------------------->
+                <div class="table-wrapper overflow-x-auto">
+                    <div class="relative overflow-x-auto">
+						 <?php if (!empty($document_text)) { 
+							$document_array = json_decode($document_text, true);
+							$document_array_extra = json_decode($document_text, true);
+							$document_array = $document_array['asset_list'];
+							$document_array_extra = $document_array_extra['assets_extra_details'];
+							$hash_id = [];
+								foreach($document_array_extra as $hash_key => $array_extra) {
+									foreach($array_extra['file_category'] as $file_category){
+										if($file_category == 'Specification') {
+											$hash_id[] = $hash_key;
+										}
+									}
+								}
+							//echo "<pre>"; print_r($hash_id);
+							$html = ""; 
+							if (!empty($document_array)) {?>
+                        <div class="font-semibold"><?= $escaper->escapeHtml(__("Documents")) ?></div>
+                        <table class="text-zinc-950 w-full text-sm text-left">
+                            <thead class="bg-gray-50 font-industry  border-b border-zinc-950 border-opacity-20">
+                                <tr>
+                                    <th scope="col" class="py-3 text-xs font-normal uppercase tracking-widest">
+                                        Name
+                                    </th>
+                                    <th scope="col" class="whitespace-nowrap px-4 py-3 w-44 text-xs font-normal uppercase tracking-widest">
+                                        Last Modified
+                                    </th>
+                                    <th scope="col" class="py-3 w-24 text-xs font-normal uppercase tracking-widest">
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+							<?php foreach ($document_array as $doc) { 
+							if (in_array($doc['hash_id'], $hash_id)) {
+								$lable = explode("/", $doc['item_url']); ?>
+                                <tr class="border-b border-t border-zinc-950 border-opacity-20">
+                                    <th scope="row" class="inline-flex gap-4 py-4 text-sm whitespace-nowrap font-normal ">
+                                        <button class="min-w-[40px] min-h-[40px] btn-icon bg-zinc-100">
+                                             <a href="<?php echo $doc['item_url']; ?> " target="_blank"><?= $heroicons->filePdfHtml('w-5 h-5', 20, 20) ?></a>
+                                        </button>
+                                        <p>
+                                            <span class="font-normal"> <?php echo $lable[2]; ?> </span>
+                                            <span class="text-xs font-normal uppercase tracking-widest block">File size</span>
+                                        </p>
+                                    </th>
+                                    <td class="p-4">2020-09-23</td>
+                                    <td class="py-4 text-right">
+                                         <a href="<?php echo $doc['item_url']; ?>" class="text-idex-orange text-xs ont-industry uppercase leading-tight tracking-widest" target="_blank">Download</a>
+                                    </td>
+                                </tr>
+								 <?php } } ?>
+                            </tbody>
+                        </table>
+						<?php } }?>
+                    </div>
+                </div>
+<!----------------------------------------------------------------------------------
+    Static Code need to make it dynamic End
+------------------------------------------------------------------------------------->
+
+            </div>
+        </div>
+        <?php if($techSpec = $product->getData('textspecs')):?>
+            <div class="accordion-list">
+                <div class="tab">
+                    <?= $escaper->escapeHtml(__("Bid Specification Template")) ?>
+                </div>
+                <div class="card w-full">
+                    <div class="table-wrapper overflow-x-auto inline-flex flex-col gap-6" id="product-bid-specification">
+                        <?= $techSpec;?>
+                    </div>
+                </div>
+            </div>
+        <?php endif;?>
+        <div class="accordion-list">
+            <div class="tab">
+                <?= $escaper->escapeHtml(__("Performance")) ?>
+            </div>
+            <div class="card w-full">
+
+<!----------------------------------------------------------------------------------
+    Static Code need to make it dynamic start
+------------------------------------------------------------------------------------->
+                <div class="table-wrapper overflow-x-auto" id="product-performance">
+                    <?php if (!empty($document_text)) { 
+                        $document_array = json_decode($document_text, true);
+						$document_array_extra = json_decode($document_text, true);
+						$document_array = $document_array['asset_list'];
+						$document_array_extra = $document_array_extra['assets_extra_details'];
+						$hash_id = [];
+						foreach($document_array_extra as $hash_key => $array_extra) {
+							foreach($array_extra['file_category'] as $file_category){
+								if($file_category == 'Performance') {
+									$hash_id[] = $hash_key;
+								}
+							}
+						}
+						//echo "<pre>"; print_r($hash_id);
+                        $html = ""; 
+                        if (!empty($document_array)) {?>
+                    <div class="font-semibold"><?= $escaper->escapeHtml(__("Documents")) ?></div>
+                    <table class="text-zinc-950 w-full text-sm text-left">
+                        <thead class="bg-gray-50 font-industry  border-b border-zinc-950 border-opacity-20">
+                            <tr>
+                                <th scope="col" class="py-3 text-xs font-normal uppercase tracking-widest">
+                                    Name
+                                </th>
+                                <th scope="col" class="whitespace-nowrap px-4 py-3 w-44 text-xs font-normal uppercase tracking-widest">
+                                    Last Modified
+                                </th>
+                                <th scope="col" class="py-3 w-24 text-xs font-normal uppercase tracking-widest">
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($document_array as $doc) { 
+							if (in_array($doc['hash_id'], $hash_id)) {
+								$lable = explode("/", $doc['item_url']); ?>
+                            <tr class="border-b border-t border-zinc-950 border-opacity-20">
+                                <th scope="row" class="inline-flex gap-4 py-4 text-sm whitespace-nowrap font-normal ">
+                                    <button class="min-w-[40px] min-h-[40px] btn-icon bg-zinc-100">
+                                    <a href="<?php echo $doc['item_url']; ?> " target="_blank"><?= $heroicons->filePdfHtml('w-5 h-5', 20, 20) ?></a>
+                                    </button>
+                                    <p>
+                                    <span class="font-normal"> <?php echo $lable[2]; ?> </span>
+                                    <span class="text-xs font-normal uppercase tracking-widest block">File size</span>
+                                    </p>
+                                </th>
+                                <td class="p-4">2020-09-23</td>
+                                <td class="py-4 text-right">
+                                    <a href="<?php echo $doc['item_url']; ?>" class="text-idex-orange text-xs ont-industry uppercase leading-tight tracking-widest" target="_blank">Download</a>
+                                </td>
+                            </tr>
+                            <?php } } ?>
+                        </tbody>
+                    </table>
+                    <?php } }?>
+                </div>
+<!----------------------------------------------------------------------------------
+    Static Code need to make it dynamic End
+------------------------------------------------------------------------------------->
+
+            </div>
+        </div>
+        <div class="accordion-list">
+            <div class="tab">
+                <?= $escaper->escapeHtml(__("Drawings")) ?>
+            </div>
+            <div class="card w-full">
+                <div class="table-wrapper overflow-x-auto" id="product-drawings">
+					<?php if (!empty($document_text)) { 
+                        $document_array = json_decode($document_text, true);
+						$document_array_extra = json_decode($document_text, true);
+						$document_array = $document_array['asset_list'];
+						$document_array_extra = $document_array_extra['assets_extra_details'];
+						$hash_id = [];
+						foreach($document_array_extra as $hash_key => $array_extra) {
+							foreach($array_extra['file_category'] as $file_category){
+								if($file_category == 'Drawings') {
+									$hash_id[] = $hash_key;
+								}
+							}
+						}
+						//echo "<pre>"; print_r($hash_id);
+                        $html = ""; 
+                        if (!empty($document_array)) {?>
+                    <p><?= $escaper->escapeHtml(__("Documents")) ?></p>
+					<table class="text-zinc-950 w-full text-sm text-left">
+                        <thead class="bg-gray-50 font-industry  border-b border-zinc-950 border-opacity-20">
+                            <tr>
+                                <th scope="col" class="py-3 text-xs font-normal uppercase tracking-widest">
+                                    Name
+                                </th>
+                                <th scope="col" class="whitespace-nowrap px-4 py-3 w-44 text-xs font-normal uppercase tracking-widest">
+                                    Last Modified
+                                </th>
+                                <th scope="col" class="py-3 w-24 text-xs font-normal uppercase tracking-widest">
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($document_array as $doc) { 
+							if (in_array($doc['hash_id'], $hash_id)) {
+								$lable = explode("/", $doc['item_url']); ?>
+                            <tr class="border-b border-t border-zinc-950 border-opacity-20">
+                                <th scope="row" class="inline-flex gap-4 py-4 text-sm whitespace-nowrap font-normal ">
+                                    <button class="min-w-[40px] min-h-[40px] btn-icon bg-zinc-100">
+                                    <a href="<?php echo $doc['item_url']; ?> " target="_blank"><?= $heroicons->filePdfHtml('w-5 h-5', 20, 20) ?></a>
+                                    </button>
+                                    <p>
+                                    <span class="font-normal"> <?php echo $lable[2]; ?> </span>
+                                    <span class="text-xs font-normal uppercase tracking-widest block">File size</span>
+                                    </p>
+                                </th>
+                                <td class="p-4">2020-09-23</td>
+                                <td class="py-4 text-right">
+                                    <a href="<?php echo $doc['item_url']; ?>" class="text-idex-orange text-xs ont-industry uppercase leading-tight tracking-widest" target="_blank">Download</a>
+                                </td>
+                            </tr>
+                            <?php } } ?>
+                        </tbody>
+                    </table>
+                    <?php } }?>
+                </div>
+            </div>
+        </div>
+        <div class="accordion-list">
+            <div class="tab">
+                <?= $escaper->escapeHtml(__("Installation & Service")) ?>
+            </div>
+            <div class="card w-full">
+
+<!----------------------------------------------------------------------------------
+    Static Code need to make it dynamic start
+------------------------------------------------------------------------------------->
+                <div class="relative table-wrapper overflow-x-auto" id="product-installation">
+					<?php if (!empty($document_text)) { 
+                        $document_array = json_decode($document_text, true);
+						$document_array_extra = json_decode($document_text, true);
+						$document_array = $document_array['asset_list'];
+						$document_array_extra = $document_array_extra['assets_extra_details'];
+						$hash_id = [];
+						foreach($document_array_extra as $hash_key => $array_extra) {
+							foreach($array_extra['file_category'] as $file_category){
+								if($file_category == 'Installation___Service') {
+									$hash_id[] = $hash_key;
+								}
+							}
+						}
+						//echo "<pre>"; print_r($hash_id);
+                        $html = ""; 
+                        if (!empty($document_array)) {?>
+                    <div class="font-semibold"><?= $escaper->escapeHtml(__("Documents")) ?></div>
+                    <table class="table-auto text-zinc-950 w-full text-sm text-left">
+                        <thead class="bg-gray-50 font-industry  border-b border-zinc-950 border-opacity-20">
+                            <tr>
+                                <th scope="col" class="w-full py-3 text-xs font-normal uppercase tracking-widest">
+                                    Name
+                                </th>
+                                <th scope="col" class="whitespace-nowrap min-w-[155px] px-4 py-3 text-xs font-normal uppercase tracking-widest">
+                                    Last Modified
+                                </th>
+                                <th scope="col" class="whitespace-nowrap min-w-[103px] px-4 py-3 text-xs font-normal uppercase tracking-widest">
+                                Sheet #
+                                </th>
+                                <th scope="col" class="py-3 w-24 text-xs font-normal uppercase tracking-widest">
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+						<?php foreach ($document_array as $doc) { 
+							if (in_array($doc['hash_id'], $hash_id)) {
+								$lable = explode("/", $doc['item_url']); ?>
+                            <tr class="border-b border-t border-zinc-950 border-opacity-20">
+                                <th scope="row" class="inline-flex gap-4 py-4 text-sm whitespace-nowrap font-normal ">
+                                    <button class="min-w-[40px] min-h-[40px] btn-icon bg-zinc-100">
+                                        <a href="<?php echo $doc['item_url']; ?> " target="_blank"><?= $heroicons->filePdfHtml('w-5 h-5', 20, 20) ?></a>
+                                    </button>
+                                    <p>
+                                    <span class="font-normal"> <?php echo $lable[2]; ?> </span>
+                                    <span class="text-xs font-normal uppercase tracking-widest block">File size</span>
+                                    </p>
+                                </th>
+                                <td class="p-4">2020-09-23</td>
+                                <td class="py-4 px-4">127329</td>
+                                <td class="py-4 text-right">
+                                     <a href="<?php echo $doc['item_url']; ?>" class="text-idex-orange text-xs ont-industry uppercase leading-tight tracking-widest" target="_blank">Download</a>
+                                </td>
+                            </tr>
+							 <?php } } ?>
+                        </tbody>
+                    </table>
+					 <?php } } ?>
+                </div>
+                <div class="more-links">
+                    <a class="group" href="#">
+                        <?= $escaper->escapeHtml(__("Find out more about our service and maintenance packages")) ?>
+                        <?= $heroicons->arrowRightHtml('w-4 h-4 group-hover:-rotate-45', 16, 16) ?>
+                    </a>
+                </div>
+<!----------------------------------------------------------------------------------
+    Static Code need to make it dynamic End
+------------------------------------------------------------------------------------->
+
+            </div>
+        </div>
+        <div class="accordion-list">
+            <div class="tab">
+                <?= $escaper->escapeHtml(__("Software/Multimedia")) ?>
+            </div>
+            <div class="card w-full">
+                <div class="table-wrapper overflow-x-auto" id="product-software">
+					<?php if (!empty($document_text)) { 
+                        $document_array = json_decode($document_text, true);
+						$document_array_extra = json_decode($document_text, true);
+						$document_array = $document_array['asset_list'];
+						$document_array_extra = $document_array_extra['assets_extra_details'];
+						$hash_id = [];
+						foreach($document_array_extra as $hash_key => $array_extra) {
+							foreach($array_extra['file_category'] as $file_category){
+								if($file_category == 'Software_Multimedia') {
+									$hash_id[] = $hash_key;
+								}
+							}
+						}
+						//echo "<pre>"; print_r($hash_id);
+                        $html = ""; 
+                        if (!empty($document_array)) {?>
+                    <p><?= $escaper->escapeHtml(__("Documents")) ?></p>
+					<table class="text-zinc-950 w-full text-sm text-left">
+                        <thead class="bg-gray-50 font-industry  border-b border-zinc-950 border-opacity-20">
+                            <tr>
+                                <th scope="col" class="py-3 text-xs font-normal uppercase tracking-widest">
+                                    Name
+                                </th>
+                                <th scope="col" class="whitespace-nowrap px-4 py-3 w-44 text-xs font-normal uppercase tracking-widest">
+                                    Last Modified
+                                </th>
+                                <th scope="col" class="py-3 w-24 text-xs font-normal uppercase tracking-widest">
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($document_array as $doc) { 
+							if (in_array($doc['hash_id'], $hash_id)) {
+								$lable = explode("/", $doc['item_url']); ?>
+                            <tr class="border-b border-t border-zinc-950 border-opacity-20">
+                                <th scope="row" class="inline-flex gap-4 py-4 text-sm whitespace-nowrap font-normal ">
+                                    <button class="min-w-[40px] min-h-[40px] btn-icon bg-zinc-100">
+                                    <a href="<?php echo $doc['item_url']; ?> " target="_blank"><?= $heroicons->filePdfHtml('w-5 h-5', 20, 20) ?></a>
+                                    </button>
+                                    <p>
+                                    <span class="font-normal"> <?php echo $lable[2]; ?> </span>
+                                    <span class="text-xs font-normal uppercase tracking-widest block">File size</span>
+                                    </p>
+                                </th>
+                                <td class="p-4">2020-09-23</td>
+                                <td class="py-4 text-right">
+                                    <a href="<?php echo $doc['item_url']; ?>" class="text-idex-orange text-xs ont-industry uppercase leading-tight tracking-widest" target="_blank">Download</a>
+                                </td>
+                            </tr>
+                            <?php } } ?>
+                        </tbody>
+                    </table>
+                    <?php } }?>
+                </div>
+            </div>
+        </div>
+        <?php if($parts = $product->getData('associted_part_numbers')):?>
+            <div class="accordion-list">
+                <div class="tab">
+                    <?= $escaper->escapeHtml(__("Bid Specification Template")) ?>
+                </div>
+                <div class="card w-full">
+                    <div class="table-wrapper overflow-x-auto" id="product-part-numbers">
+                        <?= $parts;?>
+                    </div>
+                </div>
+            </div>
+        <?php endif;?>
+    </div>
+</div>

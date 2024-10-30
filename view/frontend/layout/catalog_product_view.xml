@@ -13,12 +13,20 @@
 				</argument>
 			</action>
 		</referenceBlock>
-       <referenceBlock name="product.info.details">
+       <!-- <referenceBlock name="product.info.details">
            <block class="Magento\Catalog\Block\Product\View" name="custom.tab" template="DamConsultants_Idex::product/view/bynderdoc_tab.phtml" group="detailed_info" >
                <arguments>
                    <argument translate="true" name="title" xsi:type="string">Document</argument>
                </arguments>
            </block>
-       </referenceBlock>
+       </referenceBlock> -->
+		<referenceContainer name="product.info.main">
+			<block class="Magento\Catalog\Block\Product\View\Attributes" name="custom.tab" template="DamConsultants_Idex::product/details.phtml"/>
+		</referenceContainer>
+        <referenceBlock name="product-technical-spec" remove="true"/>
+        <move element="upsell" destination="product.info.main" after="custom.tab"/>
+        <move element="related" destination="product.info.main" after="custom.tab"/>
+        <move element="product.review.form" destination="footer-container" after="review_list" />
+        <move element="review_list" destination="footer-container" before="-" />
     </body>
 </page>
