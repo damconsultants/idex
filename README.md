@@ -11,4 +11,4 @@ Magento 2 Idex Extension gives you a great opportunity to upload more â€œimagesâ
     1.4.3. php bin/magento setup:static-content:deploy
     
 2) Using Composer
-      composer require damconsultants/Idex:1.0.3
+      composer require damconsultants/Idex:1.0.4
