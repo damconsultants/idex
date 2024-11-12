@@ -386,6 +386,7 @@ class FeatchNullDataToMagento
             $assets_extra_details_video = array();
             $assets_extra_details_doc = array();
 			$type = [];
+			$is_order = [];
             foreach ($convert_array['data'] as $data_value) {
                 $type[] = $data_value['type'];
                 $bynder_media_id = $data_value['id'];
@@ -456,6 +457,11 @@ class FeatchNullDataToMagento
                             }
                             $new_bynder_mediaid_text[] = $bynder_media_id."\n";
                             $hash_id[] = $idHash."\n";
+							if(isset($data_value["assets_extra_details"]["image_order"]) && !empty($data_value["assets_extra_details"]["image_order"])) {
+                                foreach ($data_value["assets_extra_details"]["image_order"]  as $property_Magento_Media_Order) {
+                                    $is_order[] = $property_Magento_Media_Order . "\n";
+                                }
+                            }
                         }
                     } else {
                         $new_magento_role_list[] = "###"."\n";
@@ -471,6 +477,11 @@ class FeatchNullDataToMagento
                         }
                         $new_bynder_mediaid_text[] = $bynder_media_id."\n";
                         $hash_id[] = $idHash."\n";
+						if(isset($data_value["assets_extra_details"]["image_order"]) && !empty($data_value["assets_extra_details"]["image_order"])) {
+							foreach ($data_value["assets_extra_details"]["image_order"]  as $property_Magento_Media_Order) {
+								$is_order[] = $property_Magento_Media_Order . "\n";
+							}
+						}
                     }
                     if (count($images_urls_list) == 0) {
                         if (isset($image_data["JPG"])) {
@@ -501,6 +512,7 @@ class FeatchNullDataToMagento
                         "image_alt_text" => $new_bynder_alt_text,
                         "bynder_media_id_new" => $new_bynder_mediaid_text,
                         'id_hash' => $hash_id,
+						'is_order' => $is_order
                     ];
                     array_push($data_val_arr, $data_p);
                 } elseif ($data_value['type'] == 'video') {
@@ -517,6 +529,7 @@ class FeatchNullDataToMagento
                         "type" => $data_value['type'],
                         'bynder_media_id_new' => $video_new_bynder_mediaid_text,
                         'id_hash' => $video_hash_id,
+						'is_order' => $is_order
                     ];
                     array_push($data_val_arr, $data_p);
 
@@ -536,9 +549,11 @@ class FeatchNullDataToMagento
                         "type" => $data_value['type'],
                         'bynder_media_id_new' => $doc_new_bynder_mediaid_text,
                         'id_hash' => $doc_hash_id,
+						'is_order' => $is_order
                     ];
                     array_push($doc_data_val_arr, $data_p);
                 }
+				$is_order = [];
             }
         }
         $type = array_unique($type);
@@ -588,6 +603,7 @@ class FeatchNullDataToMagento
         $image_alt_text = [];
         $byn_md_id_new = [];
 		$is_hash = [];
+		$byn_is_order = [];
         foreach ($data_arr as $key => $skus) {
             $temp_arr[$skus][] = implode("", $data_val_arr[$key]["url"]);
             $image_value_details_role[$skus][] = implode("", $data_val_arr[$key]["magento_image_role"]);
@@ -595,6 +611,7 @@ class FeatchNullDataToMagento
             $bynder_media_id_new[$skus][] = implode("", $data_val_arr[$key]["bynder_media_id_new"]);
             $is_hash[$skus][] = implode("", $data_val_arr[$key]["id_hash"]);
             $img_type[$skus][] = $data_val_arr[$key]["type"];
+			$byn_is_order[$skus][] = implode("", $data_val_arr[$key]["is_order"]);
         }
         //echo "<pre> image "; print_r($img_type);
         foreach ($temp_arr as $product_sku_key => $image_value) {
@@ -604,6 +621,7 @@ class FeatchNullDataToMagento
             $bynder_media_id_value = implode("", $bynder_media_id_new[$product_sku_key]);
             $byd_hash_id = implode("", $is_hash[$product_sku_key]);
             $byd_type = implode(",", $img_type[$product_sku_key]);
+			$byd_media_is_order = implode("", $byn_is_order[$product_sku_key]);
             $this->getUpdateImage(
                 $img_json,
                 $product_sku_key,
@@ -614,7 +632,8 @@ class FeatchNullDataToMagento
                 $bynder_extra_data_video,
 				$byd_hash_id,
                 $byd_type,
-                $type
+                $type,
+				$byd_media_is_order
             );
         }
     }
@@ -633,6 +652,7 @@ class FeatchNullDataToMagento
         $image_alt_text = [];
         $byn_md_id_new = [];
 		$is_hash = [];
+		$byn_is_order = [];
         foreach ($data_arr as $key => $skus) {
             $temp_arr[$skus][] = implode("", $data_val_arr[$key]["url"]);
             $image_value_details_role[$skus][] = implode("", $data_val_arr[$key]["magento_image_role"]);
@@ -640,6 +660,7 @@ class FeatchNullDataToMagento
             $bynder_media_id_new[$skus][] = implode("", $data_val_arr[$key]["bynder_media_id_new"]);
             $is_hash[$skus][] = implode("", $data_val_arr[$key]["id_hash"]);
             $img_type[$skus][] = $data_val_arr[$key]["type"];
+			$byn_is_order[$skus][] = implode("", $data_val_arr[$key]["is_order"]);
         }
 
         foreach ($temp_arr as $product_sku_key => $image_value) {
@@ -649,6 +670,7 @@ class FeatchNullDataToMagento
             $bynder_media_id_value = implode("", $bynder_media_id_new[$product_sku_key]);
             $byd_hash_id = implode("", $is_hash[$product_sku_key]);
             $byd_type = implode(",", $img_type[$product_sku_key]);
+			$byd_media_is_order = implode("", $byn_is_order[$product_sku_key]);
             $this->getUpdatedoc(
                 $img_json,
                 $product_sku_key,
@@ -658,6 +680,7 @@ class FeatchNullDataToMagento
 				$bynder_extra_data,
 				$byd_hash_id,
                 $byd_type,
+				$byd_media_is_order
             );
         }
     }
@@ -682,7 +705,8 @@ class FeatchNullDataToMagento
         $bynder_extra_data_video,
 		$byd_hash_id,
 		$byd_type,
-        $all_type
+        $all_type,
+		$byd_media_is_order
 	)
     {
 
@@ -711,6 +735,7 @@ class FeatchNullDataToMagento
             if (in_array("image", $all_type) || in_array("video", $all_type)) {
 				$bynder_media_id = explode("\n", $bynder_media_id_value);
 				$hashId = explode("\n", $byd_hash_id);
+				$isOrder = explode("\n", $byd_media_is_order);
                 if (!empty($image_value)) {
                     $new_image_array = explode("\n", $img_json);
                     $new_alttext_array = explode("\n", $image_alt_text_value);
@@ -750,7 +775,7 @@ class FeatchNullDataToMagento
                                 if ($new_magento_role_option_array[$vv] != "###") {
                                     $curt_img_role = [$new_magento_role_option_array[$vv]];
                                 }
-                                
+                                $is_order = isset($isOrder[$vv]) ? $isOrder[$vv] : "";
                                 $image_detail[] = [
                                     "item_url" => $new_image_value,
                                     "alt_text" => $img_altText_val,
@@ -760,9 +785,10 @@ class FeatchNullDataToMagento
                                     "bynder_md_id" => $bynder_media_id[$vv],
                                     "hash_id" => $hashId[$vv],
                                     "is_import" => 0,
+									"is_order" => empty($is_order) ? "100" : $is_order
                                 ];
                                 if (!in_array($item_url[0], $all_item_url)) {
-                                    
+                                    $is_order = isset($isOrder[$vv]) ? $isOrder[$vv] : "";
                                     $diff_image_detail[] = [
                                         "item_url" => $new_image_value,
                                         "alt_text" => $img_altText_val,
@@ -772,6 +798,7 @@ class FeatchNullDataToMagento
                                         "bynder_md_id" => $bynder_media_id[$vv],
                                         "hash_id" => $hashId[$vv],
                                         "is_import" => 0,
+										"is_order" => empty($is_order) ? "100" : $is_order
                                     ];
                                     $data_image_data = [
                                         'sku' => $product_sku_key,
@@ -817,6 +844,7 @@ class FeatchNullDataToMagento
                             } else {
                                 $item_url = explode("@@", $new_image_value);
                                 if (!empty($new_image_value)) {
+									$is_order = isset($isOrder[$vv]) ? $isOrder[$vv] : "";
                                     $video_detail[] = [
                                         "item_url" => $item_url[0],
                                         "image_role" => null,
@@ -824,9 +852,10 @@ class FeatchNullDataToMagento
                                         "thum_url" => $item_url[1],
                                         "bynder_md_id" => $bynder_media_id[$vv],
                                         "hash_id" => $hashId[$vv],
+										"is_order" => empty($is_order) ? "100" : $is_order
                                     ];
                                     if (!in_array($item_url[0], $all_video_url)) {
-                                        
+                                        $is_order = isset($isOrder[$vv]) ? $isOrder[$vv] : "";
                                         $video_detail_diff[] = [
                                             "item_url" => $item_url[0],
                                             "image_role" => null,
@@ -834,6 +863,7 @@ class FeatchNullDataToMagento
                                             "thum_url" => $item_url[1],
                                             "bynder_md_id" => $bynder_media_id[$vv],
                                             "hash_id" => $hashId[$vv],
+											"is_order" => empty($is_order) ? "100" : $is_order
                                         ];
                                         $data_video_data = [
                                             'sku' => $product_sku_key,
@@ -898,6 +928,7 @@ class FeatchNullDataToMagento
                                                 "bynder_md_id" => $img['bynder_md_id'],
                                                 "hash_id" => $img['hash_id'],
                                                 "is_import" => $img['is_import'],
+												"is_order" => $img['is_order'],
                                             ];
                                         }
                                     }
@@ -919,6 +950,7 @@ class FeatchNullDataToMagento
                                                 "thum_url" => $img['thum_url'],
                                                 "bynder_md_id" => $img['bynder_md_id'],
                                                 "hash_id" => $img['hash_id'],
+												"is_order" => $img['is_order'],
                                             ];
                                         }
                                     }
@@ -943,6 +975,7 @@ class FeatchNullDataToMagento
                                                     "bynder_md_id" => $img['bynder_md_id'],
                                                     "hash_id" => $img['hash_id'],
                                                     "is_import" => $img['is_import'],
+													"is_order" => $img['is_order'],
                                                 ];
                                             }
                                         } else {
@@ -955,6 +988,7 @@ class FeatchNullDataToMagento
                                                     "thum_url" => $img['thum_url'],
                                                     "bynder_md_id" => $img['bynder_md_id'],
                                                     "hash_id" => $img['hash_id'],
+													"is_order" => $img['is_order'],
                                                 ];
                                             }
                                         }
@@ -1042,6 +1076,7 @@ class FeatchNullDataToMagento
                                 if ($new_magento_role_option_array[$vv] != "###") {
                                     $curt_img_role = [$new_magento_role_option_array[$vv]];
                                 }
+								$is_order = isset($isOrder[$vv]) ? $isOrder[$vv] : "";
                                 $image_detail[] = [
                                     "item_url" => $image_value,
                                     "alt_text" => $img_altText_val,
@@ -1050,7 +1085,8 @@ class FeatchNullDataToMagento
                                     "thum_url" => $item_url[0],
                                     "bynder_md_id" => $bynder_media_id[$vv],
                                     "hash_id" => $hashId[$vv],
-                                    "is_import" => 0
+                                    "is_import" => 0,
+									"is_order" => empty($is_order) ? "100" : $is_order
                                 ];
                                 $data_image_data = [
                                     'sku' => $product_sku_key,
@@ -1080,6 +1116,7 @@ class FeatchNullDataToMagento
                                 if (!empty($image_value)) {
                                     $item_url = explode("@@", $image_value);
                                     $media_video_explode = explode("/", $item_url[0]);
+									$is_order = isset($isOrder[$vv]) ? $isOrder[$vv] : "";
                                     $video_detail[] = [
                                         "item_url" => $item_url[0],
                                         "image_role" => null,
@@ -1087,6 +1124,7 @@ class FeatchNullDataToMagento
                                         "thum_url" => $item_url[1],
                                         "bynder_md_id" => $bynder_media_id[$vv],
                                         "hash_id" => $hashId[$vv],
+										"is_order" => empty($is_order) ? "100" : $is_order
                                     ];
                                     $data_video_data = [
                                         'sku' => $product_sku_key,
@@ -1186,7 +1224,8 @@ class FeatchNullDataToMagento
 		$bynder_media_id_value,
 		$bynder_extra_data,
 		$byd_hash_id,
-		$byd_type
+		$byd_type,
+		$byd_media_is_order
 	)
     {
 
@@ -1210,16 +1249,19 @@ class FeatchNullDataToMagento
                     $new_doc_array = explode("\n", $img_json);
 					$bynder_media_id = explode("\n", $bynder_media_id_value);
 					$hashId = explode("\n", $byd_hash_id);
+					$isOrder = explode("\n", $byd_media_is_order);
                     $doc_detail = [];
                     foreach ($new_doc_array as $vv => $doc_value) {
                         if(!empty($doc_value)){
                             $item_url = explode("?", $doc_value);
                             $media_doc_explode = explode("/", $item_url[0]);
+							$is_order = isset($isOrder[$vv]) ? $isOrder[$vv] : "";
                             $doc_detail[] = [
                                 "item_url" => $item_url[0],
                                 "item_type" => 'DOCUMENT',
                                 "bynder_md_id" => $bynder_media_id[$vv],
                                 "hash_id" => $hashId[$vv],
+								"is_order" => empty($is_order) ? "100" : $is_order
                             ];
                             $data_doc_value = [
                                 'sku' => $product_sku_key,

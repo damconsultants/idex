@@ -259,14 +259,14 @@ $get_base_url = $block->getBaseUrl();
         var selected_images = JSON.parse(old_selected_images);
         var item_length = selected_images['asset_list'].length;
         var content = '';
-        // selected_images['asset_list'].sort(function(a, b) {
-        //     return Number(a.is_order) - Number(b.is_order);
-        // });
+        selected_images['asset_list'].sort(function(a, b) {
+             return Number(a.is_order) - Number(b.is_order);
+        });
         jQuery.each(selected_images['asset_list'], function( i, img_data ){
 
             var selected_role = img_data.image_role;
             var select_item_type = img_data.item_type;
-			// var is_order = img_data.is_order
+			var is_order = img_data.is_order
 			// console.log("is_order", is_order);
             var bynder_media_id = "";
             if(typeof img_data.bynder_md_id != "undefined"){
@@ -291,7 +291,7 @@ $get_base_url = $block->getBaseUrl();
                         'data-bynderid="'+bynder_media_id+'"'+
                         'data-hashid="'+bynder_hash_id+'"'+
                         'data-isimport="'+check_is_imported+'"'+
-                        //'data-isorder="'+is_order+'"'+
+                        'data-isorder="'+is_order+'"'+
                         'data-index="'+i+'" id="textboxId_'+i+'" data-imgType="'+select_item_type+'"'+
                         'data-thumUrl="'+item_thum_url+'" value="'+original_item_url+'" />'
             content += '</td>'
@@ -780,6 +780,7 @@ $get_base_url = $block->getBaseUrl();
                     var is_imported = jQuery(this).attr("data-isimport");
                     var item_hash_id = jQuery(this).attr("data-hashid");
                     var item_media_id = jQuery(this).attr("data-bynderid");
+					var is_order = jQuery(this).attr("data-isorder");
 
                     var n_image_role = jQuery('.image_role_'+item_index).val();
                     
@@ -804,7 +805,7 @@ $get_base_url = $block->getBaseUrl();
                         "bynder_md_id": item_media_id,
                         "hash_id" : item_hash_id,
                         "is_import" : is_imported,
-                        //"is_order" : [is_order]
+                        "is_order" : is_order
                     };
                     all_selected_images.push(images_details);
                 });

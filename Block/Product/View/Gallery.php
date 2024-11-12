@@ -168,8 +168,18 @@ class Gallery extends \Magento\Catalog\Block\Product\View\Gallery
                 $bynder_image = $product->getData('bynder_multi_img');
                 $json_value = json_decode($bynder_image, true);
 				$json_value = $json_value["asset_list"];
+				 usort($json_value, function ($a, $b) {
+                    return $a['is_order'] <=> $b['is_order'];
+                });
                 $flag = '';
+                $all_unq_media_ids = array();
                 foreach ($json_value as $key => $values) {
+                    // check image already added or not
+                    if(in_array($values["bynder_md_id"],$all_unq_media_ids)){
+                        continue;
+                    }else{
+                        array_push($all_unq_media_ids,$values["bynder_md_id"]);
+                    }
                     $image_values = trim($values['thum_url']);
                     $isMain = '';
                     if ($values['item_type'] == 'IMAGE') {
@@ -220,8 +230,18 @@ class Gallery extends \Magento\Catalog\Block\Product\View\Gallery
                 $bynder_image = $product->getData('bynder_multi_img');
                 $json_value = json_decode($bynder_image, true);
 				$json_value = $json_value["asset_list"];
+				usort($json_value, function ($a, $b) {
+                    return $a['is_order'] <=> $b['is_order'];
+                });
                 $flag = '';
+                $all_unq_media_ids = array();
                 foreach ($json_value as $key => $values) {
+                    // check image already added or not
+                    if(in_array($values["bynder_md_id"],$all_unq_media_ids)){
+                        continue;
+                    }else{
+                        array_push($all_unq_media_ids,$values["bynder_md_id"]);
+                    }
                     $image_values = trim($values['thum_url']);
                     $isMain = '';
                     if ($values['item_type'] == 'IMAGE') {

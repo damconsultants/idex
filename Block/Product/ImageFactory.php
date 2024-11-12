@@ -219,6 +219,8 @@ class ImageFactory extends \Magento\Catalog\Block\Product\ImageFactory
                 } else {
                     $image_url = $imageAsset->getUrl();
                 }
+            } else {
+                $image_url = $imageAsset->getUrl();
             }
         } else {
             $image_url = $imageAsset->getUrl();
