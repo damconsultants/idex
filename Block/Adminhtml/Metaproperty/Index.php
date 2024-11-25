@@ -116,6 +116,8 @@ class Index extends \Magento\Backend\Block\Template
 			$response_data['image_search']= $properties_details["search_visibility"]["bynder_property_slug"];
 			$response_data['image_asset']= $properties_details["asset"]["bynder_property_slug"];
 			$response_data['image_order']= $properties_details["image_order"]["bynder_property_slug"];
+            $response_data['asset_sub_type']= $properties_details["asset_sub_type"]["bynder_property_slug"];
+            $response_data['file_title']= $properties_details["file_title"]["bynder_property_slug"];
         } else {
             $response_data['sku_selected'] = '0';
             $response_data['image_role_selected'] = '0';
@@ -127,6 +129,8 @@ class Index extends \Magento\Backend\Block\Template
 			$response_data['image_search'] = '0';
 			$response_data['image_asset'] = '0';
 			$response_data['image_order'] =  '0';
+            $response_data['asset_sub_type'] =  '0';
+            $response_data['file_title'] =  '0';
         }
         return $response_data;
     }

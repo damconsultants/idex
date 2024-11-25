@@ -15,6 +15,7 @@ $bynder_image = $block->getProduct()->getBynderMultiImg();
 $type = [];
 if (!empty($bynder_image)) {
     $json_decode = json_decode($bynder_image, true);
+	$json_decode = $json_decode['asset_list'];
     foreach( $json_decode as $data_image) {
         $type[] = $data_image['item_type'];
 		

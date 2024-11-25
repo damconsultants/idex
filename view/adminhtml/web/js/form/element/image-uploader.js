@@ -551,7 +551,7 @@ define([
                       dir_path + '/' +
                       res.file_name +
                       '" class="bynder-view" >'
-                  );
+                  ).trigger('imageAdded');
                   jQuery("#YnluZGVy a").click();
                   return true;
                 } else {

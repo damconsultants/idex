@@ -11,6 +11,8 @@ $default_image_file = $block_get_data['image_file'];
 $default_image_search = $block_get_data['image_search'];
 $default_image_asset = $block_get_data['image_asset'];
 $default_image_media_order = $block_get_data['image_order'];
+$default_asset_sub_type = $block_get_data['asset_sub_type'];
+$default_file_title = $block_get_data['file_title'];
 $url = $block->getMainUrl();
 $syncMetaUrl = $url . "bynder/index/synmetaproperty";
 
@@ -24,6 +26,8 @@ $search_visibility_properites = "";
 $asset_properites = "";
 $is_order = "";
 $customer_visibility = "";
+$asset_sub_type = "";
+$file_title = "";
 if (count($get_metaData) > 0) {
     foreach ($get_metaData as $newKey => $newValue) {
         $sku_checked = "";
@@ -36,6 +40,8 @@ if (count($get_metaData) > 0) {
         $asset = "";
         $customer_visibility_checked = "";
         $media_order_checked = "";
+        $sub_type_checked = "";
+        $file_title_checked = "";
         if ($default_sku_value == $newKey) {
             $sku_checked = "selected";
         } elseif ($default_image_role_value == $newKey) {
@@ -56,6 +62,10 @@ if (count($get_metaData) > 0) {
             $asset = "selected";
         } elseif ($default_image_media_order == $newKey) {
             $media_order_checked = "selected";
+        } elseif ($default_asset_sub_type == $newKey) {
+            $sub_type_checked = "selected";
+        } elseif ($default_file_title == $newKey) {
+            $file_title_checked = "selected";
         }
         $sku_properites .= '<option value="' . $newKey . '" ' . $sku_checked . ' >' .
             $block->escapeHtml($newValue) .
@@ -85,6 +95,12 @@ if (count($get_metaData) > 0) {
             $newValue .
             '</option>';
         $is_order .= '<option value="' . $newKey . '" ' . $media_order_checked . ' >' .
+            $newValue .
+            '</option>';
+        $asset_sub_type .= '<option value="' . $newKey . '" ' . $sub_type_checked . ' >' .
+            $newValue .
+            '</option>';
+        $file_title .= '<option value="' . $newKey . '" ' . $file_title_checked . ' >' .
             $newValue .
             '</option>';
     }
@@ -196,6 +212,24 @@ if (count($get_metaData) > 0) {
                         <select class="selectbox_item" id="bynder_property_media_order" name="select_meta_tag[]">
                             <option value="0">Select an option</option>
                             <?= $is_order ?>
+                        </select>
+                    </div>
+
+                    <div class="dropdown-item">
+                        <label><strong>Meta Property for Asset Sub Type:</strong></label><br><br>
+                        <input type="hidden" name="system_slug[]" value="asset_sub_type" />
+                        <select class="selectbox_item" id="bynder_property_asset_sub_type" name="select_meta_tag[]">
+                            <option value="0">Select an option</option>
+                            <?= $asset_sub_type ?>
+                        </select>
+                    </div>
+
+                    <div class="dropdown-item">
+                        <label><strong>Meta Property for File Title:</strong></label><br><br>
+                        <input type="hidden" name="system_slug[]" value="file_title" />
+                        <select class="selectbox_item" id="bynder_property_file_title" name="select_meta_tag[]">
+                            <option value="0">Select an option</option>
+                            <?= $file_title ?>
                         </select>
                     </div>
                 </div>

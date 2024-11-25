@@ -12,6 +12,8 @@
 namespace DamConsultants\Idex\Controller\BynderIndex;
 
 use DamConsultants\Idex\Helper\Data;
+use Symfony\Component\Process\Process;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class Index extends \Magento\Framework\App\Action\Action
 {
@@ -85,15 +87,29 @@ class Index extends \Magento\Framework\App\Action\Action
                         }
                     }
                     $res_array["status"] = 1;
-                    $res_array["message"] = "successfull ";
+                    $res_array["message"] = "Successful";
+                    $res_array["file_name"] = $basename;
+
+                    // Run the command programmatically
+                    try {
+                        $process = new Process(['php', 'bin/magento', 'media-gallery:sync']);
+                        $process->setWorkingDirectory(BP); // Set base Magento directory
+                        $process->run();
+
+                        // Check if the process was successful
+                        if ($process->isSuccessful()) {
+                            $res_array["command_status"] = "Command executed successfully.";
+                        } else {
+                            $res_array["command_status"] = "Command failed: " . $process->getErrorOutput();
+                        }
+                    } catch (ProcessFailedException $exception) {
+                        $res_array["command_status"] = "Command execution error: " . $exception->getMessage();
+                    }
                 } else {
-                    $res_array["message"] = "Something went wrong.
-                    Please reload the page and try again.";
+                    $res_array["message"] = "Something went wrong. Please reload the page and try again.";
                 }
             } else {
-                $res_array["message"] = "Sorry,
-                you not selected any item ?.
-                Please select item and try again";
+                $res_array["message"] = "Sorry, you did not select any item. Please select an item and try again.";
             }
         }
         $json_data = json_encode($res_array);

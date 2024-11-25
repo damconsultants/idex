@@ -103,4 +103,43 @@
          <column name="id" />
       </constraint>
    </table>
+   <table name="bynder_customer_visibility_option" resource="default" engine="innodb" comment="Customer Visibility Option">
+      <column xsi:type="int" name="id" padding="7" unsigned="false" nullable="false" identity="true" comment="id" />
+      <column xsi:type="text" name="option_id" nullable="true"  comment="Option Id" />
+	  <column xsi:type="text" name="option_label" nullable="true"  comment="Option Lable" />
+	  <column xsi:type="text" name="option_name" nullable="true"  comment="Option Name" />
+	  <column xsi:type="int" name="bynder_status" nullable="true"  comment="Bynder Status" />
+	  <column xsi:type="int" name="status" nullable="true"  comment="Status" />
+      <column xsi:type="datetime" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At"/>
+      <column xsi:type="datetime" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP" comment="Updated At"/>
+      <constraint xsi:type="primary" referenceId="PRIMARY">
+         <column name="id" />
+      </constraint>
+   </table>
+   <table name="bynder_brand_option" resource="default" engine="innodb" comment="Brand Option">
+      <column xsi:type="int" name="id" padding="7" unsigned="false" nullable="false" identity="true" comment="id" />
+      <column xsi:type="text" name="option_id" nullable="true"  comment="Option Id" />
+	  <column xsi:type="text" name="option_label" nullable="true"  comment="Option Lable" />
+	  <column xsi:type="text" name="option_name" nullable="true"  comment="Option Name" />
+	  <column xsi:type="int" name="bynder_status" nullable="true"  comment="Bynder Status" />
+	  <column xsi:type="int" name="status" nullable="true"  comment="Status" />
+      <column xsi:type="datetime" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At"/>
+      <column xsi:type="datetime" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP" comment="Updated At"/>
+      <constraint xsi:type="primary" referenceId="PRIMARY">
+         <column name="id" />
+      </constraint>
+   </table>
+   <table name="bynder_file_category_option" resource="default" engine="innodb" comment="File Category Option">
+      <column xsi:type="int" name="id" padding="7" unsigned="false" nullable="false" identity="true" comment="id" />
+      <column xsi:type="text" name="option_id" nullable="true"  comment="Option Id" />
+	  <column xsi:type="text" name="option_label" nullable="true"  comment="Option Lable" />
+	  <column xsi:type="text" name="option_name" nullable="true"  comment="Option Name" />
+	  <column xsi:type="int" name="bynder_status" nullable="true"  comment="Bynder Status" />
+	  <column xsi:type="int" name="status" nullable="true"  comment="Status" />
+      <column xsi:type="datetime" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At"/>
+      <column xsi:type="datetime" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP" comment="Updated At"/>
+      <constraint xsi:type="primary" referenceId="PRIMARY">
+         <column name="id" />
+      </constraint>
+   </table>
 </schema>

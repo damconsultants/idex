@@ -349,8 +349,29 @@ class Psku extends \Magento\Backend\App\Action
             foreach ($convert_array['data'] as $data_value) {
                 $is_order = array();
                 if ($select_attribute == $data_value['type']) {
-                    //echo "<pre>"; print_r($data_value["assets_extra_details"]['image_order']); 
-                    $assets_extra_details["assets_extra_details"][$data_value["idHash"]] = $data_value["assets_extra_details"];
+					$b = [];
+					$c = [];
+					$f = [];
+					if(!empty($data_value["assets_extra_details"]['brands'])){
+						foreach($data_value["assets_extra_details"]['brands'] as $brands) {
+							$brandCollection = $this->datahelper->getBrandName($brands);
+							$b['brands_lables'][] = $brandCollection[0]['option_label'];
+						}
+					}
+					if(!empty($data_value["assets_extra_details"]['customer_visibility'])){
+						foreach($data_value["assets_extra_details"]['customer_visibility'] as $customer) {
+							$customerCollection = $this->datahelper->getCustomerVisibilityName($customer);
+							$c['customer_visibility_lables'][] = $customerCollection[0]['option_label'];
+						}
+					}
+					if(!empty($data_value["assets_extra_details"]['file_category'])){
+						foreach($data_value["assets_extra_details"]['file_category'] as $file) {
+							$fileCollection = $this->datahelper->getFileCatagoryName($file);
+							$f['file_category_lables'][] = $fileCollection[0]['option_label'];
+						}
+					}
+					
+                    $assets_extra_details["assets_extra_details"][$data_value["idHash"]] = array_merge($data_value["assets_extra_details"],$b,$c,$f);
                     $bynder_media_id = $data_value['id'];
                     $image_data = $data_value['thumbnails'];
                     $bynder_image_role = $image_data['magento_role_options'];
@@ -1174,14 +1195,16 @@ class Psku extends \Magento\Backend\App\Action
                     foreach ($new_doc_array as $vv => $doc_value) {
                         if (!empty($doc_value)) {
                             $item_url = explode("?", $doc_value);
+                            $doc_name = explode("@@", $doc_value);
                             $media_doc_explode = explode("/", $item_url[0]);
 							$is_order = isset($isOrder[$vv]) ? $isOrder[$vv] : "";
                             $doc_detail[] = [
                                 "item_url" => $item_url[0],
                                 "item_type" => 'DOCUMENT',
+                                "doc_name" => $doc_name[1],
                                 "bynder_md_id" => $bynder_media_id[$vv],
 								"hash_id" => $hashId[$vv],
-								"is_order" => $is_order
+								"is_order" => empty($is_order) ? "100" : $is_order
                             ];
                         }
                     }

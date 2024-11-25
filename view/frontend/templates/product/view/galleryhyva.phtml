@@ -456,7 +456,7 @@ $productName = $block->getProduct()->getName();
 
                 // Set up HTML5 video player with autoplay and controls
                 mp4Container.innerHTML = 
-                    `<video id="html5-video-player" controls width="640" height="360"
+                    `<video id="html5-video-player fotorama-video-container" controls width="640" height="360"
                             class="object-center w-full h-full object-fit"
                             x-ref="videoPlayer">
                         <source src="${mp4Url}" type="video/mp4">
@@ -599,3 +599,17 @@ $productName = $block->getProduct()->getName();
         }
      }
 </script>
+<!--<style>
+.fotorama-video-container:after {
+    background: url(https://idex.magentoextensions.shop/static/version1731426316/frontend/Magento/luma/en_US/Magento_ProductVideo/img/gallery-sprite.png) bottom right;
+    bottom: 0;
+    content: '';
+    height: 100px;
+    left: 0;
+    margin: auto;
+    position: absolute;
+    right: 0;
+    top: 12px;
+    width: 100px;
+}
+</style>-->

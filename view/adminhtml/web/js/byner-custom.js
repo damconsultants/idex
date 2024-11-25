@@ -13,6 +13,8 @@ require([
 		jQuery('#bynder_property_search_visibility').select2();
 		jQuery('#bynder_property_asset').select2();
 		jQuery('#bynder_property_media_order').select2();
+		jQuery('#bynder_property_asset_sub_type').select2();
+		jQuery('#bynder_property_file_title').select2();
 		/*jQuery('#bynder_property_5').select2();
 		jQuery('#bynder_property_6').select2();
 		jQuery('#bynder_property_7').select2();*/

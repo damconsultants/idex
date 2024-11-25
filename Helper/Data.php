@@ -4,6 +4,9 @@ namespace DamConsultants\Idex\Helper;
 
 use \Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Store\Model\ScopeInterface;
+use DamConsultants\Idex\Model\ResourceModel\Collection\BrandOptionCollectionFactory;
+use DamConsultants\Idex\Model\ResourceModel\Collection\CustomerVisibilityOptionCollectionFactory;
+use DamConsultants\Idex\Model\ResourceModel\Collection\FileCategoryOptionCollectionFactory;
 
 class Data extends AbstractHelper
 {
@@ -60,6 +63,18 @@ class Data extends AbstractHelper
      * @var $permanent_token
      */
     protected $_bulk;
+	/**
+     * @var $brandOptionCollectionFactory
+     */
+    protected $brandOptionCollectionFactory;
+	/**
+     * @var $customerVisibilityOptionCollectionFactory
+     */
+    protected $customerVisibilityOptionCollectionFactory;
+	/**
+     * @var $fileCategoryOptionCollectionFactory
+     */
+    protected $fileCategoryOptionCollectionFactory;
     /**
      * @var $permanent_token
      */
@@ -98,7 +113,10 @@ class Data extends AbstractHelper
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Registry $registry,
-        \Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Bulk $bulk
+        \Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Bulk $bulk,
+		BrandOptionCollectionFactory $brandOptionCollectionFactory,
+		CustomerVisibilityOptionCollectionFactory $customerVisibilityOptionCollectionFactory,
+		FileCategoryOptionCollectionFactory $fileCategoryOptionCollectionFactory
     ) {
         $this->cookieMetadataFactory = $cookieMetadataFactory;
         $this->cookieManager = $cookieManager;
@@ -109,6 +127,9 @@ class Data extends AbstractHelper
         $this->_curl = $curl;
         $this->_bulk = $bulk;
         $this->_registry = $registry;
+		$this->brandOptionCollectionFactory = $brandOptionCollectionFactory;
+		$this->customerVisibilityOptionCollectionFactory = $customerVisibilityOptionCollectionFactory;
+		$this->fileCategoryOptionCollectionFactory = $fileCategoryOptionCollectionFactory;
         parent::__construct($context);
     }
     /**
@@ -873,4 +894,265 @@ class Data extends AbstractHelper
         /*$response = '{"status":1,"data":[{"id":"48DADC72-8775-4CCC-81764EC55395E178"},{"id":"D49C3C3C-8091-4CA0-8D27C36BA14B15D7"}]}';
         return $response;*/
     }
+
+    /**
+     * Get searchFromBynder
+     * not in use at the moments
+     * @return $this
+     * @param string $keyword
+     * @param string $extra_details
+     */
+    public function searchFromBynder($keyword, $extra_details)
+    {
+        $collection_data_value = $extra_details["collection_data_value"];
+        //$property_id = $extra_details["property_id"]; 
+        $permanent_token = $this->getPermanenToken();
+        $bynder_domain = $this->getBynderDom();
+        $fields = [
+            'search_term' => $keyword,
+            'bynder_metaproperty_collection' => $collection_data_value
+        ];
+        $remove = array("http://","https://","/");
+        $bynder_domain = str_replace($remove,"",$bynder_domain);
+
+        $send_fields = [
+            'Year' => "2024",
+            'bynder_metaproperty_collection' => $collection_data_value
+        ];
+		
+		
+		$queryString = http_build_query($send_fields);
+		$url = 'https://' . $bynder_domain . '/api/v4/media/?' . $queryString;
+
+		// Get Magento's Curl client
+		$this->_curl->setOption(CURLOPT_URL, $url);
+		$this->_curl->setOption(CURLOPT_RETURNTRANSFER, true);
+		$this->_curl->setOption(CURLOPT_TIMEOUT, 0);
+		$this->_curl->setOption(CURLOPT_ENCODING, '');
+		$this->_curl->setOption(CURLOPT_MAXREDIRS, 10);
+		$this->_curl->setOption(CURLOPT_FOLLOWLOCATION, true);
+		$this->_curl->setOption(CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
+
+		// Set the Authorization header
+		$this->_curl->addHeader("Authorization", "Bearer " . $permanent_token);
+
+		// Execute the GET request
+		$this->_curl->get($url);
+
+		// Retrieve the response
+		$response = $this->_curl->getBody();
+		//echo "<pre>"; print_r(json_decode($response)); exit;
+		return $response;
+		
+    }
+
+    /**
+     * Get searchPriceListFromBynder
+     *
+     * @return $this
+     * @param string $keyword
+     * @param string $extra_details
+     */
+    public function searchPriceListFromBynder($search_details,$search_values, $extra_details)
+    {
+        $collection_data_value = $extra_details["collection_data_value"];
+        // search details and collection_data_value will be use for log
+        $permanent_token = $this->getPermanenToken();
+        $bynder_domain = $this->getBynderDom();
+        $remove = array("http://","https://","/");
+        $bynder_domain = str_replace($remove,"",$bynder_domain);
+
+        $query_String = http_build_query($search_values);
+       
+		$url = 'https://' . $bynder_domain . '/api/v4/media/?' . $query_String;
+
+		// Get Magento's Curl client
+		$this->_curl->setOption(CURLOPT_URL, $url);
+		$this->_curl->setOption(CURLOPT_RETURNTRANSFER, true);
+		$this->_curl->setOption(CURLOPT_TIMEOUT, 0);
+		$this->_curl->setOption(CURLOPT_ENCODING, '');
+		$this->_curl->setOption(CURLOPT_MAXREDIRS, 10);
+		$this->_curl->setOption(CURLOPT_FOLLOWLOCATION, true);
+		$this->_curl->setOption(CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
+
+        $this->_curl->addHeader("Content-Type", "application/json");
+		// Set the Authorization header
+		$this->_curl->addHeader("Authorization", "Bearer " . $permanent_token);
+
+		// Execute the GET request
+		$this->_curl->get($url);
+
+		// Retrieve the response
+		$response = $this->_curl->getBody();
+
+		return $response;
+    }
+
+    /**
+     * Get getMediaInfo
+     *
+     * @return $this
+     * @param string $keyword
+     * @param string $extra_details
+     */
+    public function getMediaInfo($og_media_id)
+    {
+        $permanent_token = $this->getPermanenToken();
+        $bynder_domain = $this->getBynderDom();
+        $remove = array("http://","https://","/");
+        $bynder_domain = str_replace($remove,"",$bynder_domain);
+
+        /* $send_fields = [
+            'Year' => "2024",
+            'bynder_metaproperty_collection' => $collection_data_value
+        ]; */
+        
+		$url = 'https://' . $bynder_domain . '/api/v4/media/'.$og_media_id.'?versions=1';
+
+		// Get Magento's Curl client
+		$this->_curl->setOption(CURLOPT_URL, $url);
+		$this->_curl->setOption(CURLOPT_RETURNTRANSFER, true);
+		$this->_curl->setOption(CURLOPT_TIMEOUT, 0);
+		$this->_curl->setOption(CURLOPT_ENCODING, '');
+		$this->_curl->setOption(CURLOPT_MAXREDIRS, 10);
+		$this->_curl->setOption(CURLOPT_FOLLOWLOCATION, true);
+		$this->_curl->setOption(CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
+
+        $this->_curl->addHeader("Content-Type", "application/json");
+		// Set the Authorization header
+		$this->_curl->addHeader("Authorization", "Bearer " . $permanent_token);
+
+		// Execute the GET request
+		$this->_curl->get($url);
+
+		// Retrieve the response
+		$response = $this->_curl->getBody();
+		
+        return $response;
+    }
+
+    /**
+     * Get getMediaDownloadLocationForAssetItem
+     *
+     * @return $this
+     * @param string $keyword
+     * @param string $extra_details
+     */
+    public function getMediaDownloadLocationForAssetItem($og_media_id, $og_media_id_new)
+    {
+        $permanent_token = $this->getPermanenToken();
+        $bynder_domain = $this->getBynderDom();
+        $remove = array("http://","https://","/");
+        $bynder_domain = str_replace($remove,"",$bynder_domain);
+
+        /* $send_fields = [
+            'property_Asset_Sub-Type' => $keyword,
+            'Year' => "2024",
+            'bynder_metaproperty_collection' => $collection_data_value
+        ]; */
+        
+		$url = 'https://' . $bynder_domain . '/api/v4/media/' . $og_media_id . '/download/' . $og_media_id_new . '/';
+
+		// Get Magento's Curl client
+		$this->_curl->setOption(CURLOPT_URL, $url);
+		$this->_curl->setOption(CURLOPT_RETURNTRANSFER, true);
+		$this->_curl->setOption(CURLOPT_TIMEOUT, 0);
+		$this->_curl->setOption(CURLOPT_ENCODING, '');
+		$this->_curl->setOption(CURLOPT_MAXREDIRS, 10);
+		$this->_curl->setOption(CURLOPT_FOLLOWLOCATION, true);
+		$this->_curl->setOption(CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
+
+        $this->_curl->addHeader("Content-Type", "application/json");
+		// Set the Authorization header
+		$this->_curl->addHeader("Authorization", "Bearer " . $permanent_token);
+
+		// Execute the GET request
+		$this->_curl->get($url);
+
+		// Retrieve the response
+		$response = $this->_curl->getBody();
+		
+        echo "<pre>";
+        print_r($response);
+        exit;
+		return $response;
+    }
+
+    
+
+	/**
+     * Get brandName
+     *
+     * @return $this
+     * @param string $name
+     */
+    public function getBrandName($name)
+	{
+		$collection = $this->brandOptionCollectionFactory->create();
+		$collection->addFieldToFilter('option_name', ['eq' => $name]);
+		return $collection->getData();
+	}
+	/**
+     * Get Customer Visibility Name
+     *
+     * @return $this
+     * @param string $name
+     */
+    public function getCustomerVisibilityName($name)
+	{
+		$collection = $this->customerVisibilityOptionCollectionFactory->create();
+		$collection->addFieldToFilter('option_name', ['eq' => $name]);
+		return $collection->getData();
+	}
+	/**
+     * Get file Catagoty Name
+     *
+     * @return $this
+     * @param string $name
+     */
+    public function getFileCatagoryName($name)
+	{
+		$collection = $this->fileCategoryOptionCollectionFactory->create();
+		$collection->addFieldToFilter('option_name', ['eq' => $name]);
+		return $collection->getData();
+	}
+
+    /**
+     * Get BrandLabel
+     *
+     * @return $this
+     * @param string $label
+     */
+    public function getBrandLabel($label)
+	{
+		$collection = $this->brandOptionCollectionFactory->create();
+		$collection->addFieldToFilter('option_label', ['eq' => $label]);
+		return $collection->getData();
+	}
+
+    /**
+     * Get CustomerVisibilityLabel
+     *
+     * @return $this
+     * @param string $label
+     */
+    public function getCustomerVisibilityLabel($label)
+	{
+		$collection = $this->customerVisibilityOptionCollectionFactory->create();
+		$collection->addFieldToFilter('option_label', ['eq' => $label]);
+		return $collection->getData();
+	}
+
+    /**
+     * Get getFileCatagory Label
+     *
+     * @return $this
+     * @param string $label
+     */
+    public function getFileCatagoryLabel($label)
+	{
+		$collection = $this->fileCategoryOptionCollectionFactory->create();
+		$collection->addFieldToFilter('option_label', ['eq' => $label]);
+		return $collection->getData();
+	}
 }

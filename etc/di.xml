@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+    <preference for="DamConsultants\Idex\Api\BynderCustomInterface" type="DamConsultants\Idex\Model\BynderCustom" />
+	<type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
             <argument name="collections" xsi:type="array">
                 <item name="bynder_index_listing_data_source" xsi:type="string">DamConsultants\Idex\Model\ResourceModel\Collection\Grid\Collection</item>

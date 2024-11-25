@@ -183,10 +183,14 @@ class Gallery extends \Magento\Catalog\Block\Product\View\Gallery
                     $image_values = trim($values['thum_url']);
                     $isMain = '';
                     if ($values['item_type'] == 'IMAGE') {
-                        foreach ($values['image_role'] as $image_role) {
-                            if ($image_role == 'Base') {
-                                $flag = true;
+                        if(isset($values['image_role'][0])){
+                            if($values['image_role'][0] == "Base"){
                                 $isMain = true;
+                                $flag = true;
+                            }else{
+                                $last_added_key = array_search($values["bynder_md_id"],$all_unq_media_ids);
+                                unset($all_unq_media_ids[$last_added_key]);
+                                continue;
                             }
                         }
                     }
@@ -234,6 +238,7 @@ class Gallery extends \Magento\Catalog\Block\Product\View\Gallery
                     return $a['is_order'] <=> $b['is_order'];
                 });
                 $flag = '';
+               
                 $all_unq_media_ids = array();
                 foreach ($json_value as $key => $values) {
                     // check image already added or not
@@ -245,13 +250,18 @@ class Gallery extends \Magento\Catalog\Block\Product\View\Gallery
                     $image_values = trim($values['thum_url']);
                     $isMain = '';
                     if ($values['item_type'] == 'IMAGE') {
-                        foreach ($values['image_role'] as $image_role) {
-                            if ($image_role == 'Base') {
+                        if(isset($values['image_role'][0])){
+                            if($values['image_role'][0] == "Base"){
                                 $isMain = true;
                                 $flag = true;
+                            }else{
+                                $last_added_key = array_search($values["bynder_md_id"],$all_unq_media_ids);
+                                unset($all_unq_media_ids[$last_added_key]);
+                                continue;
                             }
                         }
                     }
+
                     $imageItem = new DataObject([
                         'thumb' => $image_values,
                         'img' => $image_values,

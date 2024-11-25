@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi/etc/webapi.xsd">
+    <!-- GET API -->
+    <route url="/V1/search_from_bynder" method="GET">
+        <service class="DamConsultants\Idex\Api\BynderCustomInterface" method="getSearchFromBynder" />
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+    <route url="/V1/list_user_pricelist" method="GET">
+        <service class="DamConsultants\Idex\Api\BynderCustomInterface" method="getListUserPriceList" />
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+</routes>

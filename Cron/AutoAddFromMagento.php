@@ -392,7 +392,28 @@ class AutoAddFromMagento
                 $doc_hash_id = [];
 				$is_order = [];
                 if ($data_value['type'] == "image") {
-                    $assets_extra_details["assets_extra_details"][$data_value["idHash"]] = $data_value["assets_extra_details"];
+					$b = [];
+					$c = [];
+					$f = [];
+					if(!empty($data_value["assets_extra_details"]['brands'])){
+						foreach($data_value["assets_extra_details"]['brands'] as $brands) {
+							$brandCollection = $this->datahelper->getBrandName($brands);
+							$b['brands_lables'][] = $brandCollection[0]['option_label'];
+						}
+					}
+					if(!empty($data_value["assets_extra_details"]['customer_visibility'])){
+						foreach($data_value["assets_extra_details"]['customer_visibility'] as $customer) {
+							$customerCollection = $this->datahelper->getCustomerVisibilityName($customer);
+							$c['customer_visibility_lables'][] = $customerCollection[0]['option_label'];
+						}
+					}
+					if(!empty($data_value["assets_extra_details"]['file_category'])){
+						foreach($data_value["assets_extra_details"]['file_category'] as $file) {
+							$fileCollection = $this->datahelper->getFileCatagoryName($file);
+							$f['file_category_lables'][] = $fileCollection[0]['option_label'];
+						}
+					}
+                    $assets_extra_details["assets_extra_details"][$data_value["idHash"]] = array_merge($data_value["assets_extra_details"],$b,$c,$f);
                     if (count($bynder_image_role) > 0) {
                         foreach ($bynder_image_role as $m_bynder_role) {
                             $lower_m_bynder_role = strtolower($m_bynder_role);
@@ -496,7 +517,28 @@ class AutoAddFromMagento
                     ];
                     array_push($data_val_arr, $data_p);
                 } elseif ($data_value['type'] == 'video') {
-                    $assets_extra_details_video["assets_extra_details"][$data_value["idHash"]] = $data_value["assets_extra_details"];
+					$b = [];
+					$c = [];
+					$f = [];
+					if(!empty($data_value["assets_extra_details"]['brands'])){
+						foreach($data_value["assets_extra_details"]['brands'] as $brands) {
+							$brandCollection = $this->datahelper->getBrandName($brands);
+							$b['brands_lables'][] = $brandCollection[0]['option_label'];
+						}
+					}
+					if(!empty($data_value["assets_extra_details"]['customer_visibility'])){
+						foreach($data_value["assets_extra_details"]['customer_visibility'] as $customer) {
+							$customerCollection = $this->datahelper->getCustomerVisibilityName($customer);
+							$c['customer_visibility_lables'][] = $customerCollection[0]['option_label'];
+						}
+					}
+					if(!empty($data_value["assets_extra_details"]['file_category'])){
+						foreach($data_value["assets_extra_details"]['file_category'] as $file) {
+							$fileCollection = $this->datahelper->getFileCatagoryName($file);
+							$f['file_category_lables'][] = $fileCollection[0]['option_label'];
+						}
+					}
+                    $assets_extra_details_video["assets_extra_details"][$data_value["idHash"]] = array_merge($data_value["assets_extra_details"],$b,$c,$f);
                     $video_link[] = $data_value["videoPreviewURLs"][0] . '@@' . $image_data["webimage"]."\n";
                     $video_new_bynder_mediaid_text[] = $bynder_media_id."\n";
                     $video_hash_id[] = $idHash."\n";
@@ -1102,11 +1144,13 @@ class AutoAddFromMagento
                         if(!empty($doc_value)){
 							$is_order = isset($isOrder[$vv]) ? $isOrder[$vv] : "";
                             $item_url = explode("?", $doc_value);
+                            $doc_name = explode("@@", $doc_value);
                             $media_doc_explode = explode("/", $item_url[0]);
                             if(!in_array($bynder_media_id[$vv], $b_id)) {
                                 $doc_detail[] = [
                                     "item_url" => $item_url[0],
                                     "item_type" => 'DOCUMENT',
+                                    "doc_name" => $doc_name[1],
                                     "bynder_md_id" => $bynder_media_id[$vv],
                                     "hash_id" => $hashId[$vv],
 									"is_order" => empty($is_order) ? "100" : $is_order

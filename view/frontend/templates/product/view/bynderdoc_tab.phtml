@@ -14,7 +14,7 @@ if (!empty($document_text)) {
 			//echo "<pre>"; print_r($doc); 
             $lable = explode("/", $doc['item_url']);
 			//echo "<pre>"; print_r($lable); 
-            $html .= '<li><a href="' . $doc['item_url'] . '" target="_blank">' . $lable[2] . '</a></li>';
+            $html .= '<li><a href="' . $doc['item_url'] . '" target="_blank">' . $doc['doc_name'] . '</a></li>';
         }
     }
     ?>

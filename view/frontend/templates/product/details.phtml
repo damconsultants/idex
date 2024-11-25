@@ -105,8 +105,15 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                                 </tr>
                             </thead>
                             <tbody>
-							<?php foreach ($document_array as $doc) { 
+							<?php 
+                            $lable_name = '';
+                            foreach ($document_array as $doc) { 
 							if (in_array($doc['hash_id'], $hash_id)) {
+                                foreach($document_array_extra as $hash_key => $array_extra) {
+                                    if($doc['hash_id'] == $hash_key) {
+                                        $lable_name = $array_extra['file_title'];
+                                    }
+                                }
 								$lable = explode("/", $doc['item_url']); ?>
                                 <tr class="border-b border-t border-zinc-950 border-opacity-20">
                                     <th scope="row" class="inline-flex gap-4 py-4 text-sm whitespace-nowrap font-normal ">
@@ -114,7 +121,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                                              <a href="<?php echo $doc['item_url']; ?> " target="_blank"><?= $heroicons->filePdfHtml('w-5 h-5', 20, 20) ?></a>
                                         </button>
                                         <p>
-                                            <span class="font-normal"> <?php echo $lable[2]; ?> </span>
+                                            <span class="font-normal"> <?php echo $lable_name; ?> </span>
                                             <span class="text-xs font-normal uppercase tracking-widest block">File size</span>
                                         </p>
                                     </th>
@@ -188,8 +195,15 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($document_array as $doc) { 
+                            <?php 
+                            $lable_name = '';
+                            foreach ($document_array as $doc) { 
 							if (in_array($doc['hash_id'], $hash_id)) {
+                                foreach($document_array_extra as $hash_key => $array_extra) {
+                                    if($doc['hash_id'] == $hash_key) {
+                                        $lable_name = $array_extra['file_title'];
+                                    }
+                                }
 								$lable = explode("/", $doc['item_url']); ?>
                             <tr class="border-b border-t border-zinc-950 border-opacity-20">
                                 <th scope="row" class="inline-flex gap-4 py-4 text-sm whitespace-nowrap font-normal ">
@@ -197,7 +211,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                                     <a href="<?php echo $doc['item_url']; ?> " target="_blank"><?= $heroicons->filePdfHtml('w-5 h-5', 20, 20) ?></a>
                                     </button>
                                     <p>
-                                    <span class="font-normal"> <?php echo $lable[2]; ?> </span>
+                                    <span class="font-normal"> <?php echo $lable_name; ?> </span>
                                     <span class="text-xs font-normal uppercase tracking-widest block">File size</span>
                                     </p>
                                 </th>
@@ -254,8 +268,15 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($document_array as $doc) { 
+                            <?php 
+                            $lable_name = '';
+                            foreach ($document_array as $doc) { 
 							if (in_array($doc['hash_id'], $hash_id)) {
+                                foreach($document_array_extra as $hash_key => $array_extra) {
+                                    if($doc['hash_id'] == $hash_key) {
+                                        $lable_name = $array_extra['file_title'];
+                                    }
+                                }
 								$lable = explode("/", $doc['item_url']); ?>
                             <tr class="border-b border-t border-zinc-950 border-opacity-20">
                                 <th scope="row" class="inline-flex gap-4 py-4 text-sm whitespace-nowrap font-normal ">
@@ -263,7 +284,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                                     <a href="<?php echo $doc['item_url']; ?> " target="_blank"><?= $heroicons->filePdfHtml('w-5 h-5', 20, 20) ?></a>
                                     </button>
                                     <p>
-                                    <span class="font-normal"> <?php echo $lable[2]; ?> </span>
+                                    <span class="font-normal"> <?php echo $lable_name; ?> </span>
                                     <span class="text-xs font-normal uppercase tracking-widest block">File size</span>
                                     </p>
                                 </th>
@@ -323,8 +344,15 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                             </tr>
                         </thead>
                         <tbody>
-						<?php foreach ($document_array as $doc) { 
+						<?php 
+                        $lable_name = '';
+                        foreach ($document_array as $doc) { 
 							if (in_array($doc['hash_id'], $hash_id)) {
+                                foreach($document_array_extra as $hash_key => $array_extra) {
+                                    if($doc['hash_id'] == $hash_key) {
+                                        $lable_name = $array_extra['file_title'];
+                                    }
+                                }
 								$lable = explode("/", $doc['item_url']); ?>
                             <tr class="border-b border-t border-zinc-950 border-opacity-20">
                                 <th scope="row" class="inline-flex gap-4 py-4 text-sm whitespace-nowrap font-normal ">
@@ -332,7 +360,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                                         <a href="<?php echo $doc['item_url']; ?> " target="_blank"><?= $heroicons->filePdfHtml('w-5 h-5', 20, 20) ?></a>
                                     </button>
                                     <p>
-                                    <span class="font-normal"> <?php echo $lable[2]; ?> </span>
+                                    <span class="font-normal"> <?php echo $lable_name; ?> </span>
                                     <span class="text-xs font-normal uppercase tracking-widest block">File size</span>
                                     </p>
                                 </th>
@@ -396,8 +424,15 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($document_array as $doc) { 
+                            <?php 
+                            $lable_name = '';
+                            foreach ($document_array as $doc) { 
 							if (in_array($doc['hash_id'], $hash_id)) {
+                                foreach($document_array_extra as $hash_key => $array_extra) {
+                                    if($doc['hash_id'] == $hash_key) {
+                                        $lable_name = $array_extra['file_title'];
+                                    }
+                                }
 								$lable = explode("/", $doc['item_url']); ?>
                             <tr class="border-b border-t border-zinc-950 border-opacity-20">
                                 <th scope="row" class="inline-flex gap-4 py-4 text-sm whitespace-nowrap font-normal ">
@@ -405,7 +440,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                                     <a href="<?php echo $doc['item_url']; ?> " target="_blank"><?= $heroicons->filePdfHtml('w-5 h-5', 20, 20) ?></a>
                                     </button>
                                     <p>
-                                    <span class="font-normal"> <?php echo $lable[2]; ?> </span>
+                                    <span class="font-normal"> <?php echo $lable_name; ?> </span>
                                     <span class="text-xs font-normal uppercase tracking-widest block">File size</span>
                                     </p>
                                 </th>
