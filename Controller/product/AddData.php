@@ -134,28 +134,33 @@ class AddData extends \Magento\Framework\App\Action\Action
         $storeId = $this->storeManagerInterface->getStore()->getId();
         $product = $this->_product->load($product_id);
         $bynder_value = $product->getData('bynder_multi_img');
-        $item_old_value = json_decode($bynder_value, true);
-        $item_old_value = $item_old_value["asset_list"];
-        $item_old_asset_value = json_decode($bynder_value, true);
-        $old_asset_detail_array = $item_old_asset_value['assets_extra_details'];
-        $ajax_value = json_decode($bynder_image, true);
         $ajax_hash_id = [];
         $bynder_data = [];
         $bynder_extra_data = [];
-        foreach($ajax_value as $a_value){
-            $ajax_hash_id[] = $a_value['hash_id'];
+        if(!empty($bynder_value)){
+            $item_old_value = json_decode($bynder_value, true);
         }
-        foreach($item_old_value as $value) {
-            if(in_array($value['hash_id'], $ajax_hash_id)){
-                $bynder_data[] = $value;
+        if(isset($item_old_value["asset_list"]) && count($item_old_value["asset_list"]) > 0){
+            $item_old_value = $item_old_value["asset_list"];
+            $item_old_asset_value = json_decode($bynder_value, true);
+            $old_asset_detail_array = $item_old_asset_value['assets_extra_details'];
+            $ajax_value = json_decode($bynder_image, true);
+            
+            foreach ($ajax_value as $a_value) {
+                $ajax_hash_id[] = $a_value['hash_id'];
+            }
+            foreach ($item_old_value as $value) {
+                if (in_array($value['hash_id'], $ajax_hash_id)) {
+                    $bynder_data[] = $value;
+                }
+            }
+            foreach ($old_asset_detail_array as $hash_id_key => $value_data) {
+                if (in_array($hash_id_key, $ajax_hash_id)) {
+                    $bynder_extra_data[$hash_id_key] = $value_data;
+                }
             }
         }
-        foreach($old_asset_detail_array as $hash_id_key => $value_data) {
-            //echo "<pre> extara "; print_r($hash_id_key);
-            if(in_array($hash_id_key, $ajax_hash_id)){
-                $bynder_extra_data[$hash_id_key] = $value_data;
-            }
-        }
+
         $update_latest_code = [
             "asset_list" => $bynder_data,
             "assets_extra_details" => $bynder_extra_data

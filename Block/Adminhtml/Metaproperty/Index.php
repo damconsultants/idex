@@ -21,8 +21,14 @@ class Index extends \Magento\Backend\Block\Template
      * @var \DamConsultants\Idex\Model\ResourceModel\Collection\MetaPropertyCollectionFactory
      */
     protected $_metaPropertyCollectionFactory;
-	protected $_default_metaProperty_collection;
-	protected $_storeManager;
+    /**
+     * @var $_default_metaProperty_collection
+     */
+    protected $_default_metaProperty_collection;
+    /**
+     * @var $_storeManager
+     */
+    protected $_storeManager;
 
     /**
      * Metaproperty
@@ -78,9 +84,9 @@ class Index extends \Magento\Backend\Block\Template
         exit; */
         if (count($defaultmetaPropertycollection_data) > 0) {
             foreach ($defaultmetaPropertycollection_data as $meta_val) {
-				if($meta_val['status'] == 1){
-					$attribute_array[$meta_val['bynder_property_slug']] = $meta_val['property_name'];
-				}
+                if ($meta_val['status'] == 1) {
+                    $attribute_array[$meta_val['bynder_property_slug']] = $meta_val['property_name'];
+                }
             }
         }
         $collection = $this->_metaPropertyCollectionFactory->create();
@@ -106,29 +112,53 @@ class Index extends \Magento\Backend\Block\Template
                 ];
             }
 
-            $response_data['sku_selected'] = $properties_details["sku"]["bynder_property_slug"];
-            $response_data['image_role_selected']= $properties_details["image_role"]["bynder_property_slug"];
-            $response_data['image_alt_text']= $properties_details["alt_text"]["bynder_property_slug"];
-			$response_data['customer_visibility']= $properties_details["customer_visibility"]["bynder_property_slug"];
-			$response_data['image_brand']= $properties_details["brands"]["bynder_property_slug"];
-			$response_data['image_style']= $properties_details["style"]["bynder_property_slug"];
-			$response_data['image_file']= $properties_details["file_category"]["bynder_property_slug"];
-			$response_data['image_search']= $properties_details["search_visibility"]["bynder_property_slug"];
-			$response_data['image_asset']= $properties_details["asset"]["bynder_property_slug"];
-			$response_data['image_order']= $properties_details["image_order"]["bynder_property_slug"];
-            $response_data['asset_sub_type']= $properties_details["asset_sub_type"]["bynder_property_slug"];
-            $response_data['file_title']= $properties_details["file_title"]["bynder_property_slug"];
+            $response_data['sku_selected'] = isset($properties_details["sku"]["bynder_property_slug"])
+            ? $properties_details["sku"]["bynder_property_slug"]
+            : '0';
+            $response_data['image_role_selected']= isset($properties_details["image_role"]["bynder_property_slug"])
+            ? $properties_details["image_role"]["bynder_property_slug"] 
+            : '0';
+            $response_data['image_alt_text']= isset($properties_details["alt_text"]["bynder_property_slug"])
+            ? $properties_details["alt_text"]["bynder_property_slug"]
+            : '0';
+            $response_data['customer_visibility']= isset($properties_details["customer_visibility"]["bynder_property_slug"])
+            ? $properties_details["customer_visibility"]["bynder_property_slug"]
+            : '0';
+            $response_data['image_brand']= isset($properties_details["brands"]["bynder_property_slug"])
+            ? $properties_details["brands"]["bynder_property_slug"]
+            : '0';
+            $response_data['image_style']= isset($properties_details["style"]["bynder_property_slug"])
+            ? $properties_details["style"]["bynder_property_slug"]
+            : '0';
+            $response_data['image_file']= isset($properties_details["file_category"]["bynder_property_slug"])
+            ? $properties_details["file_category"]["bynder_property_slug"]
+            : '0';
+            $response_data['image_search']= isset($properties_details["search_visibility"]["bynder_property_slug"])
+            ? $properties_details["search_visibility"]["bynder_property_slug"]
+            : '0';
+            $response_data['image_asset']= isset($properties_details["asset"]["bynder_property_slug"])
+            ? $properties_details["asset"]["bynder_property_slug"]
+            : '0';
+            $response_data['image_order']= isset($properties_details["image_order"]["bynder_property_slug"])
+            ? $properties_details["image_order"]["bynder_property_slug"] 
+            : '0';
+            $response_data['asset_sub_type']= isset($properties_details["asset_sub_type"]["bynder_property_slug"])
+            ? $properties_details["asset_sub_type"]["bynder_property_slug"] 
+            : '0';
+            $response_data['file_title'] = isset($properties_details["file_title"]["bynder_property_slug"]) 
+            ? $properties_details["file_title"]["bynder_property_slug"] 
+            : '0';
         } else {
             $response_data['sku_selected'] = '0';
             $response_data['image_role_selected'] = '0';
             $response_data['image_alt_text'] = '0';
-			$response_data['customer_visibility'] = '0';
-			$response_data['image_brand'] = '0';
-			$response_data['image_style'] = '0';
-			$response_data['image_file'] = '0';
-			$response_data['image_search'] = '0';
-			$response_data['image_asset'] = '0';
-			$response_data['image_order'] =  '0';
+            $response_data['customer_visibility'] = '0';
+            $response_data['image_brand'] = '0';
+            $response_data['image_style'] = '0';
+            $response_data['image_file'] = '0';
+            $response_data['image_search'] = '0';
+            $response_data['image_asset'] = '0';
+            $response_data['image_order'] =  '0';
             $response_data['asset_sub_type'] =  '0';
             $response_data['file_title'] =  '0';
         }

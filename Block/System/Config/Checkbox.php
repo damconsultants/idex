@@ -12,7 +12,7 @@ class Checkbox extends Field
      *
      * @var string
      */
-	protected $_template = 'DamConsultants_Idex::system/config/checkbox.phtml';
+    protected $_template = 'DamConsultants_Idex::system/config/checkbox.phtml';
     /**
      * @var $_storeManager
      */

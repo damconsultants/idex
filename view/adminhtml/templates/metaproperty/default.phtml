@@ -1,18 +1,18 @@
 <?php
 $block_get_data = $block->getMetaData();
 $get_metaData = $block_get_data['metadata'];
-$default_sku_value = $block_get_data['sku_selected'];
-$default_image_role_value = $block_get_data['image_role_selected'];
-$default_image_alt_text = $block_get_data['image_alt_text'];
-$default_customer_visibility = $block_get_data['customer_visibility'];
-$default_brands = $block_get_data['image_brand'];
-$default_style = $block_get_data['image_style'];
-$default_image_file = $block_get_data['image_file'];
-$default_image_search = $block_get_data['image_search'];
-$default_image_asset = $block_get_data['image_asset'];
-$default_image_media_order = $block_get_data['image_order'];
-$default_asset_sub_type = $block_get_data['asset_sub_type'];
-$default_file_title = $block_get_data['file_title'];
+$default_sku_value = isset($block_get_data['sku_selected']) ? $block_get_data['sku_selected'] : '0';
+$default_image_role_value = isset($block_get_data['image_role_selected']) ? $block_get_data['image_role_selected'] : '0';
+$default_image_alt_text = isset($block_get_data['image_alt_text']) ? $block_get_data['image_alt_text'] : '0';
+$default_customer_visibility = isset($block_get_data['customer_visibility']) ? $block_get_data['customer_visibility'] : '0';
+$default_brands = isset($block_get_data['image_brand']) ? $block_get_data['image_brand'] : '0';
+$default_style = isset($block_get_data['image_style']) ? $block_get_data['image_style'] : '0';
+$default_image_file = isset($block_get_data['image_file']) ? $block_get_data['image_file'] : '0';
+$default_image_search = isset($block_get_data['image_search']) ? $block_get_data['image_search'] : '0';
+$default_image_asset = isset($block_get_data['image_asset']) ? $block_get_data['image_asset'] : '0';
+$default_image_media_order = isset($block_get_data['image_order']) ? $block_get_data['image_order'] : '0';
+$default_asset_sub_type = isset($block_get_data['asset_sub_type']) ? $block_get_data['asset_sub_type'] : '0';
+$default_file_title = isset($block_get_data['file_title']) ? $block_get_data['file_title'] : '0';
 $url = $block->getMainUrl();
 $syncMetaUrl = $url . "bynder/index/synmetaproperty";
 

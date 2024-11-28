@@ -9,6 +9,8 @@ use Magento\Framework\View\Element\Template;
 class Version extends Template implements RendererInterface
 {
     /**
+     * Render
+     *
      * @param AbstractElement $element
      * @return string
      */
