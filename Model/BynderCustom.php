@@ -159,6 +159,30 @@ class BynderCustom implements BynderCustomInterface
                         } else {
                             $res_data[$og_k]["assets_extra_details"]["file_category_lables"] = "";
                         }
+
+                        $is_public = $og_v['isPublic'];
+                        $original_size = $og_v['fileSize'];
+                        $formated_size = $this->formatBytes($original_size);
+                        
+                        $publish_date_original = $og_v["datePublished"];
+                        $modified_date_original = isset($og_v["dateModified"])?$og_v["dateModified"]:"";
+                        $modified_date = "";
+                        $published_date = "";
+                        if($modified_date_original != ""){
+                            $og_modified_time = strtotime($modified_date_original);
+                            $modified_date = date("Y-m-d",$og_modified_time);
+                        }
+
+                        if($publish_date_original != ""){
+                            $og_publish_time = strtotime($publish_date_original);
+                            $published_date = date("Y-m-d",$og_publish_time);
+                        }
+
+                        $res_data[$og_k]["assets_extra_details"]["published_date"] = $published_date;
+                        $res_data[$og_k]["assets_extra_details"]["modified_date"] = $modified_date;
+                        $res_data[$og_k]["assets_extra_details"]["extension_type"] = implode("",$og_v['extension']);
+                        $res_data[$og_k]["assets_extra_details"]["file_size"] = $formated_size;
+                        $res_data[$og_k]["assets_extra_details"]["is_public"] = $is_public;
                     }
 
                     $res_data[$og_k]["docs_details"]["doc_link"] = isset($og_v["original"]) ? $og_v["original"] : "";
@@ -314,6 +338,31 @@ class BynderCustom implements BynderCustomInterface
                         } else {
                             $res_data[$og_k]["assets_extra_details"]["file_category_lables"] = "";
                         }
+
+                        $is_public = $og_v['isPublic'];
+                        $original_size = $og_v['fileSize'];
+                        $formated_size = $this->formatBytes($original_size);
+                        
+                        $publish_date_original = $og_v["datePublished"];
+                        $modified_date_original = isset($og_v["dateModified"])?$og_v["dateModified"]:"";
+
+                        $modified_date = "";
+                        $published_date = "";
+                        if($modified_date_original != ""){
+                            $og_modified_time = strtotime($modified_date_original);
+                            $modified_date = date("Y-m-d",$og_modified_time);
+                        }
+
+                        if($publish_date_original != ""){
+                            $og_publish_time = strtotime($publish_date_original);
+                            $published_date = date("Y-m-d",$og_publish_time);
+                        }
+
+                        $res_data[$og_k]["assets_extra_details"]["published_date"] = $published_date;
+                        $res_data[$og_k]["assets_extra_details"]["modified_date"] = $modified_date;
+                        $res_data[$og_k]["assets_extra_details"]["extension_type"] = implode("",$og_v['extension']);
+                        $res_data[$og_k]["assets_extra_details"]["file_size"] = $formated_size;
+                        $res_data[$og_k]["assets_extra_details"]["is_public"] = $is_public;
                     }
 
                     $res_data[$og_k]["docs_details"]["doc_link"] = isset($og_v["original"]) ? $og_v["original"] : "";
@@ -372,6 +421,42 @@ class BynderCustom implements BynderCustomInterface
             "collection_data_value" => $collection_data_value,
             "collection_data_slug_val" => $collection_data_slug_val
         ];
+        return $response_array;
+    }
+
+    /**
+     * Get formatBytes
+     *
+     * @param int $bytes
+     * @param string $force_unit
+     * @param int $format
+     * @return string $response_array
+     */
+
+    public function formatBytes($bytes, $force_unit = "t", $format = 0, $si = TRUE){
+        // Format string
+        $format = ($format === 0) ? '%01.2f %s' : (string) $format;
+    
+        // IEC prefixes (binary)
+        if ($si == FALSE OR strpos($force_unit, 'i') !== FALSE)
+        {
+            $units = array('B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB');
+            $mod   = 1024;
+        }
+        // SI prefixes (decimal)
+        else
+        {
+            $units = array('B', 'kB', 'MB', 'GB', 'TB', 'PB');
+            $mod   = 1000;
+        }
+    
+        // Determine unit to use
+        if (($power = array_search((string) $force_unit, $units)) === FALSE)
+        {
+            $power = ($bytes > 0) ? floor(log($bytes, $mod)) : 0;
+        }
+        
+        $response_array = sprintf($format, $bytes / pow($mod, $power), $units[$power]);
         return $response_array;
     }
 }

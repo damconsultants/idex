@@ -1055,7 +1055,8 @@ class AutoAddFromMagento
                     $updated_values = [
                         'bynder_multi_img' => $new_value_array,
                         'bynder_isMain' => $flag,
-                        'bynder_auto_replace' => 1
+                        'bynder_auto_replace' => 1,
+						'use_bynder_cdn' => 1
                     ];
                     $this->action->updateAttributes(
                         [$product_ids],
@@ -1148,7 +1149,7 @@ class AutoAddFromMagento
                             $media_doc_explode = explode("/", $item_url[0]);
                             if(!in_array($bynder_media_id[$vv], $b_id)) {
                                 $doc_detail[] = [
-                                    "item_url" => $item_url[0],
+                                    "item_url" => $doc_name[0],
                                     "item_type" => 'DOCUMENT',
                                     "doc_name" => $doc_name[1],
                                     "bynder_md_id" => $bynder_media_id[$vv],
@@ -1157,7 +1158,7 @@ class AutoAddFromMagento
                                 ];
                                 $data_doc_value = [
                                     'sku' => $product_sku_key,
-                                    'message' => $item_url[0],
+                                    'message' => $doc_name[0],
                                     'data_type' => '2',
                                     'media_id' => $bynder_media_id[$vv],
                                     'remove_for_magento' => '1',

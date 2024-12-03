@@ -112,6 +112,8 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                                 foreach($document_array_extra as $hash_key => $array_extra) {
                                     if($doc['hash_id'] == $hash_key) {
                                         $lable_name = $array_extra['file_title'];
+										$file_size = $array_extra['file_size'];
+										$publish_date = $array_extra['published_date'];
                                     }
                                 }
 								$lable = explode("/", $doc['item_url']); ?>
@@ -122,12 +124,12 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                                         </button>
                                         <p>
                                             <span class="font-normal"> <?php echo $lable_name; ?> </span>
-                                            <span class="text-xs font-normal uppercase tracking-widest block">File size</span>
+                                            <span class="text-xs font-normal uppercase tracking-widest block"><?php echo $file_size; ?></span>
                                         </p>
                                     </th>
-                                    <td class="p-4">2020-09-23</td>
+                                    <td class="p-4"><?php echo $publish_date; ?></td>
                                     <td class="py-4 text-right">
-                                         <a href="<?php echo $doc['item_url']; ?>" class="text-idex-orange text-xs ont-industry uppercase leading-tight tracking-widest" target="_blank">Download</a>
+                                        <a href="<?php echo $doc['item_url']; ?>" class="text-idex-orange text-xs ont-industry uppercase leading-tight tracking-widest" target="_blank">Download</a>
                                     </td>
                                 </tr>
 								 <?php } } ?>
@@ -202,6 +204,8 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                                 foreach($document_array_extra as $hash_key => $array_extra) {
                                     if($doc['hash_id'] == $hash_key) {
                                         $lable_name = $array_extra['file_title'];
+										$file_size = $array_extra['file_size'];
+										$publish_date = $array_extra['published_date'];
                                     }
                                 }
 								$lable = explode("/", $doc['item_url']); ?>
@@ -212,10 +216,10 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                                     </button>
                                     <p>
                                     <span class="font-normal"> <?php echo $lable_name; ?> </span>
-                                    <span class="text-xs font-normal uppercase tracking-widest block">File size</span>
+                                    <span class="text-xs font-normal uppercase tracking-widest block"><?php echo $file_size; ?></span>
                                     </p>
                                 </th>
-                                <td class="p-4">2020-09-23</td>
+                                <td class="p-4"><?php echo $publish_date; ?></td>
                                 <td class="py-4 text-right">
                                     <a href="<?php echo $doc['item_url']; ?>" class="text-idex-orange text-xs ont-industry uppercase leading-tight tracking-widest" target="_blank">Download</a>
                                 </td>
@@ -275,6 +279,8 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                                 foreach($document_array_extra as $hash_key => $array_extra) {
                                     if($doc['hash_id'] == $hash_key) {
                                         $lable_name = $array_extra['file_title'];
+										$file_size = $array_extra['file_size'];
+										$publish_date = $array_extra['published_date'];
                                     }
                                 }
 								$lable = explode("/", $doc['item_url']); ?>
@@ -285,10 +291,10 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                                     </button>
                                     <p>
                                     <span class="font-normal"> <?php echo $lable_name; ?> </span>
-                                    <span class="text-xs font-normal uppercase tracking-widest block">File size</span>
+                                    <span class="text-xs font-normal uppercase tracking-widest block"><?php echo $file_size; ?></span>
                                     </p>
                                 </th>
-                                <td class="p-4">2020-09-23</td>
+                                <td class="p-4"><?php echo $publish_date; ?></td>
                                 <td class="py-4 text-right">
                                     <a href="<?php echo $doc['item_url']; ?>" class="text-idex-orange text-xs ont-industry uppercase leading-tight tracking-widest" target="_blank">Download</a>
                                 </td>
@@ -351,6 +357,12 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                                 foreach($document_array_extra as $hash_key => $array_extra) {
                                     if($doc['hash_id'] == $hash_key) {
                                         $lable_name = $array_extra['file_title'];
+										$file_size = $array_extra['file_size'];
+										$publish_date = $array_extra['published_date'];
+                                        $style = "";
+                                        if(isset($array_extra['style']) && count($array_extra['style']) > 0){
+                                            $style = implode(",",$array_extra['style']);
+                                        }
                                     }
                                 }
 								$lable = explode("/", $doc['item_url']); ?>
@@ -361,11 +373,11 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                                     </button>
                                     <p>
                                     <span class="font-normal"> <?php echo $lable_name; ?> </span>
-                                    <span class="text-xs font-normal uppercase tracking-widest block">File size</span>
+                                    <span class="text-xs font-normal uppercase tracking-widest block"><?php echo $file_size; ?></span>
                                     </p>
                                 </th>
-                                <td class="p-4">2020-09-23</td>
-                                <td class="py-4 px-4">127329</td>
+                                <td class="p-4"><?php echo $publish_date; ?></td>
+                                <td class="py-4 px-4"><?php echo $style; ?></td>
                                 <td class="py-4 text-right">
                                      <a href="<?php echo $doc['item_url']; ?>" class="text-idex-orange text-xs ont-industry uppercase leading-tight tracking-widest" target="_blank">Download</a>
                                 </td>
@@ -431,6 +443,8 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                                 foreach($document_array_extra as $hash_key => $array_extra) {
                                     if($doc['hash_id'] == $hash_key) {
                                         $lable_name = $array_extra['file_title'];
+										$file_size = $array_extra['file_size'];
+										$publish_date = $array_extra['published_date'];
                                     }
                                 }
 								$lable = explode("/", $doc['item_url']); ?>
@@ -441,10 +455,10 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                                     </button>
                                     <p>
                                     <span class="font-normal"> <?php echo $lable_name; ?> </span>
-                                    <span class="text-xs font-normal uppercase tracking-widest block">File size</span>
+                                    <span class="text-xs font-normal uppercase tracking-widest block"><?php echo $file_size; ?></span>
                                     </p>
                                 </th>
-                                <td class="p-4">2020-09-23</td>
+                                <td class="p-4"><?php echo $publish_date; ?></td>
                                 <td class="py-4 text-right">
                                     <a href="<?php echo $doc['item_url']; ?>" class="text-idex-orange text-xs ont-industry uppercase leading-tight tracking-widest" target="_blank">Download</a>
                                 </td>

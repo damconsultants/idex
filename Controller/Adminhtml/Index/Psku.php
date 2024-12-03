@@ -508,6 +508,7 @@ class Psku extends \Magento\Backend\App\Action
                                 'id_hash' => $hash_id,
                                 'is_order' => $is_order
                             ];
+							//echo "<pre>"; print_r($data_p);
                             array_push($data_val_arr, $data_p);
                         }
 
@@ -844,7 +845,8 @@ class Psku extends \Magento\Backend\App\Action
                     $this->getInsertDataTable($data_image_data);
                     $updated_values = [
                         'bynder_multi_img' => $new_value_array,
-                        'bynder_isMain' => $flag
+                        'bynder_isMain' => $flag,
+						'use_bynder_cdn' => 1
                     ];
                     $this->productAction->updateAttributes(
                         [$product_ids],
@@ -941,7 +943,8 @@ class Psku extends \Magento\Backend\App\Action
                     $new_value_array = json_encode($update_latest_code, true);
                     $updated_values = [
                         'bynder_multi_img' => $new_value_array,
-                        'bynder_isMain' => $flag
+                        'bynder_isMain' => $flag,
+						'use_bynder_cdn' => 1
                     ];
                     $this->productAction->updateAttributes(
                         [$product_ids],
@@ -1097,7 +1100,8 @@ class Psku extends \Magento\Backend\App\Action
                     
                     $updated_values = [
                         'bynder_multi_img' => $new_value_array,
-                        'bynder_isMain' => $flag
+                        'bynder_isMain' => $flag,
+						'use_bynder_cdn' => 1
                     ];
                     $this->productAction->updateAttributes(
                         [$product_ids],
@@ -1155,7 +1159,8 @@ class Psku extends \Magento\Backend\App\Action
 
                     $updated_values = [
                         'bynder_multi_img' => $new_value_array,
-                        'bynder_isMain' => $flag
+                        'bynder_isMain' => $flag,
+						'use_bynder_cdn' => 1
                     ];
                     $this->productAction->updateAttributes(
                         [$product_ids],
@@ -1176,12 +1181,12 @@ class Psku extends \Magento\Backend\App\Action
                     $doc_detail = [];
                     foreach ($new_doc_array as $vv => $doc_value) {
                         if (!empty($doc_value)) {
-                            $item_url = explode("?", $doc_value);
+                            //$item_url = explode("?", $doc_value);
                             $doc_name = explode("@@", $doc_value);
-                            $media_doc_explode = explode("/", $item_url[0]);
+                            $media_doc_explode = explode("/", $doc_name[0]);
                             $is_order = isset($isOrder[$vv]) ? $isOrder[$vv] : "";
                             $doc_detail[] = [
-                                "item_url" => $item_url[0],
+                                "item_url" => $doc_name[0],
                                 "item_type" => 'DOCUMENT',
                                 "doc_name" => $doc_name[1],
                                 "bynder_md_id" => $bynder_media_id[$vv],
