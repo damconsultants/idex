@@ -106,12 +106,13 @@ class BynderCustom implements BynderCustomInterface
             "limit" => $limit
         );
         try {
-
+            $brand_default_image = "https://media.idexcorp.com/m/11a5506c07907565/Magento_Base-IDEXFS_Logo_Color_Transparent-200x200.png";
             $basic_details = $this->datahelper->searchPriceListFromBynder($search_details, $search_values, $meta_properties);
             $basic_details = json_decode($basic_details, true);
             $res_data = array();
             if ($basic_details["count"]["total"] > 0) {
                 foreach ($basic_details["media"] as $og_k => $og_v) {
+                    
                     if (count($all_properties_slug) > 0) {
                         $b = [];
                         $c = [];
@@ -184,7 +185,13 @@ class BynderCustom implements BynderCustomInterface
                         $res_data[$og_k]["assets_extra_details"]["file_size"] = $formated_size;
                         $res_data[$og_k]["assets_extra_details"]["is_public"] = $is_public;
                     }
-
+                    if(isset($og_v["thumbnails"]["webimage"])){
+                        $res_data[$og_k]["docs_details"]["doc_thumbnail_web_image"] = $og_v["thumbnails"]["webimage"];
+                        $res_data[$og_k]["docs_details"]["doc_thumbnail_small_image"] = $og_v["thumbnails"]["thul"];
+                    }else{
+                        $res_data[$og_k]["docs_details"]["doc_thumbnail_web_image"] = $brand_default_image;
+                        $res_data[$og_k]["docs_details"]["doc_thumbnail_small_image"] = $brand_default_image;
+                    }
                     $res_data[$og_k]["docs_details"]["doc_link"] = isset($og_v["original"]) ? $og_v["original"] : "";
                     $res_data[$og_k]["docs_details"]["doc_name"] = isset($og_v[$file_title_slug_val]) ? $og_v[$file_title_slug_val] : $og_v["name"];
                     $res_data[$og_k]["docs_details"]["style_number"] = isset($og_v[$style_slug_val]) ? $og_v[$style_slug_val] : "";
@@ -284,16 +291,13 @@ class BynderCustom implements BynderCustomInterface
             "limit" => $limit
         );
         try {
-            //code...
-
+            $brand_default_image = "https://media.idexcorp.com/m/11a5506c07907565/Magento_Base-IDEXFS_Logo_Color_Transparent-200x200.png";
             $basic_details = $this->datahelper->searchPriceListFromBynder($search_details, $search_values, $meta_properties);
             $basic_details = json_decode($basic_details, true);
             $res_data = array();
             if ($basic_details["count"]["total"] > 0) {
                 foreach ($basic_details["media"] as $og_k => $og_v) {
-                    /* echo "<pre>";
-                print_r($basic_details["media"]);
-                exit; */
+                    
                     if (count($all_properties_slug) > 0) {
                         $b = [];
                         $c = [];
@@ -364,7 +368,13 @@ class BynderCustom implements BynderCustomInterface
                         $res_data[$og_k]["assets_extra_details"]["file_size"] = $formated_size;
                         $res_data[$og_k]["assets_extra_details"]["is_public"] = $is_public;
                     }
-
+                    if(isset($og_v["thumbnails"]["webimage"])){
+                        $res_data[$og_k]["docs_details"]["doc_thumbnail_web_image"] = $og_v["thumbnails"]["webimage"];
+                        $res_data[$og_k]["docs_details"]["doc_thumbnail_small_image"] = $og_v["thumbnails"]["thul"];
+                    }else{
+                        $res_data[$og_k]["docs_details"]["doc_thumbnail_web_image"] = $brand_default_image;
+                        $res_data[$og_k]["docs_details"]["doc_thumbnail_small_image"] = $brand_default_image;
+                    }
                     $res_data[$og_k]["docs_details"]["doc_link"] = isset($og_v["original"]) ? $og_v["original"] : "";
                     $res_data[$og_k]["docs_details"]["doc_name"] = isset($og_v[$file_title_slug_val]) ? $og_v[$file_title_slug_val] : $og_v["name"];
                     $res_data[$og_k]["docs_details"]["style_number"] = isset($og_v[$style_slug_val]) ? $og_v[$style_slug_val] : "";
