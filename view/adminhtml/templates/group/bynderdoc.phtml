@@ -93,7 +93,7 @@ $formNameEscaped = $blockj->escapeHtmlAttr($blockj->getFormName());
 <div class="error-msg-sync" style="display:none;"></div>
 <div class="row">
     <div class="add-video-button-container">
-        <button type="button" name="external_document" id="external_document">Bynder Doc</button>
+        <!--<button type="button" name="external_document" id="external_document">Bynder Doc</button>-->
     </div>
 </div>
 
@@ -105,6 +105,12 @@ $formNameEscaped = $blockj->escapeHtmlAttr($blockj->getFormName());
             <th>
                 <span>Bynder Document URL</span>
             </th>
+			<th>
+                <span>Name</span>
+            </th>
+			<!--<th>
+                <span>Thambail</span>
+            </th>-->
             <th>
                 <span>Action</span>
             </th>
@@ -133,18 +139,26 @@ $formNameEscaped = $blockj->escapeHtmlAttr($blockj->getFormName());
             var total_old_format_doc = old_bynder_doc.split(" \n");
 			const old_doc_obj = JSON.parse(old_bynder_doc);
 			console.log(old_doc_obj['asset_list'].length);
+			var lable_name = '';
             if(old_doc_obj['asset_list'].length > 0){
                 jQuery.each(old_doc_obj['asset_list'],function(kk,val){
-                    var item_url = val['item_url'];
-                    var item_media_id = val['bynder_md_id'];
-                    var item_hash_id = val['hash_id'];
-                    var doc_details = {
-                        "item_url": item_url,
-                        "item_type" : 'DOCUMENT',
-                        "bynder_md_id":item_media_id,
-                        "hash_id" : item_hash_id,   
-                    };
-                    old_selected_bynder_doc.push(doc_details);
+					jQuery.each(old_doc_obj['assets_extra_details'],function(k,v){
+						if(val['hash_id'] == k) {
+							var lable_name = v['file_title'];
+							var item_url = val['item_url'];
+							//var doc_name = val['doc_name'];
+							var item_media_id = val['bynder_md_id'];
+							var item_hash_id = val['hash_id'];
+							var doc_details = {
+								"item_url": item_url,
+								"item_type" : 'DOCUMENT',
+								"doc_name" : lable_name,
+								"bynder_md_id":item_media_id,
+								"hash_id" : item_hash_id,   
+							};
+							old_selected_bynder_doc.push(doc_details);
+						}
+					});
                 });
             }    
         }
@@ -169,6 +183,7 @@ $formNameEscaped = $blockj->escapeHtmlAttr($blockj->getFormName());
         jQuery.each(selected_images, function( i, img_data ){
             var select_item_type = img_data.item_type;
             var original_item_url = img_data.item_url;
+			var doc_name = img_data.doc_name;
             var bynder_media_id = "";
             if(typeof img_data.bynder_md_id != "undefined"){
                 bynder_media_id = img_data.bynder_md_id;
@@ -186,6 +201,14 @@ $formNameEscaped = $blockj->escapeHtmlAttr($blockj->getFormName());
                         'data-bynderid="'+bynder_media_id+'"'+
                         'data-hashid="'+bynder_hash_id+'"'+
                         'value="'+original_item_url+'" />'
+            content += '</td>'
+			content += '<td><input class="url bynder_selected_doc_name"'+
+                        'type="text" data-index="'+i+'"'+
+                        'id="textboxId_'+i+'"'+
+                        'data-imgType="'+select_item_type+'"'+
+                        'data-bynderid="'+bynder_media_id+'"'+
+                        'data-hashid="'+bynder_hash_id+'"'+
+                        'value="'+doc_name+'" />'
             content += '</td>'
             content += '<td><a href="javascript:void(0)" class="btnDelete" data-index="btnDelete_'+ i + '">'+
                         '<img src ="'+ delete_icon +'" height="25" width="25" /></a>'+
@@ -530,6 +553,13 @@ $formNameEscaped = $blockj->escapeHtmlAttr($blockj->getFormName());
                     content = '<tr style="background: #efefef;" data-index="'+i+'"><td>'
                     content += '<img src ="'+drag_img+'"/></td><td>'
                     content += '<input class="url bynder_selected_doc"'+
+                                'type="text" data-index="'+i+'"'+
+                                'data-imgType="'+select_item_type+'"'+
+                                'data-bynderid="'+bynder_media_id+'"'+
+                                'data-hashid="'+bynder_hash_id+'"'+
+                                'id="textboxId_'+i+'"'+
+                                'value="'+item_v_url+'" /></td>'
+					content += '<input class="url bynder_selected_doc"'+
                                 'type="text" data-index="'+i+'"'+
                                 'data-imgType="'+select_item_type+'"'+
                                 'data-bynderid="'+bynder_media_id+'"'+

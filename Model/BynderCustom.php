@@ -217,7 +217,7 @@ class BynderCustom implements BynderCustomInterface
         exit;
     }
 
-    public function getListUserPriceList($keyword = null, $role = null, $page = null, $limit = null)
+    public function getListUserPriceList($keyword = null, $role = null, $page = null, $limit = null, $brand = null)
     {
         $collection = $this->metaPropertyCollectionFactory->create()->getData();
         $meta_properties = $this->getMetaPropertiesCollection($collection);
@@ -246,6 +246,9 @@ class BynderCustom implements BynderCustomInterface
         $find_key_for_search = array_search("asset_sub_type", $all_details);
         $pricing_meta_slug = $meta_properties["collection_data_value"][$find_key_for_search]["bynder_property_slug"];
 
+        $find_key_for_brand = array_search("brands", $all_details);
+        $brand_meta_slug = $meta_properties["collection_data_value"][$find_key_for_brand]["bynder_property_slug"];
+
         $find_key_for_role = array_search("customer_visibility", $all_details);
         $role_meta_slug = $meta_properties["collection_data_value"][$find_key_for_role]["bynder_property_slug"];
         $search_values = array();
@@ -259,8 +262,9 @@ class BynderCustom implements BynderCustomInterface
             "type" => "document",
             "count" => 1
         );
+        
         $search_values = $kew;
-        $search_by .= "Keyword ";
+        $search_by .= "Keyword";
 
         if ($role != "") {
             $roleLabelCollection = $this->datahelper->getCustomerVisibilityLabel($role);
@@ -268,7 +272,17 @@ class BynderCustom implements BynderCustomInterface
                 $role = $roleLabelCollection[0]['option_name'];
                 $role_val = array("property_" . $role_meta_slug => $role);
                 $search_values = array_merge($search_values, $role_val);
-                $search_by .= "and Role";
+                $search_by .= " and Role";
+            }
+        }
+
+        if($brand != ""){
+            $brandLabelCollection = $this->datahelper->getBrandLabel($brand);
+            if (count($brandLabelCollection) > 0) {
+                $brand_name = $brandLabelCollection[0]['option_name'];
+                $brand_val = array("property_" . $brand_meta_slug => $brand_name);
+                $search_values = array_merge($search_values, $brand_val);
+                $search_by .= " and Brand";
             }
         }
 

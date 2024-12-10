@@ -440,33 +440,36 @@ class FeatchNullDataToMagento
                             switch ($m_bynder_role) {
                                 case "Catalog_Tile":
                                     $original_m_bynder_role = "Base";
+                                    $original_m_bynder_role_slug = "Magento_Base";
                                     break;
                                 case "Featured":
                                     $original_m_bynder_role = "Small";
+                                    $original_m_bynder_role_slug = "Magento_Small";
                                     break;
                                 case "Product_Page":
                                     $original_m_bynder_role = "Swatch";
+                                    $original_m_bynder_role_slug = "Magento_Swatch";
                                     break;
                                 case "Thumbnail":
                                     $original_m_bynder_role = "Thumbnail";
+                                    $original_m_bynder_role_slug = "Magento_Thumbnail";
                                     break;
                                 default:
                                     $original_m_bynder_role = $m_bynder_role;
                             }
-                            if (isset($data_value["thumbnails"][$original_m_bynder_role])) {
-                                $images_urls_list[]= $data_value["thumbnails"][$original_m_bynder_role]."\n";
+                            if (isset($data_value["thumbnails"][$original_m_bynder_role_slug])) {
+                                $images_urls_list[]= $data_value["thumbnails"][$original_m_bynder_role_slug]."\n";
                                 $new_magento_role_list[] = $original_m_bynder_role."\n";
 
                                 $alt_text_vl = $data_value["thumbnails"]["img_alt_text"];
                                 if (is_array($data_value["thumbnails"]["img_alt_text"])) {
                                     $alt_text_vl = implode(" ", $data_value["thumbnails"]["img_alt_text"]);
                                 }
-
                                 $new_bynder_alt_text[] = (strlen($alt_text_vl) > 0)?$alt_text_vl."\n":"###\n";
                             } else {
-                                if(isset($data_value["thumbnails"]["JPG"])){
-                                    $images_urls_list[]= $data_value["thumbnails"]["JPG"]."\n";
-                                }else{
+                                if (isset($data_value["thumbnails"]["Magento_Original"])) {
+                                    $images_urls_list[]= $data_value["thumbnails"]["Magento_Original"]."\n";
+                                } else {
                                     $images_urls_list[]= $data_value["thumbnails"]["webimage"]."\n";
                                 }
                                 $new_magento_role_list[] = $original_m_bynder_role."\n";
@@ -505,8 +508,8 @@ class FeatchNullDataToMagento
 						}
                     }
                     if (count($images_urls_list) == 0) {
-                        if (isset($image_data["JPG"])) {
-                            $images_urls_list[] = $image_data["JPG"]."\n";
+                        if (isset($image_data["Magento_Original"])) {
+                            $images_urls_list[] = $image_data["Magento_Original"]."\n";
                         } elseif (isset($data_value["thumbnails"]["webimage"])) {
                             $images_urls_list[] = $data_value["thumbnails"]["webimage"] . "\n";
                         } else {

@@ -169,25 +169,25 @@ class AddData extends \Magento\Framework\App\Action\Action
         $updated_values = [
             'bynder_multi_img' => $new_value_array
         ];
-        $this->productActionObject->updateAttributes(
+        /*$this->productActionObject->updateAttributes(
             [$product_id],
             $updated_values,
             $storeId
-        );
-        $new_bynder_value = $product->getResource()->getAttributeRawValue(
+        );*/
+        /*$new_bynder_value = $product->getResource()->getAttributeRawValue(
             $product_id,
             'bynder_multi_img',
             $storeId
-        );
+        );*/
         //echo "<pre>"; print_r($new_bynder_value); exit;
-        /*if ($coockie_id == 0) {
+        if ($coockie_id == 0) {
             $data = [
                 "value" => $new_value_array,
                 "product_id" => $product_id
             ];
             $bynderTempData = $this->bynderTempData->create();
             $bynderTempData->setData($data);
-            //$bynderTempData->save();
+            $bynderTempData->save();
             $collectionData = $this->bynderTempDataCollectionFactory->create()->load();
             if (!empty($collectionData)) {
                 $lastAddedId = "";
@@ -205,7 +205,7 @@ class AddData extends \Magento\Framework\App\Action\Action
                 ];
                 $bynderTempData = $this->bynderTempData->create();
                 $bynderTempData->setData($data);
-                //$bynderTempData->save();
+                $bynderTempData->save();
                 $collectionData = $this->bynderTempDataCollectionFactory->create()->load();
                 if (!empty($collectionData)) {
                     $lastAddedId = "";
@@ -221,7 +221,7 @@ class AddData extends \Magento\Framework\App\Action\Action
                 $bynderTempData = $this->bynderTempData->create();
                 $bynderTempData->load($coockie_id);
                 $bynderTempData->setData($new_data);
-                //$bynderTempData->save();
+                $bynderTempData->save();
                 $lastAddedId = $coockie_id;
             }
         }
@@ -233,10 +233,10 @@ class AddData extends \Magento\Framework\App\Action\Action
             'image_coockie_id',
             $lastAddedId,
             $publicCookieMetadata
-        );*/
+        );
         $resultJson = $this->resultJsonFactory->create();
         return $resultJson->setData([
-            'new_bynder_value' => $new_bynder_value,
+            'new_bynder_value' => $new_value_array,
             'success' => true
         ]);
     }

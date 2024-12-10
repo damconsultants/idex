@@ -163,7 +163,7 @@ class Gallery extends \Magento\Catalog\Block\Product\View\Gallery
         if ($use_bynder_both_image == 1) { /*Both Image*/
             if (!empty($product->getData('bynder_multi_img'))) {
                 $bynder_image = $product->getData('bynder_multi_img');
-                $json_value = json_decode($bynder_image, associative: true);
+                $json_value = json_decode($bynder_image, true);
                 $json_value = $json_value["asset_list"];
                 
                 usort($json_value, function ($a, $b) {
@@ -240,7 +240,9 @@ class Gallery extends \Magento\Catalog\Block\Product\View\Gallery
                     $old_asset_detail_array = $item_old_asset_value['assets_extra_details'];
                     
                     foreach($old_asset_detail_array as $extra_detail) {
-                        $default_image = $extra_detail['brand_default_image'];
+                        if(isset($extra_detail['brand_default_image'])) {
+                            $default_image = $extra_detail['brand_default_image'];
+                        }
                     }
                     usort($json_value, function ($a, $b) {
                         if (isset($a['is_order']) || isset($b['is_order'])) {

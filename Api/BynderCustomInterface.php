@@ -21,9 +21,10 @@ interface BynderCustomInterface
      * @param string|null $role Optional role parameter
      * @param string|null $page Optional page parameter
      * @param string|null $limit Optional limit parameter
+     * @param string|null $brand Optional brand parameter
      * 
      * @return mixed
      */
-    public function getListUserPriceList($keyword = null, $role = null, $page = null, $limit = null);
+    public function getListUserPriceList($keyword = null, $role = null, $page = null, $limit = null, $brand = null);
 
 }

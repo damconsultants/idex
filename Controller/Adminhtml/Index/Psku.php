@@ -756,7 +756,7 @@ class Psku extends \Magento\Backend\App\Action
                                         $new_image_detail[] = [
                                             "item_url" => $item_img_url,
                                             "alt_text" => $img['alt_text'],
-                                            "image_role" => $img['image_role'],
+                                            "image_role" => $image_detail[$item_key]['image_role'],
                                             "item_type" => $img['item_type'],
                                             "thum_url" => $img['thum_url'],
                                             "bynder_md_id" => $img['bynder_md_id'],
@@ -777,7 +777,7 @@ class Psku extends \Magento\Backend\App\Action
                                             $new_image_detail_image[] = [
                                                 "item_url" => $item_img_url,
                                                 "alt_text" => $img['alt_text'],
-                                                "image_role" => $img['image_role'],
+                                                "image_role" => $image_detail[$item_key]['image_role'],
                                                 "item_type" => $img['item_type'],
                                                 "thum_url" => $img['thum_url'],
                                                 "bynder_md_id" => $img['bynder_md_id'],
@@ -1196,13 +1196,17 @@ class Psku extends \Magento\Backend\App\Action
                         }
                     }
                     $new_value_array = json_encode($doc_detail, true);
-                    $data_doc_value = [
+					$doc_value = [];
+					foreach ($doc_detail as $doc) {
+                        $doc_value[] = $doc['item_url'];
+                    }
+					$doc_value_array = implode(',', $doc_value);
+					$data_doc_value = [
                         'sku' => $product_sku_key,
-                        'message' => $new_value_array,
+                        'message' => $doc_value_array,
                         'data_type' => '2',
                         "lable" => "1"
                     ];
-                    $this->getInsertDataTable($data_doc_value);
                     $by_extra_details = [];
                     if (isset($bynder_extra_data["extra_details"]["assets_extra_details"])) {
                         $by_extra_details = $bynder_extra_data["extra_details"]["assets_extra_details"];
@@ -1254,16 +1258,20 @@ class Psku extends \Magento\Backend\App\Action
                             
                         }
                     }
-					$new_value_array = json_encode($doc_detail, true);
-                    $data_doc_value = [
+					//$new_value_array = json_encode($doc_detail, true);
+                    $array_merg = array_merge($item_old_value, $doc_detail);
+					$doc_value = [];
+					foreach ($array_merg as $doc) {
+                        $doc_value[] = $doc['item_url'];
+                    }
+					$doc_value_array = implode(',', $doc_value);
+					$data_doc_value = [
                         'sku' => $product_sku_key,
-                        'message' => $new_value_array,
+                        'message' => $doc_value_array,
                         'data_type' => '2',
                         "lable" => "1"
                     ];
                     $this->getInsertDataTable($data_doc_value);
-                    $array_merg = array_merge($item_old_value, $doc_detail);
-					
                     $by_extra_details = [];
                     if(isset($bynder_extra_data["extra_details"]["assets_extra_details"])){
                         $by_extra_details = $bynder_extra_data["extra_details"]["assets_extra_details"];

@@ -196,12 +196,20 @@ class ImageFactory extends \Magento\Catalog\Block\Product\ImageFactory
         $image_url = "";
         $product_details = $this->productRepository->getById($product->getId());
         $bynderImage = $product_details->getBynderMultiImg();
+        $default_image = "https://media.idexcorp.com/m/11a5506c07907565/Magento_Base-IDEXFS_Logo_Color_Transparent-200x200.png";
         $use_bynder_cdn = $product_details->getUseBynderCdn();
         $use_bynder_both_image = $product_details->getUseBynderBothImage();
         if ($use_bynder_cdn == 1 || $use_bynder_both_image == 1) {
             if ($bynderImage != "") {
                 $json_value = json_decode($bynderImage, true);
                 $json_value = $json_value["asset_list"];
+                $item_old_asset_value = json_decode($bynderImage, true);
+                $old_asset_detail_array = $item_old_asset_value['assets_extra_details'];
+                foreach($old_asset_detail_array as $extra_detail) {
+                    if(isset($extra_detail['brand_default_image'])) {
+                        $default_image = $extra_detail['brand_default_image'];
+                    }
+                }
                 $small_image = 'Small';
                 if (!empty($json_value)) {
                     foreach ($json_value as $values) {
@@ -216,11 +224,12 @@ class ImageFactory extends \Magento\Catalog\Block\Product\ImageFactory
                             }
                         }
                     }
-                } else {
-                    $image_url = $imageAsset->getUrl();
+                }
+                if (empty($image_url)) {
+                    $image_url = $default_image;
                 }
             } else {
-                $image_url = $imageAsset->getUrl();
+                $image_url = $default_image;
             }
         } else {
             $image_url = $imageAsset->getUrl();

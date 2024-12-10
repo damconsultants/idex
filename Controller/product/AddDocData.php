@@ -151,21 +151,21 @@ class AddDocData extends \Magento\Framework\App\Action\Action
         $updated_values = [
             'bynder_document' => $new_value_array
         ];
-        $this->productActionObject->updateAttributes(
+        /*$this->productActionObject->updateAttributes(
             [$product_id],
             $updated_values,
             $storeId
-        );
+        );*/
        
-        $new_bynder_value = $product->getResource()->getAttributeRawValue(
+        /*$new_bynder_value = $product->getResource()->getAttributeRawValue(
             $product_id,
             'bynder_document',
             $storeId
-        );
+        );*/
         //echo "<pre>"; print_r($new_bynder_value);
-        /*if ($coockie_id == 0) {
+        if ($coockie_id == 0) {
             $data = [
-                "value" => $bynder_doc,
+                "value" => $new_value_array,
                 "product_id" => $product_id
             ];
             $bynderTempDocData = $this->bynderTempDocData->create();
@@ -183,7 +183,7 @@ class AddDocData extends \Magento\Framework\App\Action\Action
             $records->addFieldToFilter('product_id', ['eq' => [$product_id]])->load();
             if (empty($records)) {
                 $data = [
-                    "value" => $bynder_doc,
+                    "value" => $new_value_array,
                     "product_id" => $product_id
                 ];
                 $bynderTempDocData = $this->bynderTempDocData->create();
@@ -198,7 +198,7 @@ class AddDocData extends \Magento\Framework\App\Action\Action
                 }
             } else {
                 $new_data = [
-                    "value" => $bynder_doc,
+                    "value" => $new_value_array,
                     "product_id" => $product_id
                 ];
                 $bynderTempDocData = $this->bynderTempDocData->create();
@@ -216,10 +216,10 @@ class AddDocData extends \Magento\Framework\App\Action\Action
             'doc_coockie_id',
             $lastAddedId,
             $publicCookieMetadata
-        );*/
+        );
         $resultJson = $this->resultJsonFactory->create();
         return $resultJson->setData([
-            'new_bynder_value' => $new_bynder_value,
+            'new_bynder_value' => $new_value_array,
             'success' => true
         ]);
     }
