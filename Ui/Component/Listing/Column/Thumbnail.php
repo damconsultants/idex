@@ -66,51 +66,41 @@ class Thumbnail extends \Magento\Ui\Component\Listing\Columns\Column
     {
         if (isset($dataSource['data']['items'])) {
             $fieldName = $this->getData('name');
-            foreach ($dataSource['data']['items'] as & $item) {
+            $defaultImage = "https://media.idexcorp.com/m/11a5506c07907565/Magento_Base-IDEXFS_Logo_Color_Transparent-200x200.png";
+            foreach ($dataSource['data']['items'] as &$item) {
                 $_product = $this->_productRepository->getById($item['entity_id']);
                 $image_value = $_product->getBynderMultiImg();
                 if (!empty($image_value)) {
                     $item_old_value = json_decode($image_value, true);
-					$item_old_value = $item_old_value["asset_list"];
+                    $item_old_value = $item_old_value["asset_list"];
                     if (null == $item_old_value) {
                         continue;
                     }
-                    foreach ($item_old_value as $img) {
-                        if (isset($img['image_role']) && count($img['image_role']) > 0) {
-                            foreach ($img['image_role'] as $roll) {
-                                if ($roll == 'Thumbnail') {
-                                    $product = new \Magento\Framework\DataObject($item);
-                                    $imageHelper = $this->imageHelper->init($product, 'product_listing_thumbnail');
-                                    $item[$fieldName . '_src'] = $img['thum_url'];
-                                    $item[$fieldName . '_link'] = $this->urlBuilder->getUrl(
-                                        'catalog/product/edit',
-                                        [
-                                            'id' => $product->getEntityId(),
-                                            'store' => $this->context->getRequestParam('store')
-                                        ]
-                                    );
-                                    $ogImgHp = $this->imageHelper->init($product, 'product_listing_thumbnail_preview');
-                                    $item[$fieldName . '_orig_src'] = $img['thum_url'];
-                                }
-                            }
-                        }
-                    }
-
-                } else {
+                    $thumbnail = $this->getThumbnailUrl($item_old_value, $defaultImage);
                     $product = new \Magento\Framework\DataObject($item);
-                    $imageHelper = $this->imageHelper->init($product, 'product_listing_thumbnail');
-                    $item[$fieldName . '_src'] = $imageHelper->getUrl();
-                    $item[$fieldName . '_alt'] = $this->getAlt($item) ?: $imageHelper->getLabel();
+                    $item[$fieldName . '_src'] = $thumbnail;
+                    $item[$fieldName . '_orig_src'] = $thumbnail;
                     $item[$fieldName . '_link'] = $this->urlBuilder->getUrl(
                         'catalog/product/edit',
                         ['id' => $product->getEntityId(), 'store' => $this->context->getRequestParam('store')]
                     );
-                    $origImageHelper = $this->imageHelper->init($product, 'product_listing_thumbnail_preview');
-                    $item[$fieldName . '_orig_src'] = $origImageHelper->getUrl();
+
                 }
             }
         }
         return $dataSource;
+    }
+
+    private function getThumbnailUrl($imageData, $defaultImage)
+    {
+        if (!empty($imageData)) {
+            foreach ($imageData as $img) {
+                if (!empty($img['image_role']) && in_array('Thumbnail', $img['image_role'])) {
+                    return $img['thum_url'];
+                }
+            }
+        }
+        return $defaultImage;
     }
 
     /**

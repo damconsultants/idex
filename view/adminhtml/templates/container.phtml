@@ -130,8 +130,8 @@ function($,modal) {
 											'<div class="m-content">' +
 												'<input type="checkbox" class="image_types"'+
 												'id="image_type_' + total_images + '"'+
-												' name="image_type_'+index+'" value="' + res.type + index + '">' +
-												'<label for="image_type_' +total_images+ '">' +res.type+" "+dataset_size+'</label>' +
+												' name="image_type_'+index+'" value="' + res.my_type + index + '">' +
+												'<label for="image_type_' +total_images+ '">' +res.my_type+" "+dataset_size+'</label>' +
 											'</div>' +
 											'</div>';
 								});
@@ -219,7 +219,7 @@ function($,modal) {
 
 					var callurl = $("#ajax_addtofolder").val();
 					var form_keys = $("#form_keys").val();
-					var dir_path = "Bynder_idex/";
+					var dir_path = "Bynder_idex";
 					if(img_data != "") {
 						$.ajax({
 							showLoader: true,

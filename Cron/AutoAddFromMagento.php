@@ -420,6 +420,7 @@ class AutoAddFromMagento
                 $video_hash_id = [];
                 $doc_hash_id = [];
 				$is_order = [];
+				$video_link = [];
                 if ($data_value['type'] == "image") {
 					$b = [];
 					$c = [];
@@ -569,7 +570,11 @@ class AutoAddFromMagento
 						}
 					}
                     $assets_extra_details_video["assets_extra_details"][$data_value["idHash"]] = array_merge($data_value["assets_extra_details"],$b,$c,$f);
-                    $video_link[] = $data_value["videoPreviewURLs"][0] . '@@' . $image_data["webimage"]."\n";
+                    if(isset($data_value["videoPreviewURLs"])){
+                        $video_link[] = $data_value["videoPreviewURLs"][0] . '@@' . $image_data["webimage"] . "\n";
+                    }else{
+                        $video_link[] = $image_data["image_link"] . '@@' . $image_data["webimage"]. "\n";
+                    }
                     $video_new_bynder_mediaid_text[] = $bynder_media_id."\n";
                     $video_hash_id[] = $idHash."\n";
                     array_push($data_arr, $data_sku[0]);

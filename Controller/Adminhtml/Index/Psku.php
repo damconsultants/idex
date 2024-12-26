@@ -383,6 +383,7 @@ class Psku extends \Magento\Backend\App\Action
                     $new_magento_role_list = [];
                     $new_bynder_alt_text =[];
                     $new_bynder_mediaid_text = [];
+					$video_link = [];
                     $hash_id = [];
                     if (count($bynder_image_role) > 0) {
                         foreach ($bynder_image_role as $m_bynder_role) {
@@ -480,8 +481,11 @@ class Psku extends \Magento\Backend\App\Action
                         array_push($data_val_arr, $data_p);
                     } else {
                         if ($select_attribute == 'video') {
-                            //$video_link = $image_data["image_link"] . '@@' . $image_data["webimage"];
-                            $video_link[] = $data_value["videoPreviewURLs"][0] . '@@' . $image_data["webimage"] . "\n";
+                            if(isset($data_value["videoPreviewURLs"])){
+                                $video_link[] = $data_value["videoPreviewURLs"][0] . '@@' . $image_data["webimage"] . "\n";
+                            }else{
+                                $video_link[] = $image_data["image_link"] . '@@' . $image_data["webimage"]. "\n";
+                            }
                             array_push($data_arr, $data_sku[0]);
                             $data_p = [
                                 "sku" => $data_sku[0],
@@ -862,7 +866,6 @@ class Psku extends \Magento\Backend\App\Action
                     */
                 } else {
                     $new_image_array = explode("\n", $img_json);
-
                     $new_alttext_array = explode("\n", $img_alt_text);
                     $new_magento_role_option_array = explode("\n", $mg_img_role_option);
                     foreach ($new_image_array as $vv => $image_value) {
@@ -989,7 +992,7 @@ class Psku extends \Magento\Backend\App\Action
                                 "item_url" => $item_url[0],
                                 "image_role" => null,
                                 "item_type" => 'VIDEO',
-                                "thum_url" => $thum_url[1],
+                                "thum_url" => $item_url[1],
                                 "bynder_md_id" => $bynder_media_id[$vv],
                                 "hash_id" => $hashId[$vv],
                                 "is_order" => empty($is_order) ? "100" : $is_order
@@ -1109,7 +1112,7 @@ class Psku extends \Magento\Backend\App\Action
                         $storeId
                     );
                 } else {
-                    $new_video_array = explode(" \n", $img_json);
+                    $new_video_array = explode("\n", $img_json);
                     $video_detail = [];
                     foreach ($new_video_array as $vv => $video_value) {
                         if (!empty($video_value)) {
@@ -1121,7 +1124,7 @@ class Psku extends \Magento\Backend\App\Action
                                 "item_url" => $item_url[0],
                                 "image_role" => null,
                                 "item_type" => 'VIDEO',
-                                "thum_url" => $thum_url[1],
+                                "thum_url" => $item_url[1],
                                 "bynder_md_id" => $bynder_media_id[$vv],
                                 "hash_id" => $hashId[$vv],
                                 "is_order" => $is_order

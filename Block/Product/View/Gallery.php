@@ -305,7 +305,8 @@ class Gallery extends \Magento\Catalog\Block\Product\View\Gallery
 						'type' => 'image',
 						'videoUrl' => null,
                     ]);
-                    $imagesItems[] = $imageItem->toArray();
+                    //$imagesItems[] = $imageItem->toArray();
+                    array_unshift($imagesItems, $imageItem->toArray());
                 }
 
             } else {
@@ -319,7 +320,8 @@ class Gallery extends \Magento\Catalog\Block\Product\View\Gallery
 					'type' => 'image',
 					'videoUrl' => null,
 				]);
-				$imagesItems[] = $imageItem->toArray();
+				//$imagesItems[] = $imageItem->toArray();
+                array_unshift($imagesItems, $imageItem->toArray());
             }
         } else {
             foreach ($this->getGalleryImages() as $image) {
