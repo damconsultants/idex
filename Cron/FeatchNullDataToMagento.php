@@ -264,11 +264,15 @@ class FeatchNullDataToMagento
     /**
      * Is int
      *
-     * @return $this
+     * @return $array
      */
     public function getMyStoreId()
     {
-        $storeId = $this->storeManagerInterface->getStore()->getId();
+        $storeId = [];
+        foreach ($this->storeManagerInterface->getStores() as $store) { 
+            $storeId[] = $store->getId();
+        }
+        //$storeId = $this->storeManagerInterface->getStore()->getId();
         return $storeId;
     }
 
@@ -793,7 +797,7 @@ class FeatchNullDataToMagento
         $video_detail_diff = [];
         $video_detail = [];
         try {
-            $storeId = $this->storeManagerInterface->getStore()->getId();
+            $storeIds = $this->storeManagerInterface->getStore()->getId();
             /*
             $byndeimageconfig = $this->datahelper->byndeimageconfig();
             $img_roles = explode(",", $byndeimageconfig);*/
@@ -962,7 +966,10 @@ class FeatchNullDataToMagento
                             }
                             $d_media_id[] =  $d_img['bynder_md_id'];
                         }
-                        $this->getInsertMedaiDataTable($product_sku_key, $d_media_id, $product_ids, $storeId);
+                        $this->getInsertMedaiDataTable($product_sku_key, $d_media_id, $product_ids, $storeIds);
+                        foreach($this->getMyStoreId() as $storeId) {
+                            $this->getInsertMedaiDataTable($product_sku_key, $d_media_id, $product_ids, $storeId);
+                        }
                         $array_merge = array_merge($item_old_value, $merge_both_diff);
                     } else {
                         $new_image_detail = [];
@@ -1080,8 +1087,10 @@ class FeatchNullDataToMagento
                         $m_id[] = $img['bynder_md_id'];
                         $this->getDeleteMedaiDataTable($product_sku_key, $img['bynder_md_id']);
                     }
-                    $this->getInsertMedaiDataTable($product_sku_key, $m_id, $product_ids, $storeId);
-                    
+                    $this->getInsertMedaiDataTable($product_sku_key, $m_id, $product_ids, $storeIds);
+                    foreach($this->getMyStoreId() as $storeId) {
+                        $this->getInsertMedaiDataTable($product_sku_key, $m_id, $product_ids, $storeId);
+                    }
                     $flag = 0;
                     if (in_array("IMAGE", $type) && in_array("VIDEO", $type)) {
                         $flag = 1;
@@ -1115,12 +1124,18 @@ class FeatchNullDataToMagento
                         'bynder_cron_sync' => 1,
 						'use_bynder_cdn' => 1
                     ];
-
                     $this->action->updateAttributes(
                         [$product_ids],
                         $updated_values,
-                        $storeId
+                        $storeIds
                     );
+                    foreach($this->getMyStoreId() as $storeId) {
+                        $this->action->updateAttributes(
+                            [$product_ids],
+                            $updated_values,
+                            $storeId
+                        );
+                    }
                     /*
                     $this->action->updateAttributes(
                         [$product_ids],
@@ -1250,12 +1265,18 @@ class FeatchNullDataToMagento
                         'bynder_cron_sync' => 1,
 						'use_bynder_cdn' => 1
                     ];
-
                     $this->action->updateAttributes(
                         [$product_ids],
                         $updated_values,
-                        $storeId
+                        $storeIds
                     );
+                    foreach($this->getMyStoreId() as $storeId) {
+                        $this->action->updateAttributes(
+                            [$product_ids],
+                            $updated_values,
+                            $storeId
+                        );
+                    }
                     /*
                     $this->action->updateAttributes(
                         [$product_ids],
@@ -1307,7 +1328,7 @@ class FeatchNullDataToMagento
         $image_detail = [];
         $diff_image_detail = [];
         try {
-            $storeId = $this->storeManagerInterface->getStore()->getId();
+            $storeIds = $this->storeManagerInterface->getStore()->getId();
             /*
             $byndeimageconfig = $this->datahelper->byndeimageconfig();
             $img_roles = explode(",", $byndeimageconfig);*/
@@ -1362,8 +1383,15 @@ class FeatchNullDataToMagento
                     $this->action->updateAttributes(
                         [$product_ids],
                         ['bynder_document' => $new_value_array, 'bynder_cron_sync' => 1],
-                        $storeId
+                        $storeIds
                     );
+                    foreach($this->getMyStoreId() as $storeId) {
+                        $this->action->updateAttributes(
+                            [$product_ids],
+                            ['bynder_document' => $new_value_array, 'bynder_cron_sync' => 1],
+                            $storeId
+                        );
+                    }
                 }
             }
         } catch (Exception $e) {
@@ -1390,15 +1418,23 @@ class FeatchNullDataToMagento
         $updated_values = [
             'bynder_cron_sync' => 2
         ];
+        $storeIds = $this->storeManagerInterface->getStore()->getId();
 
-        $storeId = $this->getMyStoreId();
+        //$storeId = $this->getMyStoreId();
         $_product = $this->_productRepository->get($sku);
         $product_ids = $_product->getId();
-
         $this->action->updateAttributes(
             [$product_ids],
             $updated_values,
-            $storeId
+            $storeIds
         );
+        foreach($this->getMyStoreId() as $storeId) {
+            $this->action->updateAttributes(
+                [$product_ids],
+                $updated_values,
+                $storeId
+            );
+        }
+       
     }
 }

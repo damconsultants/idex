@@ -23,6 +23,7 @@
         $('#bt_id_2').click(function() {
             var product_sku = $('textarea#byndersyncdata_bynder_sync_data_sku').val();
             var select_attribute = $('select#byndersyncdata_bynder_sync_data_select').val();
+            var select_store = $('select#byndersyncdata_bynder_sync_data_store_dropdown').val();
             if(checkbox_checked == 0){
                 sku_limit = $('#byndersyncdata_bynder_sync_data_sku_limit').val();
             }else{
@@ -33,6 +34,7 @@
             var params = {
                 product_sku: product_sku,
                 select_attribute: select_attribute,
+                select_store: select_store,
                 sku_limit:sku_limit
             };
             new Ajax.Request('<?= $block->escapeUrl($block->getAjaxUrl()); ?>', {

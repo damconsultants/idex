@@ -84,6 +84,8 @@ class Data extends AbstractHelper
     public const PERMANENT_TOKEN = 'bynderconfig/bynder_credential/permanent_token';
     public const LICENCE_TOKEN = 'bynderconfig/bynder_credential/licenses_key';
     public const RADIO_BUTTON = 'byndeimageconfig/bynder_image/selectimage';
+	public const PLACEHOLDER_BASE = 'byndeimageconfig/bynder_image/placeholder_base';
+	public const PLACEHOLDER_SMALL = 'byndeimageconfig/bynder_image/placeholder_small';
     public const PRODUCT_SKU_LIMIT = 'cronimageconfig/set_limit_product_sku/product_sku_limt';
     public const FETCH_CRON = 'cronimageconfig/configurable_cron/fetch_enable';
     public const AUTO_CRON = 'cronimageconfig/auto_add_bynder/auto_enable';
@@ -170,6 +172,24 @@ class Data extends AbstractHelper
     public function getFetchCronEnable()
     {
         return $this->getConfig(self::FETCH_CRON);
+    }
+	/**
+     * Get Fetch cron enable
+     *
+     * @return $this
+     */
+    public function getBasePlaceHolder()
+    {
+        return $this->getConfig(self::PLACEHOLDER_BASE);
+    }
+	/**
+     * Get Fetch cron enable
+     *
+     * @return $this
+     */
+    public function getSmallPlaceHolder()
+    { 
+        return $this->getConfig(self::PLACEHOLDER_SMALL);
     }
     /**
      * Get Permanent Token
@@ -298,6 +318,15 @@ class Data extends AbstractHelper
     public function getRedirecturl()
     {
         return (string) $this->getbaseurl() . "bynder/redirecturl";
+    }
+	/**
+     * Get Version
+     *
+     * @return $this
+     */
+    public function getVersion()
+    {
+        return (string) "1.0.11";
     }
 
     /**
@@ -616,7 +645,7 @@ class Data extends AbstractHelper
             'property_id' => $property_id,
             'bynder_metaproperty_collection' => $collection_data_value
         ];
-
+        
         $jsonData = '{}';
         $fields = json_encode($fields);
         $this->_curl->setOption(CURLOPT_URL, self::API_CALLED . 'idex-bynder-skudetails-new');

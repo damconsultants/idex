@@ -196,7 +196,10 @@ class ImageFactory extends \Magento\Catalog\Block\Product\ImageFactory
         $image_url = "";
         $product_details = $this->productRepository->getById($product->getId());
         $bynderImage = $product_details->getBynderMultiImg();
-        $default_image = "https://media.idexcorp.com/m/11a5506c07907565/Magento_Base-IDEXFS_Logo_Color_Transparent-200x200.png";
+		$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+		$datahelper = $objectManager->get("\DamConsultants\Idex\Helper\Data");
+		$default_image = $datahelper->getBasePlaceHolder();
+        //$default_image = "https://media.idexcorp.com/m/11a5506c07907565/Magento_Base-IDEXFS_Logo_Color_Transparent-200x200.png";
         $use_bynder_cdn = $product_details->getUseBynderCdn();
         $use_bynder_both_image = $product_details->getUseBynderBothImage();
         if ($use_bynder_cdn == 1 || $use_bynder_both_image == 1) {
@@ -207,7 +210,7 @@ class ImageFactory extends \Magento\Catalog\Block\Product\ImageFactory
                 $old_asset_detail_array = $item_old_asset_value['assets_extra_details'];
                 foreach($old_asset_detail_array as $extra_detail) {
                     if(isset($extra_detail['brand_default_image'])) {
-                        $default_image = $extra_detail['brand_default_image'];
+                        $default_image = $default_image;//$extra_detail['brand_default_image'];
                     }
                 }
                 $small_image = 'Small';

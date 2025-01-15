@@ -103,7 +103,6 @@ class Submit extends \Magento\Backend\App\Action
             $meta = [];
             $properties_details = [];
             $all_properties_slug = [];
-
             $brandmodel = $this->brandOption->create();
             $customerVisibilitymodel = $this->customerVisibilityOption->create();
             $fileCatagorymodel = $this->fileCategoryOption->create();
@@ -130,6 +129,7 @@ class Submit extends \Magento\Backend\App\Action
                 $all_properties_slug = array_keys($properties_details);
                 
                 foreach ($properites_system_slug as $key => $form_system_slug) {
+                    
                     if (in_array($form_system_slug, $all_properties_slug)) {
                         /* update data */
                         $pro_id = $properties_details[$form_system_slug]["id"];
@@ -145,8 +145,8 @@ class Submit extends \Magento\Backend\App\Action
                     $model->setData('system_name', $form_system_slug);
                     $model->save();
                     
-                    $options = $data['data'][$select_meta_tag[$key]]["options"];
-
+					$options = $data['data'][$select_meta_tag[$key]]["options"];
+					
                     if ($form_system_slug == "customer_visibility") {
                         if (count($options) > 0) {
                             foreach ($options as $v) {

@@ -6,5 +6,6 @@
     <script src="DamConsultants_Idex::js/bynder-compactview-2-latest.js"/>
      <script src="DamConsultants_Idex::js/byner-custom.js"/>
      <script src="DamConsultants_Idex::js/bynder-import.js"/>
+	 <script src="DamConsultants_Idex::js/bynder-config.js"/>
    </head>
 </page>

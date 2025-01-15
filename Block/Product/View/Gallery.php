@@ -159,7 +159,10 @@ class Gallery extends \Magento\Catalog\Block\Product\View\Gallery
         $imagesItems = [];
         $use_bynder_cdn = $product->getData('use_bynder_cdn');
         $use_bynder_both_image = $product->getData('use_bynder_both_image');
-        $default_image = "https://media.idexcorp.com/m/11a5506c07907565/Magento_Base-IDEXFS_Logo_Color_Transparent-200x200.png";
+		$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+		$datahelper = $objectManager->get("\DamConsultants\Idex\Helper\Data");
+		$default_image = $datahelper->getBasePlaceHolder();
+        //$default_image = "https://media.idexcorp.com/m/11a5506c07907565/Magento_Base-IDEXFS_Logo_Color_Transparent-200x200.png";
         if ($use_bynder_both_image == 1) { /*Both Image*/
             if (!empty($product->getData('bynder_multi_img'))) {
                 $bynder_image = $product->getData('bynder_multi_img');
@@ -241,7 +244,7 @@ class Gallery extends \Magento\Catalog\Block\Product\View\Gallery
                     
                     foreach($old_asset_detail_array as $extra_detail) {
                         if(isset($extra_detail['brand_default_image'])) {
-                            $default_image = $extra_detail['brand_default_image'];
+                            $default_image = $default_image;//$extra_detail['brand_default_image'];
                         }
                     }
                     usort($json_value, function ($a, $b) {

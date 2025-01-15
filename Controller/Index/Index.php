@@ -99,6 +99,7 @@ class Index extends \Magento\Framework\App\Action\Action
                             "collection_data_value" => $collection_data_value
                         ];
                         $api_response = $this->b_datahelper->getDerivativesImage($bynder_auth);
+						//echo "<pre>"; print_r($api_response); exit;
                         $api_response = json_decode($api_response, true);   
                         if (isset($api_response["status"]) && $api_response["status"] == 1) {
                             $res_array["status"] = $api_response["status"];

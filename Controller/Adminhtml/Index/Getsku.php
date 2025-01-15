@@ -63,14 +63,15 @@ class Getsku extends \Magento\Backend\App\Action
         }
         $attribute_value = $this->getRequest()->getParam('select_attribute');
         $sku_limit = $this->getRequest()->getParam('sku_limit');
-
+        $select_store = $this->getRequest()->getParam('select_store');
         $product_sku = [];
         $sku = [];
         $id = [];
         $attribute = $this->collectionFactory->create();
         $productcollection = $this->collectionFactory->create()
             ->addAttributeToSelect('*')
-            ->addAttributeToFilter('status', \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
+            ->addAttributeToFilter('status', \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
+            ->addStoreFilter($select_store);
 
         if ($sku_limit != 0) {
             $productcollection->getSelect()->limit($sku_limit);

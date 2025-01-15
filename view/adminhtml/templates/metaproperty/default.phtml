@@ -44,27 +44,38 @@ if (count($get_metaData) > 0) {
         $file_title_checked = "";
         if ($default_sku_value == $newKey) {
             $sku_checked = "selected";
-        } elseif ($default_image_role_value == $newKey) {
+        }
+		if ($default_image_role_value == $newKey) {
             $image_role_checked = "selected";
-        } elseif ($default_image_alt_text == $newKey) {
+        }
+		if ($default_image_alt_text == $newKey) {
             $alt_checked = "selected";
-        } elseif ($default_customer_visibility == $newKey) {
+        }
+		if ($default_customer_visibility == $newKey) {
             $customer_visibility_checked = "selected";
-        } elseif ($default_brands == $newKey) {
+        }
+		if ($default_brands == $newKey) {
             $brands = "selected";
-        } elseif ($default_style == $newKey) {
+        }
+		if ($default_style == $newKey) {
             $style = "selected";
-        } elseif ($default_image_file == $newKey) {
+        }
+		if ($default_image_file == $newKey) {
             $file_catagory = "selected";
-        } elseif ($default_image_search == $newKey) {
+        }
+		if ($default_image_search == $newKey) {
             $search_visibility = "selected";
-        } elseif ($default_image_asset == $newKey) {
+        }
+		if ($default_image_asset == $newKey) {
             $asset = "selected";
-        } elseif ($default_image_media_order == $newKey) {
+        }
+		if ($default_image_media_order == $newKey) {
             $media_order_checked = "selected";
-        } elseif ($default_asset_sub_type == $newKey) {
+        }
+		if ($default_asset_sub_type == $newKey) {
             $sub_type_checked = "selected";
-        } elseif ($default_file_title == $newKey) {
+        }
+		if ($default_file_title == $newKey) {
             $file_title_checked = "selected";
         }
         $sku_properites .= '<option value="' . $newKey . '" ' . $sku_checked . ' >' .

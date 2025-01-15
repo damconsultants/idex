@@ -38,7 +38,7 @@
             <group id="bynder_sync_data" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Sync. Idex Data</label>
                 <field id="select" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Select Attribute</label>        
+                    <label>Select Asset Type</label>        
                     <source_model>DamConsultants\Idex\Model\Config\Source\Select</source_model>
                     <comment>Select the Attribute which Data you want to Sync.</comment>
                 </field>
@@ -51,14 +51,19 @@
                     <label>Get All Sku</label>
                     <frontend_model>DamConsultants\Idex\Block\System\Config\Checkbox</frontend_model>
                 </field>
-                <field id="sku" translate="label" type="textarea" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="store_dropdown" translate="label" type="select" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Select Store</label>
+                    <source_model>DamConsultants\Idex\Model\Config\Source\Store</source_model>
+                    <comment>Select the store for which you want to sync data.</comment>
+                </field>
+                <field id="sku" translate="label" type="textarea" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Product Sku</label>
                     <comment>Enter Sku code with comma separated.(Ex. 24-MB01,25-MB02,26-MB03).</comment>
                 </field>
-                <field id="bt_id_2" translate="label" type="button" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="2">
+                <field id="bt_id_2" translate="label" type="button" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="2">
                     <frontend_model>DamConsultants\Idex\Block\System\Config\GetSyncButton</frontend_model>
                 </field>
-                <field id="bt_id_1" translate="label" type="button" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="3">
+                <field id="bt_id_1" translate="label" type="button" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="3">
                     <frontend_model>DamConsultants\Idex\Block\System\Config\SyncButton</frontend_model>
                 </field>
             </group>
@@ -69,12 +74,24 @@
             <tab>bynder_tab</tab>
             <resource>DamConsultants_Idex::config</resource>
             <group id="bynder_image" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Magento Image Configuration</label>
-                <field id="selectimage" translate="label" type="multiselect" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Placeholder Image Configuration</label>
+				<field id="placeholder_base" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1" disabled="0">
+                    <label>Placeholder Base Image</label>
+                </field>
+				<field id="bt_id_placeholder" translate="label" type="button" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="3">
+                    <frontend_model>DamConsultants\Idex\Block\System\Config\PlaceholderImage</frontend_model>
+                </field>
+				<field id="placeholder_small" translate="label" type="text" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="1" enabled="0">
+                    <label>Placeholder Small Image</label>
+                </field>
+				<field id="bt_id_placeholder_small" translate="label" type="button" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="3">
+                    <frontend_model>DamConsultants\Idex\Block\System\Config\PlaceholderImageSmall</frontend_model>
+                </field>
+                <!--<field id="selectimage" translate="label" type="multiselect" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Select Image Configuration</label>        
                     <source_model>DamConsultants\Idex\Model\Config\Source\Radio</source_model>
                     <comment>Select The Image type which type of image sync. to magento</comment>
-                </field>
+                </field>-->
             </group> 
         </section>
         <section id="cronimageconfig" translate="label" type="text" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="1">
