@@ -75,13 +75,13 @@
             <resource>DamConsultants_Idex::config</resource>
             <group id="bynder_image" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Placeholder Image Configuration</label>
-				<field id="placeholder_base" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1" disabled="0">
+				<field id="placeholder_base" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Placeholder Base Image</label>
                 </field>
 				<field id="bt_id_placeholder" translate="label" type="button" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="3">
                     <frontend_model>DamConsultants\Idex\Block\System\Config\PlaceholderImage</frontend_model>
                 </field>
-				<field id="placeholder_small" translate="label" type="text" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="1" enabled="0">
+				<field id="placeholder_small" translate="label" type="text" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Placeholder Small Image</label>
                 </field>
 				<field id="bt_id_placeholder_small" translate="label" type="button" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="3">
