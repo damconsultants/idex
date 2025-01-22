@@ -22,11 +22,18 @@ class Store implements ArrayInterface
     public function toOptionArray()
     {
         $options = [];
-        foreach ($this->storeManager->getStores() as $store) {
-            $options[] = [
-                'value' => $store->getId(),
-                'label' => $store->getName()
+		$options[] = [
+                'value' => "all_store",
+                'label' => "All Stores"
             ];
+        $all_stores = $this->storeManager->getStores();    
+        if(count($all_stores) > 0){
+            foreach ($this->storeManager->getStores() as $store) {
+                $options[] = [
+                    'value' => $store->getId(),
+                    'label' => $store->getName()
+                ];
+            }
         }
         return $options;
     }

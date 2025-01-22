@@ -27,12 +27,17 @@ class Getsku extends \Magento\Backend\App\Action
      * @var $resultPageFactory;
      */
     protected $productAttributeManagementInterface;
+	/**
+     * @var $storeManagerInterface
+     */
+    protected $storeManagerInterface;
 
     /**
      * Get Sku.
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
      * @param \Magento\Framework\Controller\Result\JsonFactory $jsonFactory
+	 * @param \Magento\Store\Model\StoreManagerInterface $storeManagerInterface
      * @param \Magento\Catalog\Api\ProductAttributeManagementInterface $productAttributeManagementInterface
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $collectionFactory
      */
@@ -40,6 +45,7 @@ class Getsku extends \Magento\Backend\App\Action
         \Magento\Backend\App\Action\Context $context,
         \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute,
         \Magento\Framework\Controller\Result\JsonFactory $jsonFactory,
+		\Magento\Store\Model\StoreManagerInterface $storeManagerInterface,
         \Magento\Catalog\Api\ProductAttributeManagementInterface $productAttributeManagementInterface,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $collectionFactory
     ) {
@@ -47,6 +53,7 @@ class Getsku extends \Magento\Backend\App\Action
         $this->attribute = $attribute;
         $this->collectionFactory = $collectionFactory;
         $this->resultJsonFactory = $jsonFactory;
+		$this->storeManagerInterface = $storeManagerInterface;
         $this->productAttributeManagementInterface = $productAttributeManagementInterface;
     }
     /**
@@ -68,11 +75,17 @@ class Getsku extends \Magento\Backend\App\Action
         $sku = [];
         $id = [];
         $attribute = $this->collectionFactory->create();
-        $productcollection = $this->collectionFactory->create()
-            ->addAttributeToSelect('*')
-            ->addAttributeToFilter('status', \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
-            ->addStoreFilter($select_store);
-
+       
+		if ($select_store == 'all_store') {
+			$productcollection = $this->collectionFactory->create()
+				->addAttributeToSelect('*')
+				->addAttributeToFilter('status', \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
+		} else {
+			$productcollection = $this->collectionFactory->create()
+				->addAttributeToSelect('*')
+				->addAttributeToFilter('status', \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
+				->addStoreFilter($select_store);
+		}
         if ($sku_limit != 0) {
             $productcollection->getSelect()->limit($sku_limit);
         }
@@ -157,5 +170,19 @@ class Getsku extends \Magento\Backend\App\Action
         }
         $result = $this->resultJsonFactory->create();
         return $result->setData(['status' => $status, 'message' => $data_sku]);
+    }
+	 /**
+     * Is int
+     *
+     * @return $array
+     */
+    public function getMyStoreId()
+    {
+        $storeId = [];
+        foreach ($this->storeManagerInterface->getStores() as $store) { 
+            $storeId[] = $store->getId();
+        }
+        //$storeId = $this->storeManagerInterface->getStore()->getId();
+        return $storeId;
     }
 }
