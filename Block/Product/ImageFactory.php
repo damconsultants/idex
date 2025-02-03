@@ -198,7 +198,7 @@ class ImageFactory extends \Magento\Catalog\Block\Product\ImageFactory
         $bynderImage = $product_details->getBynderMultiImg();
 		$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
 		$datahelper = $objectManager->get("\DamConsultants\Idex\Helper\Data");
-		$default_image = $datahelper->getBasePlaceHolder();
+		$default_image = $datahelper->getSmallPlaceHolder();
         //$default_image = "https://media.idexcorp.com/m/11a5506c07907565/Magento_Base-IDEXFS_Logo_Color_Transparent-200x200.png";
         $use_bynder_cdn = $product_details->getUseBynderCdn();
         $use_bynder_both_image = $product_details->getUseBynderBothImage();

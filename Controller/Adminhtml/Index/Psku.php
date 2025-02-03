@@ -150,7 +150,7 @@ class Psku extends \Magento\Backend\App\Action
                                             "sku" => $sku,
                                             "message" => $e->getMessage(),
                                             "data_type" => "",
-                                            "lable" => "0"
+                                            "lable" => 0
                                         ];
                                         $this->getInsertDataTable($insert_data);
                                     }
@@ -197,7 +197,7 @@ class Psku extends \Magento\Backend\App\Action
                                     "sku" => $sku,
                                     "message" => 'Please Select The Metaproperty First.....',
                                     "data_type" => "",
-                                    "lable" => "0"
+                                    "lable" => 0
                                 ];
                                 $this->getInsertDataTable($insert_data);
                                 $result_data = $result->setData(
@@ -1778,11 +1778,9 @@ class Psku extends \Magento\Backend\App\Action
                 "message" => $e->getMessage(),
                 "data_type" => "",
                 'media_id' => "",
-                'remove_for_magento' => '',
-                'added_on_cron_compactview' => '',
                 "lable" => "0"
             ];
-            //$this->getInsertDataTable($insert_data);
+            $this->getInsertDataTable($insert_data);
         }
     }
     /**
@@ -2369,7 +2367,7 @@ class Psku extends \Magento\Backend\App\Action
                         'sku' => $product_sku_key,
                         'message' => $image_value_array,
                         'data_type' => '3',
-                        "lable" => "1"
+                        "lable" => 1
                     ];
                     $this->getInsertDataTable($data_video_data);
                     $by_extra_details = [];
@@ -2449,7 +2447,7 @@ class Psku extends \Magento\Backend\App\Action
                         'sku' => $product_sku_key,
                         'message' => $new_value_array,
                         'data_type' => '3',
-                        "lable" => "1"
+                        "lable" => 1
                     ];
                     $this->getInsertDataTable($data_video_data);
                     $by_extra_details = [];
@@ -2530,6 +2528,7 @@ class Psku extends \Magento\Backend\App\Action
                         'data_type' => '2',
                         "lable" => "1"
                     ];
+					$this->getInsertDataTable($data_doc_value);
                     $by_extra_details = [];
                     if (isset($bynder_extra_data["extra_details"]["assets_extra_details"])) {
                         $by_extra_details = $bynder_extra_data["extra_details"]["assets_extra_details"];
@@ -2588,12 +2587,12 @@ class Psku extends \Magento\Backend\App\Action
                     }
                     $doc_value_array = implode(',', $doc_value);
                     $data_doc_value = [
-                        'sku' => $product_sku_key,
-                        'message' => $doc_value_array,
-                        'data_type' => '2',
-                        "lable" => "1"
-                    ];
-                    $this->getInsertDataTable($data_doc_value);
+						'sku' => $product_sku_key,
+						'message' => $doc_value_array,
+						'data_type' => '2',
+						"lable" => 1
+					];
+					$this->getInsertDataTable($data_doc_value);
                     $by_extra_details = [];
                     if (isset($bynder_extra_data["extra_details"]["assets_extra_details"])) {
                         $by_extra_details = $bynder_extra_data["extra_details"]["assets_extra_details"];

@@ -2,7 +2,7 @@
 
 namespace DamConsultants\Idex\Controller\Adminhtml\Index;
 
-class Grid extends \Magento\Backend\App\Action
+class ReplaceCronGrid extends \Magento\Backend\App\Action
 {
     /**
      * @var \Magento\Framework\View\Result\PageFactory
@@ -10,7 +10,7 @@ class Grid extends \Magento\Backend\App\Action
     protected $resultPageFactory = false;
 
     /**
-     * Grid.
+     * ReplaceCronGrid.
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      */
@@ -29,7 +29,7 @@ class Grid extends \Magento\Backend\App\Action
     public function execute()
     {
         $resultPage = $this->resultPageFactory->create();
-        $resultPage->getConfig()->getTitle()->prepend((__('DAM Cron Sync. Log')));
+        $resultPage->getConfig()->getTitle()->prepend((__('DAM Auto Replace Cron Sync. Log')));
 
         return $resultPage;
     }

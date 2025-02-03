@@ -3,40 +3,71 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">  
    <menu>
        <add id="DamConsultants_Idex::menu"
-           title="Idex Sync. Log" module="DamConsultants_Idex"
+           title="DAM Sync." module="DamConsultants_Idex"
            sortOrder="10"
            resource="Magento_Backend::content"
            />
            <!-- START: new node -->
+		<add id="DamConsultants_Idex::menu_item5"
+           title="Meta properties setting" module="DamConsultants_Idex"
+           sortOrder="10" parent="DamConsultants_Idex::menu"
+           resource="DamConsultants_Idex::menu_item5"
+           />
+		   
+		<add id="DamConsultants_Idex::menu_item1"
+           title="DAM MetaProperty " module="DamConsultants_Idex"
+           sortOrder="10" parent="DamConsultants_Idex::menu_item5"
+           action="bynder/index/metaproperty"
+           resource="DamConsultants_Idex::menu_item1"
+           />
+		  
+		<add id="DamConsultants_Idex::menu_item6"
+           title="Cron Log" module="DamConsultants_Idex"
+           sortOrder="10" parent="DamConsultants_Idex::menu"
+           resource="DamConsultants_Idex::menu_item6"
+           />
        <add id="DamConsultants_Idex::menu_item"
            title="Cron Action Log" module="DamConsultants_Idex"
-           sortOrder="10" parent="DamConsultants_Idex::menu"
+           sortOrder="10" parent="DamConsultants_Idex::menu_item6"
            action="bynder/index/grid"
            resource="DamConsultants_Idex::menu_item"
            />
+		<add id="DamConsultants_Idex::menu_item3"
+           title="Replace Cron Action Log" module="DamConsultants_Idex"
+           sortOrder="10" parent="DamConsultants_Idex::menu_item6"
+           action="bynder/index/replacecrongrid"
+           resource="DamConsultants_Idex::menu_item3"
+           />
+		<add id="DamConsultants_Idex::menu_item4"
+           title="Delete Cron Action Log" module="DamConsultants_Idex"
+           sortOrder="10" parent="DamConsultants_Idex::menu_item6"
+           action="bynder/index/deletecrongrid"
+           resource="DamConsultants_Idex::menu_item4"
+           />
        <!-- END:   new node -->
        <!-- START: new node -->
+	   
+	   <add id="DamConsultants_Idex::menu_item7"
+           title="Manual sync Log" module="DamConsultants_Idex"
+           sortOrder="10" parent="DamConsultants_Idex::menu"
+           resource="DamConsultants_Idex::menu_item6"
+           />
        <add id="DamConsultants_Idex::menu_item2"
            title="Synchronization Log" module="DamConsultants_Idex"
-           sortOrder="10" parent="DamConsultants_Idex::menu"
+           sortOrder="10" parent="DamConsultants_Idex::menu_item7"
            action="bynder/index/sync"
            resource="DamConsultants_Idex::menu_item2"
            />
        <!-- END:   new node -->
         <!-- START: new node -->
-       <add id="DamConsultants_Idex::menu_item1"
-           title="Idex MetaProperty " module="DamConsultants_Idex"
-           sortOrder="10" parent="DamConsultants_Idex::menu"
-           action="bynder/index/metaproperty"
-           resource="DamConsultants_Idex::menu_item1"
-           />
-		<add id="DamConsultants_Idex::menu_item4"
-           title="Delete Cron Action Log" module="DamConsultants_Idex"
-           sortOrder="10" parent="DamConsultants_Idex::menu"
-           action="bynder/index/deletecrongrid"
-           resource="DamConsultants_Idex::menu_item4"
-           />
+       
+		
        <!-- END:   new node -->
-       <add id="DamConsultants_Idex::settings" title="Configuration" module="DamConsultants_Idex" sortOrder="10" resource="Magento_Backend::content" parent="DamConsultants_Idex::menu" action="adminhtml/system_config/edit/section/bynderconfig"/>
+	    <add id="DamConsultants_Idex::menu_item8"
+           title="Configuration Settings" module="DamConsultants_Idex"
+           sortOrder="10" parent="DamConsultants_Idex::menu"
+           resource="DamConsultants_Idex::menu_item6"
+           />
+       <add id="DamConsultants_Idex::settings" title="Configuration" module="DamConsultants_Idex" sortOrder="10" resource="Magento_Backend::content" parent="DamConsultants_Idex::menu_item8" action="adminhtml/system_config/edit/section/bynderconfig"/>
    </menu>
 </config> 

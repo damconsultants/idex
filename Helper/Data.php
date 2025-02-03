@@ -1101,9 +1101,6 @@ class Data extends AbstractHelper
 		// Retrieve the response
 		$response = $this->_curl->getBody();
 		
-        echo "<pre>";
-        print_r($response);
-        exit;
 		return $response;
     }
 
@@ -1184,4 +1181,46 @@ class Data extends AbstractHelper
 		$collection->addFieldToFilter('option_label', ['eq' => $label]);
 		return $collection->getData();
 	}
+
+    /**
+     * Get DerivativesImage
+     *
+     * @return $this
+     * @param array $bynder_auth
+     */
+    public function getLogoDerivativesImage($bynder_auth)
+    {
+
+        $fields = [
+            'bynder_domain' => $bynder_auth['bynderDomain'],
+            'redirectUri' => $bynder_auth['redirectUri'],
+            'permanent_token' => $bynder_auth['token'],
+            'databaseId' => $bynder_auth['og_media_ids'],
+            'daatasetType' => $bynder_auth['dataset_types'],
+            'base_url' => $this->getbaseurl(),
+            'licence_token' => $this->getLicenceToken(),
+            'bynder_metaproperty_collection' => $bynder_auth['collection_data_value']
+        ];
+        $jsonData = '{}';
+        $fields = json_encode($fields);
+
+        $this->_curl->setOption(CURLOPT_URL, self::API_CALLED . 'idex-magento-public-derivatives');
+        $this->_curl->setOption(CURLOPT_RETURNTRANSFER, true);
+        $this->_curl->setOption(CURLOPT_TIMEOUT, 0);
+        $this->_curl->setOption(CURLOPT_ENCODING, '');
+        $this->_curl->setOption(CURLOPT_MAXREDIRS, 10);
+        $this->_curl->setOption(CURLOPT_FOLLOWLOCATION, true);
+        $this->_curl->setOption(CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
+        $this->_curl->setOption(CURLOPT_POSTFIELDS, $fields);
+
+        $this->_curl->addHeader("Content-Type", "application/json");
+
+        $this->_curl->post(self::API_CALLED . 'idex-magento-public-derivatives', $jsonData);
+
+        $response = $this->_curl->getBody();
+        /* echo "<pre>";
+        print_r($response);
+        exit; */
+        return $response;
+    }
 }

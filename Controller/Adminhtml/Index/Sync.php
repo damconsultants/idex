@@ -29,7 +29,7 @@ class Sync extends \Magento\Backend\App\Action
     public function execute()
     {
         $resultPage = $this->resultPageFactory->create();
-        $resultPage->getConfig()->getTitle()->prepend((__('Idex Synchronization. Action Log')));
+        $resultPage->getConfig()->getTitle()->prepend((__('DAM Synchronization. Action Log')));
 
         return $resultPage;
     }

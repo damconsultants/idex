@@ -43,6 +43,9 @@ class Image
         $productId = $item->getProduct()->getId();
         $product = $this->product->load($productId);
         $bynderImage = $product->getData('bynder_multi_img');
+		$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+		$datahelper = $objectManager->get("\DamConsultants\Idex\Helper\Data");
+		$default_image = $datahelper->getSmallPlaceHolder();
         $thumbnail = 'Thumbnail';
         if(!empty($bynderImage) && strlen($bynderImage) > 10){
             $json_value = json_decode($bynderImage, true);
@@ -60,7 +63,9 @@ class Image
                             if ($image_role ==  $thumbnail) {
                                 $image_values = trim($values['thum_url']);
                                 $data['product_image']['src'] =  $image_values;
-                            }
+                            } else {
+								 $data['product_image']['src'] =  $default_image;
+							}
                         }
                     }
                 }

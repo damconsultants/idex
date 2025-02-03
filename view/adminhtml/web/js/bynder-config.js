@@ -13,7 +13,7 @@ require([
     var url = new URL(baseUrl);
     var baseUrl = url.origin + "/";
 
-    var AjaxU = baseUrl + "bynder/index";
+    var AjaxU = baseUrl + "bynder/index/logo";
     var docicon = "https://img.icons8.com/cotton/2x/regular-document.png";
     var p_id = jQuery(this).parent().parent().attr("id");
     var ident = "#";
@@ -91,89 +91,64 @@ require([
                 '<div class="main-one image-boxs" >';
 
               $.each(data.data, function (index, r) {
-                $.each(r, function (i, res) {
-                 if (res.image_link == null) {
-						type_design += '<h5 style="color:red;">'+
-										'You don\'t have access.<img src="'+res.main_link1+'">'+
-										'Please Make It Public from Bynder</h5>';
-						return false;
-					} else {
-					  var dataset_tag = '<img src="' + res.image_link + '">';
-					  total_images++;
-					}
+					$.each(r, function (i, res) {
+						if (res.image_link == null) {
+							type_design +=
+								'<h5 style="color:red;">' +
+								'You don\'t have access.<img src="' + res.main_link1 + '">' +
+								'Please Make It Public from Bynder</h5>';
+							return false;
+						} else {
+							var dataset_tag = '<img src="' + res.image_link + '">';
+							total_images++;
+						}
 
-                  if (res.dataset_type == "VIDEO") {
-                    dataset_tag =
-                      '<video width="100%" controls><source src="' +
-                      res.image_link +
-                      '" type="video/mp4"><source src="' +
-                      res.main_link +
-                      '" type="video/ogg">Your browser does not support HTML video.</video>';
-                  }
+						if (res.dataset_type == "VIDEO") {
+							dataset_tag =
+								'<video width="100%" controls>' +
+								'<source src="' + res.image_link + '" type="video/mp4">' +
+								'<source src="' + res.main_link + '" type="video/ogg">' +
+								'Your browser does not support HTML video.</video>';
+						}
 
-                  var dataset_size = "( Size: " + res.size + ")";
-                  if (res.size == "0x0") {
-                    dataset_size = " ";
-                  }
+						var dataset_size = "( Size: " + res.size + ")";
+						if (res.size == "0x0") {
+							dataset_size = " ";
+						}
 
-                  if (res.size == "0x0" && res.dataset_type == "DOCUMENT") {
-                    type_design +=
-                      '<div class="m-box">' +
-                      '<div class="m-img">' +
-                      dataset_tag +
-                      "</div>" +
-                      '<div class="m-content">' +
-                      '<input type="checkbox" class="image_types" id="image_type_' +
-                      total_images +
-                      '" name="image_type_' +
-                      index +
-                      '" value="' +
-                      res.type +
-                      index +
-                      '">' +
-                      '<label for="image_type_' +
-                      total_images +
-                      '">' +
-                      res.type +
-                      " " +
-                      dataset_size +
-                      "</label>" +
-                      "</div>" +
-                      "</div>";
-                  }
+						if ((res.size == "0x0" && res.dataset_type == "DOCUMENT") || 
+							(res.dataset_type == "IMAGE" || res.dataset_type == "VIDEO" && res.size != "0x0")) {
 
-                  if (
-                    res.dataset_type == "IMAGE" ||
-                    res.dataset_type == "VIDEO"
-                  ) {
-                    if (res.size != "0x0") {
-                      type_design +=
-                        '<div class="m-box">' +
-                        '<div class="m-img">' +
-                        dataset_tag +
-                        "</div>" +
-                        '<div class="m-content">' +
-                        '<input type="checkbox" class="image_types" id="image_type_' +
-                        total_images +
-                        '" name="image_type_' +
-                        index +
-                        '" value="' +
-                        res.type +
-                        index +
-                        '">' +
-                        '<label for="image_type_' +
-                        total_images +
-                        '">' +
-                        res.type +
-                        " " +
-                        dataset_size +
-                        "</label>" +
-                        "</div>" +
-                        "</div>";
-                    }
-                  }
-                });
-              });
+							type_design +=
+								'<div class="m-box">' +
+								'<div class="m-img">' +
+								dataset_tag +
+								"</div>" +
+								'<div class="m-content">' +
+								'<input type="checkbox" class="image_types" id="image_type_' +
+								total_images +
+								'" name="image_type" value="' +
+								res.type +
+								index +
+								'">' +
+								'<label for="image_type_' +
+								total_images +
+								'">' +
+								res.type +
+								" " +
+								dataset_size +
+								"</label>" +
+								"</div>" +
+								"</div>";
+						}
+					});
+				});
+
+				// jQuery to allow only one checkbox selection
+				$(document).on("change", ".image_types", function () {
+					$(".image_types").not(this).prop("checked", false);
+				});
+
               type_design += "</div> </div> </div>";
               $("#compactViewContainer").html(type_design);
 
@@ -206,7 +181,7 @@ require([
                             if ($.inArray(type_val, selected_types) != -1) {
                               console.log(res);
                               if (res.dataset_type == "IMAGE") {
-                                tag_html += res.public_url;
+                                tag_html = res.public_url;
                               } else if (res.dataset_type == "VIDEO") {
                                 if (video_url[res.bynderid] != undefined) {
                                   var v_url = video_url[res.bynderid];
@@ -228,6 +203,9 @@ require([
                         });
 
                         if (p_id != "" && p_id != undefined) {
+							
+						var base = jQuery("#byndeimageconfig_bynder_image_placeholder_base").val();
+            jQuery("#byndeimageconfig_bynder_image_placeholder_base").val("");
                           jQuery("#byndeimageconfig_bynder_image_placeholder_base")
                             .val(tag_html);
                         } else {
@@ -259,7 +237,7 @@ require([
     var url = new URL(baseUrl);
     var baseUrl = url.origin + "/";
 
-    var AjaxU = baseUrl + "bynder/index";
+    var AjaxU = baseUrl + "bynder/index/logo";
     var docicon = "https://img.icons8.com/cotton/2x/regular-document.png";
     var p_id = jQuery(this).parent().parent().attr("id");
     var ident = "#";
@@ -336,90 +314,64 @@ require([
                 '<div class="middle-content">' +
                 '<div class="main-one image-boxs" >';
 
-              $.each(data.data, function (index, r) {
-                $.each(r, function (i, res) {
-                 if (res.image_link == null) {
-						type_design += '<h5 style="color:red;">'+
-										'You don\'t have access.<img src="'+res.main_link1+'">'+
-										'Please Make It Public from Bynder</h5>';
-						return false;
-					} else {
-					  var dataset_tag = '<img src="' + res.image_link + '">';
-					  total_images++;
-					}
+				$.each(data.data, function (index, r) {
+					$.each(r, function (i, res) {
+						if (res.image_link == null) {
+							type_design +=
+								'<h5 style="color:red;">' +
+								'You don\'t have access.<img src="' + res.main_link1 + '">' +
+								'Please Make It Public from Bynder</h5>';
+							return false;
+						} else {
+							var dataset_tag = '<img src="' + res.image_link + '">';
+							total_images++;
+						}
 
-                  if (res.dataset_type == "VIDEO") {
-                    dataset_tag =
-                      '<video width="100%" controls><source src="' +
-                      res.image_link +
-                      '" type="video/mp4"><source src="' +
-                      res.main_link +
-                      '" type="video/ogg">Your browser does not support HTML video.</video>';
-                  }
+						if (res.dataset_type == "VIDEO") {
+							dataset_tag =
+								'<video width="100%" controls>' +
+								'<source src="' + res.image_link + '" type="video/mp4">' +
+								'<source src="' + res.main_link + '" type="video/ogg">' +
+								'Your browser does not support HTML video.</video>';
+						}
 
-                  var dataset_size = "( Size: " + res.size + ")";
-                  if (res.size == "0x0") {
-                    dataset_size = " ";
-                  }
+						var dataset_size = "( Size: " + res.size + ")";
+						if (res.size == "0x0") {
+							dataset_size = " ";
+						}
 
-                  if (res.size == "0x0" && res.dataset_type == "DOCUMENT") {
-                    type_design +=
-                      '<div class="m-box">' +
-                      '<div class="m-img">' +
-                      dataset_tag +
-                      "</div>" +
-                      '<div class="m-content">' +
-                      '<input type="checkbox" class="image_types" id="image_type_' +
-                      total_images +
-                      '" name="image_type_' +
-                      index +
-                      '" value="' +
-                      res.type +
-                      index +
-                      '">' +
-                      '<label for="image_type_' +
-                      total_images +
-                      '">' +
-                      res.type +
-                      " " +
-                      dataset_size +
-                      "</label>" +
-                      "</div>" +
-                      "</div>";
-                  }
+						if ((res.size == "0x0" && res.dataset_type == "DOCUMENT") || 
+							(res.dataset_type == "IMAGE" || res.dataset_type == "VIDEO" && res.size != "0x0")) {
 
-                  if (
-                    res.dataset_type == "IMAGE" ||
-                    res.dataset_type == "VIDEO"
-                  ) {
-                    if (res.size != "0x0") {
-                      type_design +=
-                        '<div class="m-box">' +
-                        '<div class="m-img">' +
-                        dataset_tag +
-                        "</div>" +
-                        '<div class="m-content">' +
-                        '<input type="checkbox" class="image_types" id="image_type_' +
-                        total_images +
-                        '" name="image_type_' +
-                        index +
-                        '" value="' +
-                        res.type +
-                        index +
-                        '">' +
-                        '<label for="image_type_' +
-                        total_images +
-                        '">' +
-                        res.type +
-                        " " +
-                        dataset_size +
-                        "</label>" +
-                        "</div>" +
-                        "</div>";
-                    }
-                  }
-                });
-              });
+							type_design +=
+								'<div class="m-box">' +
+								'<div class="m-img">' +
+								dataset_tag +
+								"</div>" +
+								'<div class="m-content">' +
+								'<input type="checkbox" class="image_types" id="image_type_' +
+								total_images +
+								'" name="image_type" value="' +
+								res.type +
+								index +
+								'">' +
+								'<label for="image_type_' +
+								total_images +
+								'">' +
+								res.type +
+								" " +
+								dataset_size +
+								"</label>" +
+								"</div>" +
+								"</div>";
+						}
+					});
+				});
+
+				// jQuery to allow only one checkbox selection
+				$(document).on("change", ".image_types", function () {
+					$(".image_types").not(this).prop("checked", false);
+				});
               type_design += "</div> </div> </div>";
               $("#compactViewContainer").html(type_design);
 
@@ -474,6 +426,11 @@ require([
                         });
 
                         if (p_id != "" && p_id != undefined) {
+						var small = jQuery("#byndeimageconfig_bynder_image_placeholder_small").val();
+						if(small.length > 0) {
+							jQuery("#byndeimageconfig_bynder_image_placeholder_small")
+                            .val("");
+						}
                           jQuery("#byndeimageconfig_bynder_image_placeholder_small")
                             .val(tag_html);
                         } else {

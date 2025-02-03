@@ -66,7 +66,10 @@ class Thumbnail extends \Magento\Ui\Component\Listing\Columns\Column
     {
         if (isset($dataSource['data']['items'])) {
             $fieldName = $this->getData('name');
-            $defaultImage = "https://media.idexcorp.com/m/11a5506c07907565/Magento_Base-IDEXFS_Logo_Color_Transparent-200x200.png";
+			$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+			$datahelper = $objectManager->get("\DamConsultants\Idex\Helper\Data");
+			$default_image = $datahelper->getSmallPlaceHolder();
+            //$defaultImage = "https://media.idexcorp.com/m/11a5506c07907565/Magento_Base-IDEXFS_Logo_Color_Transparent-200x200.png";
             foreach ($dataSource['data']['items'] as &$item) {
                 $_product = $this->_productRepository->getById($item['entity_id']);
                 $image_value = $_product->getBynderMultiImg();
@@ -76,7 +79,7 @@ class Thumbnail extends \Magento\Ui\Component\Listing\Columns\Column
                     if (null == $item_old_value) {
                         continue;
                     }
-                    $thumbnail = $this->getThumbnailUrl($item_old_value, $defaultImage);
+                    $thumbnail = $this->getThumbnailUrl($item_old_value, $default_image);
                     $product = new \Magento\Framework\DataObject($item);
                     $item[$fieldName . '_src'] = $thumbnail;
                     $item[$fieldName . '_orig_src'] = $thumbnail;
@@ -91,7 +94,7 @@ class Thumbnail extends \Magento\Ui\Component\Listing\Columns\Column
         return $dataSource;
     }
 
-    private function getThumbnailUrl($imageData, $defaultImage)
+    private function getThumbnailUrl($imageData, $default_image)
     {
         if (!empty($imageData)) {
             foreach ($imageData as $img) {
@@ -100,7 +103,7 @@ class Thumbnail extends \Magento\Ui\Component\Listing\Columns\Column
                 }
             }
         }
-        return $defaultImage;
+        return $default_image;
     }
 
     /**

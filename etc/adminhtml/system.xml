@@ -2,21 +2,21 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
         <tab id="bynder_tab" translate="label" sortOrder="0">
-            <label> Idex Configuration </label>
+            <label> DAM Configuration </label>
         </tab>
         <section id="bynderconfig" translate="label" type="text" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
             <label>Configuration</label>
             <tab>bynder_tab</tab>
             <resource>DamConsultants_Idex::config</resource>
             <group id="bynder_credential" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Idex Credential</label>
+                <label>DAM Credential</label>
                 <field id="bynderdomain" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Idex Domain</label>
-                    <comment>Enter your Idex Domain Name Here Without https://.</comment>
+                    <label>DAM Domain</label>
+                    <comment>Enter your DAM Domain Name Here Without https://.</comment>
                 </field>
                 <field id="permanent_token" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Permanent Token</label>
-                    <comment>Enter your Idex Permanent Token Here.(Note:- Please, given Full permission your Account.)</comment>
+                    <comment>Enter your DAM Permanent Token Here.(Note:- Please, given Full permission your Account.)</comment>
                 </field>
 				<field id="licenses_key" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>License Key</label>
@@ -32,11 +32,11 @@
             </group>
         </section>
         <section id="byndersyncdata" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
-            <label>Sync. Idex Data</label>
+            <label>Sync. DAM Data</label>
             <tab>bynder_tab</tab>
             <resource>DamConsultants_Idex::config</resource>
             <group id="bynder_sync_data" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Sync. Idex Data</label>
+                <label>Sync. DAM Data</label>
                 <field id="select" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Select Asset Type</label>        
                     <source_model>DamConsultants\Idex\Model\Config\Source\Select</source_model>

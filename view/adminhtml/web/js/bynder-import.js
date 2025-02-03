@@ -184,6 +184,7 @@ require([
               $("#compactViewContainer").html(type_design);
 
               var tag_html = "";
+			  var video_thu = "";
               var options = {
                 type: "popup",
                 responsive: true,
@@ -220,6 +221,7 @@ require([
                                 if (video_url[res.bynderid] != undefined) {
                                   var v_url = video_url[res.bynderid];
                                   tag_html += v_url;
+								  video_thu +=  res.main_link;
                                 }
                               } else if (res.dataset_type == "DOCUMENT") {
                                 tag_html +=
@@ -240,7 +242,7 @@ require([
                           jQuery("input[name='video_source']")
                             .val(tag_html)
                             .trigger("change");
-                        } else {
+						} else {
                           console.log("pid not exits");
                         }
                       } else {
@@ -251,8 +253,9 @@ require([
                   },
                 ],
               };
-              var popup = modal(options, $("#popup-modal"));
-              $("#popup-modal").modal("openModal");
+               var popupModal = $("#popup-modal");
+				modal(options, popupModal);
+              popupModal.modal("openModal");
               return true;
             } else {
             }

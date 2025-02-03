@@ -29,7 +29,7 @@ class DeleteCronGrid extends \Magento\Backend\App\Action
     public function execute()
     {
         $resultPage = $this->resultPageFactory->create();
-        $resultPage->getConfig()->getTitle()->prepend((__('Idex Delete Cron Sync. Log')));
+        $resultPage->getConfig()->getTitle()->prepend((__('DAM Delete Cron Sync. Log')));
 
         return $resultPage;
     }
