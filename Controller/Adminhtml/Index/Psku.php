@@ -134,6 +134,7 @@ class Psku extends \Magento\Backend\App\Action
                         $getIsJson = $this->getIsJSON($get_data);
                         if (!empty($get_data) && $getIsJson) {
                             $respon_array = json_decode($get_data, true);
+							
                             if ($respon_array['status'] == 1) {
                                 $convert_array = json_decode($respon_array['data'], true);
                                 if ($convert_array['status'] == 1) {
@@ -294,7 +295,7 @@ class Psku extends \Magento\Backend\App\Action
      * Is Json
      *
      * @param string $sku
-     * @param string $m_id
+     * @param array $m_id
      * @param string $product_ids
      * @param string $storeId
      * @return $this
@@ -324,11 +325,21 @@ class Psku extends \Magento\Backend\App\Action
         $updated_values = [
             'bynder_delete_cron' => 1
         ];
-        $this->productAction->updateAttributes(
-            [$product_ids],
-            $updated_values,
-            $storeId
-        );
+        try{
+            $this->productAction->updateAttributes(
+                [$product_ids],
+                $updated_values,
+                $storeId
+            );
+        }catch(Exception $e){
+            $insert_data = [
+                "sku" => $sku,
+                "message" => $e->getMessage(),
+                'media_id' => "",
+                "data_type" => ""
+            ];
+            $this->getInsertDataTable($insert_data);
+        }
     }
     /**
      * Is Json
@@ -2539,11 +2550,34 @@ class Psku extends \Magento\Backend\App\Action
                     ];
                     $new_value_array = json_encode($update_latest_code, true);
 
-                    $this->productAction->updateAttributes(
+                    /*$this->productAction->updateAttributes(
                         [$product_ids],
                         ['bynder_document' => $new_value_array],
                         $storeId
-                    );
+                    );*/
+                    if ($select_store == 'all_store') {
+                        $this->productAction->updateAttributes(
+                            [$product_ids],
+                            ['bynder_document' => $new_value_array],
+                            $storeIds
+                        );
+                        $all_stores = $this->getMyStoreId();
+                        if (count($all_stores) > 0) {
+                            foreach ($all_stores as $storeId) {
+                                $this->productAction->updateAttributes(
+                                    [$product_ids],
+                                    ['bynder_document' => $new_value_array],
+                                    $storeId
+                                );
+                            }
+                        }
+                    } else {
+                        $this->productAction->updateAttributes(
+                            [$product_ids],
+                            ['bynder_document' => $new_value_array],
+                            $select_store
+                        );
+                    }
                 } else {
                     $b_id = [];
                     $all_item_url = [];
