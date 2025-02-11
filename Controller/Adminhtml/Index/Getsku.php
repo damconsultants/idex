@@ -80,13 +80,13 @@ class Getsku extends \Magento\Backend\App\Action
 			$productcollection = $this->collectionFactory->create()
 				->addAttributeToSelect('*')
 				->addAttributeToFilter('status', \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
-			$productcollection->getSelect()->limit(400);
+			/*$productcollection->getSelect()->limit(400);*/
 		} else {
 			$productcollection = $this->collectionFactory->create()
 				->addAttributeToSelect('*')
 				->addAttributeToFilter('status', \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
 				->addStoreFilter($select_store);
-			$productcollection->getSelect()->limit(400);
+			/*$productcollection->getSelect()->limit(400);*/
 		}
         if ($sku_limit != 0) {
             $productcollection->getSelect()->limit($sku_limit);
@@ -155,7 +155,7 @@ class Getsku extends \Magento\Backend\App\Action
 				foreach ($productcollection as $product) {
 					// Check for 'bynder_multi_img' and filter based on 'bynder_isMain'
 					if (!empty($product['bynder_multi_img'])) {
-						if (!in_array($product['bynder_isMain'], ["1", "2","3"])) {
+						if ($product['bynder_isMain'] != '1') {
 							$product_sku[] = $product->getSku();
 						}
 					} else {
