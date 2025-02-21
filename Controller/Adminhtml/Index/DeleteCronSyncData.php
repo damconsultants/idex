@@ -40,11 +40,4 @@ class DeleteCronSyncData extends Action
         }
         return $resultRedirect->setPath('bynder/index/grid');
     }
-    /**
-     * Is Allowed
-     */
-    public function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('DamConsultants_Idex::delete');
-    }
 }

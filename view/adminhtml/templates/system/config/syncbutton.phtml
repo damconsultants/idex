@@ -4,7 +4,8 @@
         'jquery',
         'prototype'
     ], function($) {
-
+        var ajax_request;
+        var test = 1;
         $('#bt_id_1').click(function() {
             var product_sku = $('textarea#byndersyncdata_bynder_sync_data_sku').val();
             var select_attribute = $('select#byndersyncdata_bynder_sync_data_select').val();
@@ -14,20 +15,62 @@
                 select_attribute: select_attribute,
                 select_store: select_store
             };
+
+            var sku_to_array = product_sku.split(",");
+            var total_skus = sku_to_array.length;
+            console.log("Total sku=>"+total_skus);
+            var batch = 20;
+            var start = 0;
+            var batch_value = batch;
+            var slicedArray = sku_to_array.slice(0, batch);
+
+            var total_module_Val = total_skus % batch;
+            var perfect_working = total_skus - total_module_Val;
+            var total_loops = perfect_working / batch;
+
+            var i=0;
+            var k = 0;
+            var next_value = batch;
+
+            for(i=0;i<total_loops;i++){
+                var slicedArray = sku_to_array.slice(k, next_value);
+                k = k+batch;
+                next_value = next_value + batch;
+                if(test == 0){
+                    break;
+                }
+                var new_skus_list = slicedArray.join(",");
+                var params = {
+                    product_sku: new_skus_list,
+                    select_attribute: select_attribute,
+                    select_store: select_store
+                };
+                var check_all_extra = new_skus_list.split(",");
+                console.log(check_all_extra);
+                //do_ajax_call(params);
+            }
+
+            var new_skus_list = sku_to_array.slice(perfect_working, total_skus);
+            var params = {
+                product_sku: new_skus_list,
+                select_attribute: select_attribute,
+                select_store: select_store
+            };
+            do_ajax_call(params);
+        });
+
+        function do_ajax_call(params){
             new Ajax.Request('<?= $block->escapeUrl($block->getAjaxUrl()); ?>', {
                 parameters: params,
                 loaderArea: true,
-                asynchronous: true,
-                
                 beforeSend: function() {
                     $('body').trigger('processStart');
                 },
-                onSuccess: function(transport) {
-                    
+                onSuccess: function(transport) {                    
                     var resultText = '';
                     if (transport.responseJSON.status == 1) {
                         resultText = transport.statusText;
-                        console.log(transport);
+                        //console.log(transport);
                         $('#byndersyncdata_bynder_sync_data_sku').text('');
                         $(".success-msg-sync").show();
                         $(".error-msg-sync").hide();
@@ -36,7 +79,7 @@
                             $('.success-msg-sync').delay(5000).fadeOut('slow');
                         }, 5000);
                     } else {
-                        console.log(transport.responseJSON.message);
+                        //console.log(transport.responseJSON.message);
                         resultText = transport.responseJSON.message
                         $('#byndersyncdata_bynder_sync_data_sku').text('');
                         $(".error-msg-sync").show();
@@ -48,7 +91,7 @@
                     }
                 }
             });
-        });
+        }
     });
 </script>
 

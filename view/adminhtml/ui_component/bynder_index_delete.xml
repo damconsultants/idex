@@ -49,6 +49,7 @@
                         <item name="title" xsi:type="string" translate="true">Delete Data?</item>
                         <item name="message" xsi:type="string" translate="true">Are you sure you want to delete the selected Data?</item>
                     </item>
+					<item name="aclResource" xsi:type="string">DamConsultants_Idex::cron_mass_delete</item>
                 </item>
                 </argument>
             </action>
@@ -183,7 +184,7 @@
                 </item>
             </argument>
         </column>
-        <actionsColumn name="delete_action" class="DamConsultants\Idex\Ui\Component\Listing\Column\DeleteActionCron">
+        <actionsColumn name="delete_action" class="DamConsultants\Idex\Ui\Component\Listing\Column\DeleteActionCronDelete">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="indexField" xsi:type="string">id</item>

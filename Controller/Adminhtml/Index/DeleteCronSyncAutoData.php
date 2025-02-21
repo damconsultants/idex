@@ -41,11 +41,4 @@ class DeleteCronSyncAutoData extends Action
         }
         return $resultRedirect->setPath('bynder/index/replacecrongrid');
     }
-    /**
-     * Execute
-     */
-    public function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('DamConsultants_Idex::delete');
-    }
 }

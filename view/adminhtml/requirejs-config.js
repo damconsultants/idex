@@ -18,6 +18,8 @@ var config = {
             'Magento_PageBuilder/template/form/element/html-code.html': 'DamConsultants_Idex/template/form/element/html-code.html',
             /*'Magento_PageBuilder/js/form/element/image-uploader': 'DamConsultants_Idex/js/form/element/image-uploader',*/
             'Magento_PageBuilder/js/form/element/html-code': 'DamConsultants_Idex/js/form/element/html-code',
+			'Magento_PageBuilder/template/content-type/video/default/master.html': 'DamConsultants_Idex/template/content-type/video/default/master.html',
+			'Magento_PageBuilder/template/content-type/video/default/preview.html': 'DamConsultants_Idex/template/content-type/video/default/preview.html',
         },
     }
 };

@@ -5,7 +5,7 @@
        <add id="DamConsultants_Idex::menu"
            title="DAM Sync." module="DamConsultants_Idex"
            sortOrder="10"
-           resource="Magento_Backend::content"
+           resource="DamConsultants_Idex::menu"
            />
            <!-- START: new node -->
 		<add id="DamConsultants_Idex::menu_item5"
@@ -57,6 +57,12 @@
            sortOrder="10" parent="DamConsultants_Idex::menu_item7"
            action="bynder/index/sync"
            resource="DamConsultants_Idex::menu_item2"
+           />
+        <add id="DamConsultants_Idex::menu_item9"
+           title="Check Sku Log" module="DamConsultants_Idex"
+           sortOrder="10" parent="DamConsultants_Idex::menu_item7"
+           action="bynder/index/sku"
+           resource="DamConsultants_Idex::menu_item9"
            />
        <!-- END:   new node -->
         <!-- START: new node -->

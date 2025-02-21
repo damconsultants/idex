@@ -6,7 +6,7 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\AuthorizationInterface;
 
-class DeleteActionCron extends \Magento\Ui\Component\Listing\Columns\Column
+class DeleteActionCronDelete extends \Magento\Ui\Component\Listing\Columns\Column
 {
     /**
      * @var urlBuilder
@@ -44,7 +44,7 @@ class DeleteActionCron extends \Magento\Ui\Component\Listing\Columns\Column
     {
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as &$item) {
-                if (isset($item['id']) && $this->authorization->isAllowed('DamConsultants_Idex::cron_delete')) {
+                if (isset($item['id']) && $this->authorization->isAllowed('DamConsultants_Idex::deletecron_delete')) {
                     $viewUrlPath = $this->getData('config/viewUrlPath');
                     $urlEntityParamName = $this->getData('config/urlEntityParamName');
                     $item[$this->getData('name')] = [

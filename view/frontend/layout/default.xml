@@ -2,5 +2,6 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
    <head>
 		<css src="DamConsultants_Idex::css/byndercms.css"/>
+		<script src="DamConsultants_Idex::js/poster-video.js" defer="defer"/>
    </head>
 </page>

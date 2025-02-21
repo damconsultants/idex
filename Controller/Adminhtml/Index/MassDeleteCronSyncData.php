@@ -6,6 +6,7 @@ use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Ui\Component\MassAction\Filter;
 use DamConsultants\Idex\Model\ResourceModel\Collection\BynderSycDataCollectionFactory;
+use Magento\Framework\AuthorizationInterface;
 
 class MassDeleteCronSyncData extends Action
 {
@@ -21,6 +22,7 @@ class MassDeleteCronSyncData extends Action
      * @var $bynderFactory
      */
     protected $bynderFactory;
+	protected $authorization;
     /**
      * Mass Delete
      *
@@ -33,12 +35,21 @@ class MassDeleteCronSyncData extends Action
         Context $context,
         Filter $filter,
         BynderSycDataCollectionFactory $collectionFactory,
+		AuthorizationInterface $authorization,
         \DamConsultants\Idex\Model\BynderSycDataFactory $bynderFactory
     ) {
         $this->filter = $filter;
         $this->collectionFactory = $collectionFactory;
         $this->bynderFactory = $bynderFactory;
+		$this->authorization = $authorization;
         parent::__construct($context);
+    }
+	/**
+     * Is Allowed
+     */
+    public function _isAllowed()
+    {
+        return $this->authorization->isAllowed('DamConsultants_Idex::cron_massdelete');
     }
     /**
      * Execute
@@ -59,12 +70,5 @@ class MassDeleteCronSyncData extends Action
             $this->messageManager->addError(__($e->getMessage()));
         }
         return $this->resultFactory->create(ResultFactory::TYPE_REDIRECT)->setPath('bynder/index/grid');
-    }
-    /**
-     * Is Allowed
-     */
-    public function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('DamConsultants_Idex::delete');
     }
 }

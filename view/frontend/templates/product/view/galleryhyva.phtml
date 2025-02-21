@@ -230,7 +230,80 @@ $productName = $block->getProduct()->getName();
         </div>
     </div>
 </div>
+<!--<script>
+document.addEventListener("DOMContentLoaded", function () {
+    let videoTag = document.querySelector(".pagebuilder-video-container video");
 
+    if (videoTag) {
+        let videoSrc = videoTag.getAttribute("poster");
+
+        // Check if the poster image exists
+        if (videoSrc && videoSrc.trim() !== "") {
+            videoTag.removeAttribute("controls"); // Hide controls initially
+
+            // Create a play button overlay
+            let playButton = document.createElement("button");
+            playButton.innerHTML = "▶";
+            playButton.classList.add("play-button");
+            playButton.style.position = "absolute";
+            playButton.style.top = "50%";
+            playButton.style.left = "50%";
+            playButton.style.transform = "translate(-50%, -50%)";
+            playButton.style.background = "rgba(0, 0, 0, 0.6)";
+            playButton.style.color = "white";
+            playButton.style.border = "none";
+            playButton.style.borderRadius = "50%";
+            playButton.style.width = "60px";
+            playButton.style.height = "60px";
+            playButton.style.fontSize = "24px";
+            playButton.style.cursor = "pointer";
+            playButton.style.display = "flex";
+            playButton.style.alignItems = "center";
+            playButton.style.justifyContent = "center";
+            playButton.style.zIndex = "10";
+
+            // Add hover effect to play button
+            playButton.addEventListener("mouseover", function () {
+                playButton.style.background = "rgba(0, 0, 0, 0.8)";
+            });
+            playButton.addEventListener("mouseout", function () {
+                playButton.style.background = "rgba(0, 0, 0, 0.6)";
+            });
+
+            // Make sure the video container is properly positioned
+            let videoContainer = document.querySelector(".pagebuilder-video-container");
+            videoContainer.style.position = "relative";
+            videoContainer.appendChild(playButton);
+
+            // Pause video initially and show play button
+            videoTag.style.display = "block";
+            videoTag.style.pointerEvents = "none"; // Prevents clicking before play
+
+            // Play video when clicking the play button
+            playButton.addEventListener("click", function () {
+                playButton.style.display = "none"; // Hide play button
+                videoTag.setAttribute("controls", "true"); // Enable controls
+                videoTag.style.pointerEvents = "auto"; // Allow clicking
+                videoTag.play(); // Play the video
+            });
+
+            // Ensure video shows controls when playing
+            videoTag.addEventListener("play", function () {
+                videoTag.setAttribute("controls", "true");
+            });
+
+            // Pause the video when the page is scrolled
+            window.addEventListener("scroll", function () {
+                if (!videoTag.paused) {
+                    videoTag.pause(); // Pause video on scroll
+                }
+            });
+        }
+    }
+});
+
+
+</script>-->
 <script>
     function initGallery () {
         let touchXDown, touchYDown;

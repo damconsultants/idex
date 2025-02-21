@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
+   <acl>
+     <resources>
+        <resource id="Magento_Backend::admin">
+            <resource id="Magento_Backend::stores">
+                <resource id="Magento_Backend::stores_settings">
+                    <resource id="Magento_Config::config">
+                        <resource id="DamConsultants_Idex::config" title="Idex Credential" sortOrder="192012" />
+                        <resource id="DamConsultants_Idex::sync" title="Idex Manual sync" sortOrder="192013" />
+						<resource id="DamConsultants_Idex::image" title="Idex Image Configuration" sortOrder="192013" />
+                        <resource id="DamConsultants_Idex::cron" title="Idex Cron" sortOrder="192014" />
+                    </resource>
+                </resource>
+            </resource>
+            <resource id="DamConsultants_Idex::menu" title="Idex Menu">
+                <resource id="DamConsultants_Idex::menu_item5" title="Idex Submenu">
+                    <resource id="DamConsultants_Idex::menu_item1" title="Idex Meta Property" sortOrder="192005" />
+                </resource>
+				<resource id="DamConsultants_Idex::menu_item6" title="Idex Cron Log">
+                    <resource id="DamConsultants_Idex::menu_item" title="Idex Cron Action Log" sortOrder="192006">
+						<resource id="DamConsultants_Idex::resync" title="Idex ReSync Link" sortOrder="192006"/>
+						<resource id="DamConsultants_Idex::cron_delete" title="Idex Delete Link" sortOrder="192006"/>
+						<resource id="DamConsultants_Idex::mass_resync" title="Idex Mass Re-Sync Data" sortOrder="192006"/>
+						<resource id="DamConsultants_Idex::cron_massdelete" title="Idex Mass Delete Data" sortOrder="192006"/>
+					</resource>
+					<resource id="DamConsultants_Idex::menu_item3" title="Idex Replace Cron Action Log" sortOrder="192007">
+						<resource id="DamConsultants_Idex::autocron_delete" title="Idex Replace Cron Delete Link" sortOrder="192007"/>
+						<resource id="DamConsultants_Idex::autocron_massdelete" title="Idex Replace Cron Mass Delete Link" sortOrder="192007"/>
+					</resource>
+					<resource id="DamConsultants_Idex::menu_item4" title="Idex Delete Cron Action Log" sortOrder="192008">
+						<resource id="DamConsultants_Idex::deletecron_delete" title="Idex Delete Cron Delete Link" sortOrder="192008"/>
+						<resource id="DamConsultants_Idex::cron_mass_delete" title="Idex Delete Cron Mass Delete Link" sortOrder="192008"/>
+					</resource>
+                </resource>
+				<resource id="DamConsultants_Idex::menu_item7" title="Idex Manual sync Log">
+                    <resource id="DamConsultants_Idex::menu_item2" title="Idex Synchronization Log" sortOrder="192009">
+						<resource id="DamConsultants_Idex::sync_delete" title="Idex Manual Sync Delete Link" sortOrder="192009"/>
+						<resource id="DamConsultants_Idex::massdelete" title="Idex Manual Sync Mass Delete Link" sortOrder="192009"/>
+					</resource>
+					<resource id="DamConsultants_Idex::menu_item9" title="Idex Manual Sku Log" sortOrder="192009" />
+                </resource>
+				<resource id="DamConsultants_Idex::menu_item8" title="Idex Configuration Settings">
+                    <resource id="DamConsultants_Idex::settings" title="Idex Configuration Settings" sortOrder="192010" />
+                </resource>
+            </resource>
+        </resource>
+     </resources>
+   </acl>
+</config>

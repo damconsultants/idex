@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <fieldset name="general">
+        <field name="poster" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string">Video Thumbnail URL</item>
+                    <item name="componentType" xsi:type="string">field</item>
+                    <item name="dataScope" xsi:type="string">poster</item>
+                    <item name="source" xsi:type="string">video</item>
+                    <item name="validation" xsi:type="array">
+                        <item name="required-entry" xsi:type="boolean">false</item>
+                        <item name="validate-url" xsi:type="boolean">true</item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+        <field name="import_bynder_video" formElement="button">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string">Import Bynder Video</item>
+                    <item name="title" xsi:type="string">Import Bynder Video</item>
+                    <item name="componentType" xsi:type="string">button</item>
+                    <item name="additionalClasses" xsi:type="string">bynder-video-button</item>
+                    <item name="displayAsLink" xsi:type="boolean">false</item>
+                </item>
+            </argument>
+        </field>
+        <field name="import_bynder_video_poster" formElement="button">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string">Import Bynder Video Thumbnail</item>
+                    <item name="title" xsi:type="string">Import Bynder Video Thumbnail</item>
+                    <item name="componentType" xsi:type="string">button</item>
+                    <item name="additionalClasses" xsi:type="string">bynder-video-poster-button</item>
+                    <item name="displayAsLink" xsi:type="boolean">false</item>
+                </item>
+            </argument>
+        </field>
+    </fieldset>
+</form>

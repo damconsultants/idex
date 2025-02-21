@@ -6,6 +6,7 @@ use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Ui\Component\MassAction\Filter;
 use DamConsultants\Idex\Model\ResourceModel\Collection\BynderAutoReplaceDataCollectionFactory;
+use Magento\Framework\AuthorizationInterface;
 
 class MassDeleteCronAutoData extends Action
 {
@@ -24,6 +25,7 @@ class MassDeleteCronAutoData extends Action
      *
      */
     protected $bynderFactory;
+	protected $authorization;
     /**
      * Get Sku.
      * @param Context $context
@@ -35,12 +37,23 @@ class MassDeleteCronAutoData extends Action
         Context $context,
         Filter $filter,
         BynderAutoReplaceDataCollectionFactory $collectionFactory,
+		AuthorizationInterface $authorization,
         \DamConsultants\Idex\Model\BynderAutoReplaceDataFactory $bynderFactory
     ) {
         $this->filter = $filter;
         $this->collectionFactory = $collectionFactory;
         $this->bynderFactory = $bynderFactory;
+		$this->authorization = $authorization;
         parent::__construct($context);
+    }
+	/**
+     * Execute
+     *
+     * @return $this
+     */
+    public function _isAllowed()
+    {
+        return $this->authorization->isAllowed('DamConsultants_Idex::autocron_massdelete');
     }
     /**
      * Execute
@@ -63,14 +76,5 @@ class MassDeleteCronAutoData extends Action
             $this->messageManager->addError(__($e->getMessage()));
         }
         return $this->resultFactory->create(ResultFactory::TYPE_REDIRECT)->setPath('bynder/index/replacecrongrid');
-    }
-    /**
-     * Execute
-     *
-     * @return $this
-     */
-    public function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('DamConsultants_Idex::delete');
     }
 }
