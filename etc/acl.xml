@@ -38,7 +38,10 @@
 						<resource id="DamConsultants_Idex::sync_delete" title="Idex Manual Sync Delete Link" sortOrder="192009"/>
 						<resource id="DamConsultants_Idex::massdelete" title="Idex Manual Sync Mass Delete Link" sortOrder="192009"/>
 					</resource>
-					<resource id="DamConsultants_Idex::menu_item9" title="Idex Manual Sku Log" sortOrder="192009" />
+					<resource id="DamConsultants_Idex::menu_item9" title="Idex Manual Sku Log" sortOrder="192009">
+						<resource id="DamConsultants_Idex::manual_sku_delete" title="Idex Manual Sku Delete Link" sortOrder="192009"/>
+						<resource id="DamConsultants_Idex::manual_cron_massdelete" title="Idex Manual Sku Mass Delete Link" sortOrder="192009"/>
+					</resource>
                 </resource>
 				<resource id="DamConsultants_Idex::menu_item8" title="Idex Configuration Settings">
                     <resource id="DamConsultants_Idex::settings" title="Idex Configuration Settings" sortOrder="192010" />

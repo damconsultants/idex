@@ -36,7 +36,7 @@ require([
       var url = new URL(baseUrl);
       var baseUrl = url.origin + "/";
 
-      var AjaxU = baseUrl + "bynder/logo";
+      var AjaxU = baseUrl + "bynder/index";
       var docicon = "https://img.icons8.com/cotton/2x/regular-document.png";
       var p_id = jQuery(this).parent().parent().attr("id");
       var ident = "#";

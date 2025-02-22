@@ -5,51 +5,51 @@ use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Ui\Component\MassAction\Filter;
-use DamConsultants\Idex\Model\ResourceModel\Collection\BynderDeleteDataCollectionFactory;
+use DamConsultants\Idex\Model\ResourceModel\Collection\MagentoSkuCollectionFactory;
 use Magento\Framework\AuthorizationInterface;
 
-class MassDeleteCronData extends Action
+class MassDeleteManualSkuData extends Action
 {
     /**
      * @var $collectionFactory
      */
     public $collectionFactory;
     /**
-     * @var $collectionFactory
+     * @var $filter
      */
     public $filter;
     /**
-     * @var $collectionFactory
+     * @var $magentoSku
      */
-    protected $bynderFactory;
+    protected $magentoSku;
 	protected $authorization;
     /**
-     * Get Sku.
+     * Mass Delete
      *
      * @param Context $context
      * @param Filter $filter
-     * @param BynderDeleteDataCollectionFactory $collectionFactory
-     * @param \DamConsultants\Idex\Model\BynderDeleteDataFactory $bynderFactory
+     * @param MagentoSkuCollectionFactory $collectionFactory
+     * @param \DamConsultants\Idex\Model\MagentoSkuFactory $bynderFactory
      */
     public function __construct(
         Context $context,
         Filter $filter,
-        BynderDeleteDataCollectionFactory $collectionFactory,
+        MagentoSkuCollectionFactory $collectionFactory,
 		AuthorizationInterface $authorization,
-        \DamConsultants\Idex\Model\BynderDeleteDataFactory $bynderFactory
+        \DamConsultants\Idex\Model\MagentoSkuFactory $MagentoSkuFactory
     ) {
         $this->filter = $filter;
         $this->collectionFactory = $collectionFactory;
-        $this->bynderFactory = $bynderFactory;
+        $this->magentoSku = $MagentoSkuFactory;
 		$this->authorization = $authorization;
         parent::__construct($context);
     }
-	    /**
-     * Execute
+	/**
+     * Is Allowed
      */
     public function _isAllowed()
     {
-        return $this->authorization->isAllowed('DamConsultants_Idex::cron_mass_delete');
+        return $this->authorization->isAllowed('DamConsultants_Idex::manual_cron_massdelete');
     }
     /**
      * Execute
@@ -61,7 +61,7 @@ class MassDeleteCronData extends Action
 
             $count = 0;
             foreach ($collection as $model) {
-                $model = $this->bynderFactory->create()->load($model->getId());
+                $model = $this->magentoSku->create()->load($model->getId());
                 $model->delete();
                 $count++;
             }
@@ -69,6 +69,6 @@ class MassDeleteCronData extends Action
         } catch (\Exception $e) {
             $this->messageManager->addError(__($e->getMessage()));
         }
-        return $this->resultFactory->create(ResultFactory::TYPE_REDIRECT)->setPath('bynder/index/deletecrongrid');
+        return $this->resultFactory->create(ResultFactory::TYPE_REDIRECT)->setPath('bynder/index/sku');
     }
 }

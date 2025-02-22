@@ -1223,4 +1223,15 @@ class Data extends AbstractHelper
         exit; */
         return $response;
     }
+
+    /**
+     * replaceto special string
+     * @param string $og_sku
+     * @return string $new_string
+     */
+    public function replacetoSpecialString($og_sku) {
+        $utf_og_sku = iconv('UTF-8', 'ISO-8859-1', $og_sku); 
+        $new_string = preg_replace('/[^a-zA-Z0-9-]/', '_', $utf_og_sku);
+        return $new_string;
+    }  
 }

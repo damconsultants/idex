@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", function () {
             // Show poster and play button again when video ends
             videoTag.addEventListener("ended", function () {
                 playButton.style.display = "flex";
-                videoTag.style.background = `url('${videoSrc}') center/cover no-repeat`;
+                //videoTag.style.background = `url('${videoSrc}') center/cover no-repeat`;
                 videoTag.removeAttribute("controls");
             });
 
@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         videoTag.pause();
                     }
                     playButton.style.display = "flex";
-                    videoTag.style.background = `url('${videoSrc}') center/cover no-repeat`;
+                    //videoTag.style.background = `url('${videoSrc}') center/cover no-repeat`;
                     videoTag.removeAttribute("controls");
                 }
             });

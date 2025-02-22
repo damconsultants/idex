@@ -216,51 +216,6 @@ require([
 											else {
 												console.log("else section");
 											}
-												
-	
-											/*
-											var _this = 0;
-											var _id = 0;
-											if ($("#cms_block_form_content")[0]){
-												_this = "#cms_block_form_content";
-												_id = "cms_block_form_content";
-											} 
-											else if($("#cms_page_form_content")[0]) {
-												_this = "#cms_page_form_content";
-												_id = "cms_page_form_content";
-											}
-											else if($("#category_form_description")[0]) {
-												_this = "#category_form_description";
-												_id = "category_form_description";
-											}
-											else {
-												//Do something if class does not exist
-												alert("not exists");
-											}
-											
-											if(_this != "" && _this != 0 && _this != null) {
-												var cursorPos = $(_this).prop('selectionStart');
-												var v = $(_this).val();
-												var textBefore = v.substring(0, cursorPos );
-												var textAfter = v.substring( cursorPos, v.length );
-												$(_this).val( textBefore + tag_html + textAfter );
-												
-												 wysiwygcompany_description = new wysiwygSetup(_id, { 
-														"width":"99%",  // defined width of editor
-														"height":"600px", // height of editor
-														"value":tag_html, 
-														"plugins":[{"name":"image"}], // for image
-														"tinymce4":{"toolbar":"formatselect | bold italic underline | alignleft aligncenter alignright | bullist numlist | link table charmap","plugins":"advlist autolink lists link charmap media noneditable table contextmenu paste code help table",
-													 }
-												 });
-												 wysiwygcompany_description.setup("exact");
-												 
-												setTimeout( function() { 
-													jQuery(".mce-container-body.mce-flow-layout div[aria-label='Bold'] button")[0].click();
-												}, 500);
-
-											}
-											*/
 											
 										}
 										else {
@@ -270,8 +225,9 @@ require([
 									}
 								}]
 							}
-							var popup = modal(options, $("#popup-modal"));
-							$("#popup-modal").modal("openModal");
+							var popupModal = $("#popup-modal");
+							modal(options, popupModal);
+							popupModal.modal("openModal");
 							return true;
 
 						}

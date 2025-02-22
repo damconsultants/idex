@@ -39,19 +39,20 @@
                 <item name="indexField" xsi:type="string">id</item>
                 </item>
             </argument>
-            <!--<action name="delete">
+            <action name="delete">
                 <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="type" xsi:type="string">delete</item>
                     <item name="label" xsi:type="string" translate="true">Delete</item>
-                    <item name="url" xsi:type="url" path="bynder/index/massdeleteskudata"/>
+                    <item name="url" xsi:type="url" path="bynder/index/massdeletemanualskudata"/>
                     <item name="confirm" xsi:type="array">
                         <item name="title" xsi:type="string" translate="true">Delete Data?</item>
                         <item name="message" xsi:type="string" translate="true">Are you sure you want to delete the selected Data?</item>
                     </item>
+					<item name="aclResource" xsi:type="string">DamConsultants_Idex::manual_cron_massdelete</item>
                 </item>
                 </argument>
-            </action>-->
+            </action>
         </massaction>
         <bookmark name="bookmarks">
             <argument name="data" xsi:type="array">
@@ -95,35 +96,6 @@
                     </item>
                 </item>
             </argument>
-            <filterRange name="Id">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="dataScope" xsi:type="string">id</item>
-                        <item name="label" xsi:type="string" translate="true">ID</item>
-                        <item name="childDefaults" xsi:type="array">
-                            <item name="provider" xsi:type="string">bynder_index_sku.bynder_index_sku.listing_top.listing_filters</item>
-                        </item>
-                    </item>
-                </argument>
-                <filterInput name="from">
-                    <argument name="data" xsi:type="array">
-                        <item name="config" xsi:type="array">
-                            <item name="dataScope" xsi:type="string">from</item>
-                            <item name="label" xsi:type="string" translate="true">from</item>
-                            <item name="placeholder" xsi:type="string" translate="true">From</item>
-                        </item>
-                    </argument>
-                </filterInput>
-                <filterInput name="to">
-                    <argument name="data" xsi:type="array">
-                        <item name="config" xsi:type="array">
-                            <item name="dataScope" xsi:type="string">to</item>
-                            <item name="label" xsi:type="string" translate="true">to</item>
-                            <item name="placeholder" xsi:type="string" translate="true">To</item>
-                        </item>
-                    </argument>
-                </filterInput>
-            </filterRange>
         </filters>
         <paging name="listing_paging">
             <argument name="data" xsi:type="array">
@@ -166,29 +138,27 @@
             </argument>
         </column>
         <column name="select_attribute">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">text</item>
-                    <item name="label" xsi:type="string" translate="true">Attribute</item>
-                </item>
-            </argument>
+			<argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">DamConsultants\Idex\Model\Config\Source\Select</item>
+				<item name="config" xsi:type="array">
+					<item name="filter" xsi:type="string">select</item>
+                    <item name="dataType" xsi:type="string">select</item>
+					<item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
+					<item name="label" xsi:type="string" translate="true">Attribute</item>
+				</item>
+			</argument>
         </column>
 		<column name="select_store">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">text</item>
-                    <item name="label" xsi:type="string" translate="true">Store</item>
-                </item>
-            </argument>
+			<argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">DamConsultants\Idex\Model\Config\Source\Store</item>
+				<item name="config" xsi:type="array">
+					<item name="filter" xsi:type="string">select</item>
+                    <item name="dataType" xsi:type="string">select</item>
+					<item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
+					<item name="label" xsi:type="string" translate="true">Store</item>
+				</item>
+			</argument>
         </column>
-		<!--<column name="token">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">text</item>
-                    <item name="label" xsi:type="string" translate="true">Token</item>
-                </item>
-            </argument>
-        </column>-->
 		<column name="token">
 			<argument name="data" xsi:type="array">
                 <item name="options" xsi:type="object">DamConsultants\Idex\Model\Config\Source\Token</item>
@@ -209,5 +179,21 @@
 				</item>
 			</argument>
 		</column>
+		<actionsColumn name="delete_action" class="DamConsultants\Idex\Ui\Component\Listing\Column\ManualDeleteAction">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="indexField" xsi:type="string">id</item>
+                    <item name="viewUrlPath" xsi:type="string">bynder/index/deleteskudata</item>
+                    <item name="urlEntityParamName" xsi:type="string">id</item>
+                    <item name="confirm" xsi:type="array">
+                        <item name="title" xsi:type="string" translate="true">Delete Data?</item>
+                        <item name="message" xsi:type="string" translate="true">Are you sure you want to delete the selected Data?</item>
+                    </item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">Delete</label>
+            </settings>
+        </actionsColumn>
     </columns>
 </listing>

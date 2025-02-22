@@ -78,7 +78,7 @@ class Thumbnail extends \Magento\Ui\Component\Listing\Columns\Column
                     if(isset($item_old_value["asset_list"])) {
                         $item_old_value = $item_old_value["asset_list"];
                     }
-                    if (null == $item_old_value || empty($item_old_value)) {
+                    if (null == $item_old_value) {
                         continue;
                     }
                     $thumbnail = $this->getThumbnailUrl($item_old_value, $default_image);

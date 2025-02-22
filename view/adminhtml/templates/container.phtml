@@ -33,7 +33,7 @@
 <div id="popup-modal-content" style="display:none;">
     <div id="compactViewContainer_content"></div>
 </div>
-<input type="hidden" id="ajax_baseurl" value="<?= $block->escapeUrl($block->getBaseUrl() . 'bynder/index'); ?>">
+<input type="hidden" id="ajax_baseurl" value="<?= $block->escapeUrl($block->getBaseUrl() . 'bynder/index/logo'); ?>">
 <input type="hidden" id="ajax_addtofolder" value="<?= $block->escapeUrl($block->getBaseUrl().'bynder/bynderindex');?>" >
 <input type="hidden" id="form_keys" value="<?= $block->escapeHtml($block->getFormKey()); ?>">
 
@@ -201,8 +201,9 @@ function($,modal) {
 								}]
 
 							};
-							var popup = modal(options, $("#popup-modal-content"));
-							$("#popup-modal-content").modal("openModal");
+							var popupModal = $("#popup-modal");
+							modal(options, popupModal);
+							popupModal.modal("openModal");
 							return true;
 
 						} else {
