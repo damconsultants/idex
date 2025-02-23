@@ -14,7 +14,7 @@
 			<schedule>*/20 * * * *</schedule>
 		</job>
 		<job instance="DamConsultants\Idex\Cron\UpdateAllSku" method="execute" name="damConsultants_bynder_update_sku_all">
-			<schedule>*/10 * * * *</schedule>
+			<schedule>*/7 * * * *</schedule>
 		</job>
 	</group> 
 </config>
