@@ -121,13 +121,13 @@ class Psku extends \Magento\Backend\App\Action
             if (count($productSku) > 0) {
                 foreach ($productSku as $sku) {
                     if ($sku != "") {
-                        //$bd_sku = trim(preg_replace('/[^A-Za-z0-9]/', '_', $sku));
+                        $bd_sku = $this->datahelper->replacetoSpecialString($sku); //trim(preg_replace('/[^A-Za-z0-9]/', '_', $sku));
                         //echo $bd_sku; exit;
                         $storeIds = 0; //$this->storeManagerInterface->getStore()->getId();
                         $_product = $this->_productRepository->get($sku);
                         $product_ids = $_product->getId();
                         $get_data = $this->datahelper->getImageSyncWithProperties(
-                            $sku,
+                            $bd_sku,
                             $property_id,
                             $collection_value
                         );
@@ -189,7 +189,7 @@ class Psku extends \Magento\Backend\App\Action
                                         "sku" => $sku,
                                         "message" => $convert_array['data'],
                                         "data_type" => "",
-                                        "lable" => "0"
+                                        "lable" => 0
                                     ];
                                     $this->getInsertDataTable($insert_data);
                                 }
@@ -333,10 +333,11 @@ class Psku extends \Magento\Backend\App\Action
             );
         }catch(Exception $e){
             $insert_data = [
-                "sku" => $sku,
+				"sku" => $sku,
                 "message" => $e->getMessage(),
+                "data_type" => "",
                 'media_id' => "",
-                "data_type" => ""
+                "lable" => 0
             ];
             $this->getInsertDataTable($insert_data);
         }
@@ -805,6 +806,33 @@ class Psku extends \Magento\Backend\App\Action
                 return $result_data;
             }
         } elseif ($select_attribute == 'all_attribute') {
+			usort($data_val_arr, function ($a, $b) {
+				$order = ['image' => 1, 'document' => 2, 'video' => 3]; // Define type priority
+
+				$aType = $order[$a['type']] ?? 999; // Default to last if unknown type
+				$bType = $order[$b['type']] ?? 999;
+
+				if ($aType !== $bType) {
+					return $aType <=> $bType; // Sort based on type order
+				}
+
+				// If both are images, prioritize those without 'magento_image_role'
+				if ($a['type'] === 'image' && $b['type'] === 'image') {
+					$aHasRole = !empty($a['magento_image_role']);
+					$bHasRole = !empty($b['magento_image_role']);
+
+					if (!$aHasRole && $bHasRole) {
+						return -1;
+					}
+					if ($aHasRole && !$bHasRole) {
+						return 1;
+					}
+				}
+
+				return 0; // Maintain order for same type
+			});
+
+			
             $type = array_unique($type);
             $bynder_extra_data = array(
                 "extra_details" => $assets_extra_details
@@ -1593,10 +1621,12 @@ class Psku extends \Magento\Backend\App\Action
             }
         } catch (Exception $e) {
             $insert_data = [
-                "sku" => $product_sku_key,
-                "message" => $e->getMessage(),
-                'media_id' => "",
-                "data_type" => ""
+				'sku' => $product_sku_key,
+				'message' => $e->getMessage(),
+				'data_type' => '',
+				'media_id' => "",
+				'lable' => 0
+				
             ];
             $this->getInsertDataTable($insert_data);
         }
@@ -1789,7 +1819,7 @@ class Psku extends \Magento\Backend\App\Action
                 "message" => $e->getMessage(),
                 "data_type" => "",
                 'media_id' => "",
-                "lable" => "0"
+                "lable" => 0
             ];
             $this->getInsertDataTable($insert_data);
         }
@@ -2081,7 +2111,7 @@ class Psku extends \Magento\Backend\App\Action
                         'sku' => $product_sku_key,
                         'message' => $image_value_array,
                         'data_type' => '1',
-                        "lable" => "1"
+                        "lable" => 1
                     ];
                     $this->getInsertDataTable($data_image_data);
                     $updated_values = [
@@ -2197,7 +2227,7 @@ class Psku extends \Magento\Backend\App\Action
                         'sku' => $product_sku_key,
                         'message' => $image_value_array,
                         'data_type' => '1',
-                        "lable" => "1"
+                        "lable" => 1
                     ];
                     $this->getInsertDataTable($data_image_data);
                     $by_extra_details = [];
@@ -2537,7 +2567,7 @@ class Psku extends \Magento\Backend\App\Action
                         'sku' => $product_sku_key,
                         'message' => $doc_value_array,
                         'data_type' => '2',
-                        "lable" => "1"
+                        "lable" => 1
                     ];
 					$this->getInsertDataTable($data_doc_value);
                     $by_extra_details = [];

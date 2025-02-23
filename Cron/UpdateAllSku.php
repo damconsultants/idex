@@ -814,6 +814,31 @@ class UpdateAllSku
                 return $result_data;
             }
         } elseif ($select_attribute == 'all_attribute') {
+			usort($data_val_arr, function ($a, $b) {
+				$order = ['image' => 1, 'document' => 2, 'video' => 3]; // Define type priority
+
+				$aType = $order[$a['type']] ?? 999; // Default to last if unknown type
+				$bType = $order[$b['type']] ?? 999;
+
+				if ($aType !== $bType) {
+					return $aType <=> $bType; // Sort based on type order
+				}
+
+				// If both are images, prioritize those without 'magento_image_role'
+				if ($a['type'] === 'image' && $b['type'] === 'image') {
+					$aHasRole = !empty($a['magento_image_role']);
+					$bHasRole = !empty($b['magento_image_role']);
+
+					if (!$aHasRole && $bHasRole) {
+						return -1;
+					}
+					if ($aHasRole && !$bHasRole) {
+						return 1;
+					}
+				}
+
+				return 0; // Maintain order for same type
+			});
             $type = array_unique($type);
             $bynder_extra_data = array(
                 "extra_details" => $assets_extra_details
@@ -1809,12 +1834,13 @@ class UpdateAllSku
                 }
             }
         } catch (Exception $e) {
-            $insert_data = [
-                "sku" => $product_sku_key,
-                "message" => $e->getMessage(),
-                "data_type" => "",
-                'media_id' => "",
-                "lable" => "0"
+			$insert_data = [
+				'sku' => $product_sku_key,
+				'message' => $e->getMessage(),
+				'data_type' => '',
+				'media_id' => "",
+				'lable' => 0
+				
             ];
             $this->getInsertDataTable($insert_data);
         }

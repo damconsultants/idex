@@ -156,8 +156,8 @@ class AutoAddFromMagento
         if (count($productSku_array) > 0) {
             foreach ($productSku_array as $sku) {
                 if ($sku != "") {
-                    //$bd_sku = trim(preg_replace('/[^A-Za-z0-9]/', '_', $sku));
-                    $get_data = $this->datahelper->getImageSyncWithProperties($sku, $property_id, $collection_value);
+                    $bd_sku = $this->datahelper->replacetoSpecialString($sku);//trim(preg_replace('/[^A-Za-z0-9]/', '_', $sku));
+                    $get_data = $this->datahelper->getImageSyncWithProperties($bd_sku, $property_id, $collection_value);
                     if (!empty($get_data) && $this->getIsJSON($get_data)) {
                         $respon_array = json_decode($get_data, true);
                         if ($respon_array['status'] == 1) {
@@ -630,6 +630,31 @@ class AutoAddFromMagento
             "extra_details" => $assets_extra_details_doc
         );
         if (count($data_arr) > 0) {
+			usort($data_val_arr, function ($a, $b) {
+				$order = ['image' => 1, 'document' => 2, 'video' => 3]; // Define type priority
+
+				$aType = $order[$a['type']] ?? 999; // Default to last if unknown type
+				$bType = $order[$b['type']] ?? 999;
+
+				if ($aType !== $bType) {
+					return $aType <=> $bType; // Sort based on type order
+				}
+
+				// If both are images, prioritize those without 'magento_image_role'
+				if ($a['type'] === 'image' && $b['type'] === 'image') {
+					$aHasRole = !empty($a['magento_image_role']);
+					$bHasRole = !empty($b['magento_image_role']);
+
+					if (!$aHasRole && $bHasRole) {
+						return -1;
+					}
+					if ($aHasRole && !$bHasRole) {
+						return 1;
+					}
+				}
+
+				return 0; // Maintain order for same type
+			});
             $this->getProcessItem($data_arr, $data_val_arr,$bynder_extra_data, $bynder_extra_data_video, $type);
         }
         if (count($doc_data_arr) > 0) {
